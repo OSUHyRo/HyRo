@@ -11,7 +11,21 @@
 \usepackage[english]{babel}
 %\usepackage{sectsty}
 \usepackage{url, lipsum}
+\usepackage{tikz}
 
+<<<<<<< HEAD:pStatement.tex
+=======
+\newcommand{\namesigdatehrule}[1]{\par\tikz \draw [blue, densely dotted, ultra thick] (0,0) -- (#1,0);\par}
+\newcommand{\namesigdate}[2][5cm]{%
+\begin{minipage}{#1}%
+    #2 \vspace{0.8cm}\namesigdatehrule{#1}\smallskip
+    \small \noindent\textit{Signature}
+    \vspace{0.8cm}\namesigdatehrule{#1}\smallskip
+    \small \textit{Date}
+\end{minipage}
+}
+
+>>>>>>> 0b9f7b220485f248ea9ba1156e84d13dfeaaee34:problem Statement.tex
 \newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
 \newcommand*\tick{\textsc{\char13}}
 \singlespacing
@@ -77,4 +91,26 @@ This software that will run on a traditional computer and operating system. It w
 %\sectionfont{\scshape}
 Our proposed solution to visualizing data and controlling functions on this rocket has very defined metrics of success. To measure our success on visualizing data on the rocket the system will have to successfully communicate data from on-board the rocket, through radio transmission, through USB communication and be interpreted and visualized on a computer accurately.  This will be successful if our UI can show sensor data accurately and in an easy way for humans to understand.  If all data is accurate according to the raw data, then we have succeeded in visualizing the data from the rocket.\par
 To measure of the success of our command protocol throughout the system is fairly easy. If a user inputs a command into the control box or the computer and the rocket does not respond appropriately we have failed. If the rocket responds to all of our commands i.e. launch and ignition, then we have successfully communicated all commands to the rocket. If our software includes any automatic adjustments these adjustments also must successfully produce the outcome they were designed to produce. For example, adjusting throttle on the rocket. This will succeed if the throttle is adjusted according to the appropriate calculations.
+
+\newpage
+
+\textbf{Students:}
+
+\vspace{5mm}
+ 
+
+\noindent \namesigdate{Jason Klindtworth} \hfill \namesigdate[6cm]{Josh Asher}
+\vspace{5mm}
+
+\noindent \namesigdate{Layne Nolli}
+ \vspace{5mm}
+
+\textbf{Client:}
+
+\vspace{5mm}
+ 
+
+\noindent \namesigdate{Nancy Squires}
+
+
 \end{document}
