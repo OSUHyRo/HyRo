@@ -1,8 +1,8 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.10.20)  20 OCT 2016 15:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.10.20)  24 OCT 2016 08:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**pStatement.tex
+**./pStatement.tex
 (./pStatement.tex
 LaTeX2e <2015/01/01>
 Babel <3.9l> and hyphenation patterns for 79 languages loaded.
@@ -805,28 +805,21 @@ Overfull \hbox (1.6pt too wide) in paragraph at lines 112--112
  []
 
 
-Package lastpage Warning: Rerun to get the references right on input line 115.
-
-
 AED: lastpage setting LastPage
-[3] (./pStatement.aux)
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
+[3] (./pStatement.aux) ) 
 Here is how much of TeX's memory you used:
- 16512 strings out of 493085
- 316586 string characters out of 6136916
- 492469 words of memory out of 5000000
+ 16527 strings out of 493085
+ 316720 string characters out of 6136916
+ 492481 words of memory out of 5000000
  19598 multiletter control sequences out of 15000+600000
- 126450 words of font info for 174 fonts, out of 8000000 for 9000
+ 127100 words of font info for 184 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,6n,54p,849b,509s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
-e/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/t
-imes/utmri8a.pfb>
-Output written on pStatement.pdf (4 pages, 44673 bytes).
+ 55i,6n,54p,1100b,509s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.
+enc}</usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on pStatement.pdf (4 pages, 45459 bytes).
 PDF statistics:
  33 PDF objects out of 1000 (max. 8388607)
  23 compressed objects within 1 object stream
