@@ -1,0 +1,113 @@
+\documentclass[10pt,draftclsnofoot,onecolumn]{IEEEtran}
+\usepackage[letterpaper, portrait, margin=0.75in]{geometry}
+%\usepackage[myheadings]{fullpage}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{graphicx, wrapfig, subcaption, setspace, booktabs}
+\usepackage[T1]{fontenc}
+\usepackage[font=small, labelfont=bf]{caption}
+%\usepackage{fourier}
+\usepackage[protrusion=true, expansion=true]{microtype}
+\usepackage[english]{babel}
+%\usepackage{sectsty}
+\usepackage{url, lipsum}
+\usepackage{tikz}
+
+
+\newcommand{\namesigdatehrule}[1]{\par\tikz \draw [blue, densely dotted, ultra thick] (0,0) -- (#1,0);\par}
+\newcommand{\namesigdate}[2][5cm]{%
+\begin{minipage}{#1}%
+    #2 \vspace{0.8cm}\namesigdatehrule{#1}\smallskip
+    \small \noindent\textit{Signature}
+    \vspace{0.8cm}\namesigdatehrule{#1}\smallskip
+    \small \textit{Date}
+\end{minipage}
+}
+
+
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+\newcommand*\tick{\textsc{\char13}}
+\singlespacing
+\setcounter{tocdepth}{5}
+\setcounter{secnumdepth}{5}
+
+
+\begin{document}
+%\title{HyRo (Working title)}
+%\author{Jason Klindtworth  |  Josh Asher  |   Layne Nolli}
+%\date{}
+%\maketitle
+\begin{titlepage}
+	\centering
+	{\scshape\LARGE HyRo (Working title) \par}
+	\vspace{1cm}
+	{\scshape\Large Jason Klindtworth  |  Josh Asher  |   Layne Nolli\par}
+	\vspace{1.5cm}
+	{\huge\bfseries CS461\par}
+	\vspace{2cm}
+	{\Large\itshape Fall 2016\par}
+	\vspace{4cm}
+	{\large Requirements Document\par}
+	\vfill
+
+% Bottom of the page
+	{\large \today\par}
+\end{titlepage}
+
+%\newpage
+%\sectionfont{\scshape}
+%\title{Abstract}
+
+
+
+\section{1. Introduction}
+%\sectionfont{\scshape}
+\subsection{1.1 Purpose}
+\paragraph This document contains the software requirements that describe components of a system for a hybrid rocket that will communicate instructions, retrieve data, log commands,
+ visualize data, and visualize controls for such a rocket.  This document will provide scope, definitions, an overall description, and specific requirements for this system.
+ This system will be used by the OSU Hybrid Rocket team to launch and visualize data from their rocket. Persons involved include Nancy Squires, ME Senior Students, ECE senior students,
+ and other rocket club members that have chosen to be part of this team. Our audience members have an inclination to participate in rocketry. The system will be part of the ESRA
+ competition and has a potential to be recognized by the AIAA who support this competition.
+\subsection{1.2 Scope}
+\paragraph There are 2 separate components to this avionics system. 
+\subsubsection{HyRo OS}
+\paragraph HyRo OS is a program residing on a Beagle Bone Black embedded Linux computer that will be onboard the hybrid rocket. This software component will collect sensor and possibly
+ GPS data from onboard electrical components and send this data to the ground team. HyRo OS is also responsible for receiving rocket commands from the ground team and responding to those
+ commands by sending electrical signals too appropriate onboard electrical equipment. The objective of this component is to provide reliable communication to the ground team for commanding
+ the rocket and gathering its data. 
+\subsubsection{HyRo VS}
+\paragraph 2)	HyRo VS is software residing on a traditional computer that will receive and communicate data and commands to the rockets HyRo OS component. HyRo VS will be the ground
+ teams graphical interface for data visualization, logging, and issuing commands to the system. It will present the ground team with input buttons to issue appropriate commands and data
+ visualization windows to monitor data transferred from the hybrid rockets on board HyRo OS. This software will benefit the ground team by providing reliable visualized data from the 
+ hybrid rocket that previously was not human readable. It also will provide reliable command input into the system that benefits the ground team by ease of use.
+\subsection{1.3  Definitions, acronyms, and abbreviations}
+\subsection{1.4  References}
+\subsection{1.5 Overview}
+
+\section{2. Overall Description}
+
+\section{3. Specific requirements}
+
+\section{Index}
+\newpage
+
+\textbf{Students:}
+
+\vspace{5mm}
+ 
+
+\noindent \namesigdate{Jason Klindtworth} \hfill \namesigdate[6cm]{Josh Asher}
+\vspace{5mm}
+
+\noindent \namesigdate{Layne Nolli}
+ \vspace{5mm}
+
+\textbf{Client:}
+
+\vspace{5mm}
+ 
+
+\noindent \namesigdate{Nancy Squires}
+
+
+\end{document}
