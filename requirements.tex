@@ -1,4 +1,4 @@
-\documentclass[10pt,draftclsnofoot,onecolumn]{IEEEtran}
+\documentclass[10pt,draftclsnofoot,onecolumn,compsoc]{IEEEtran}
 \usepackage[letterpaper, portrait, margin=0.75in]{geometry}
 %\usepackage[myheadings]{fullpage}
 \usepackage{fancyhdr}
@@ -12,7 +12,13 @@
 %\usepackage{sectsty}
 \usepackage{url, lipsum}
 \usepackage{tikz}
+\renewcommand\thesection{\arabic{section}}
+\renewcommand\thesubsection{\thesection.\arabic{subsection}}
+\renewcommand\thesubsubsection{\thesubsection.\arabic{subsubsection}}
 
+\renewcommand\thesectiondis{\arabic{section}}
+\renewcommand\thesubsectiondis{\thesectiondis.\arabic{subsection}}
+\renewcommand\thesubsubsectiondis{\thesubsectiondis.\arabic{subsubsection}}
 
 \newcommand{\namesigdatehrule}[1]{\par\tikz \draw [blue, densely dotted, ultra thick] (0,0) -- (#1,0);\par}
 \newcommand{\namesigdate}[2][5cm]{%
@@ -58,11 +64,11 @@
 %\sectionfont{\scshape}
 %\title{Abstract}
 
-
+\tableofcontents
 
 \section{ Introduction}
 %\sectionfont{\scshape}
-\subsection{1.1Purpose}
+\subsection{Purpose}
  This document contains the software requirements that describe components of a system for a hybrid rocket that will communicate instructions, retrieve data, log commands,
  visualize data, and visualize controls for such a rocket.  This document will provide scope, definitions, an overall description, and specific requirements for this system.
  This system will be used by the OSU Hybrid Rocket team to launch and visualize data from their rocket. Persons involved include Nancy Squires, ME Senior Students, ECE senior students,
@@ -116,12 +122,12 @@ Avionics System –  A system for controlling launch and other system function o
 {\bf API -}Application program interface (API) is a set of routines, protocols, and tools for building software applications. An API specifies how software components should interact and APIs are used when programming graphical user interface (GUI) components.\par
 {\bf RAM -}Random Access Memory\par
 
-\subsection{1.4  References}
-\subsection{1.5 Overview}
+\subsection{ References}
+\subsection{Overview}
 The rest of this document contains over all descriptions of the different components of this system. Followed by specific requirements of these components.
 
 \section{ Overall Description}
-\subsection{2.1 Product perspective}
+\subsection{ Product perspective}
 Our software components are part of the overall system of the Hybrid Rocket. This system encompasses on the rocket: remotely filling, arming/disarming, aborting, ignition, recovery, throttling, GPS, gathering sensor data, and radio communication circuitry.  On the traditional computer: serial communication to the ground control unit, user input, and user data visualization. Our software will need to interface with an external GPS system if this stretch goal is reached. 
 \subsubsection{System Interfaces}
 The HyRo VS component of our system will house the user interface to our system. This interface will be divided into a command menu, system diagnostics/status window, and different visualization windows with options on how to display the data. The whole graphical user interface will fill the entire screen. The command menu will house seven buttons with more to be determined. All commands have not been decided on because the rocket has yet to be made and requirements and commands may be presented to our system as other engineers design their parts of the hybrid rocket.  The seven buttons that are required at the moment are: Arm Rocket, Disarm Rocket, Fill Liquid Oxidizer, Abort Launch, and Ignition. The command menu will be located to the left of the screen and take up ¼ the width of the screen and ¾ the height of the screen. Buttons in the menu will be evenly spaced and use a size 20pt font for text inside the buttons. \par
@@ -158,7 +164,7 @@ There are 4 modes of operation in our system: pre-launch, staging, in flight, an
 
 \subsubsection{Site Adaption Requirements}
 When the hybrid rocket is ready to launch the software will be in pre-launch mode and a sequence of commands must be sent to the rocket in order for the rocket to be safely launched. This sequence is fill, arm, ignite, and launch. At any moment someone can cancel this sequence if the rocket is deemed not safe to launch by using the abort button.
-\subsection{2.2 Product functions}
+\subsection{ Product functions}
 Our software as a whole will function as a way to communicate information from a hybrid rocket to a traditional computer on the ground. The ground team will interact with the ground computer to look at the information from the rocket and pass information back to the rocket. Both software components each have their own unique functions.
 \subsubsection{HyRo OS}
 \begin{itemize}
@@ -183,10 +189,10 @@ Our software as a whole will function as a way to communicate information from a
 \item Provide a log of the data.
 \item Provide the ability to view different categories of data in a graph with a menu for the user to choose what data from the flight they would like to view.\end{itemize}
 
-\subsection{2.3 User characteristic}
+\subsection{ User characteristic}
 Intended users of this software require a knowledge of rocketry and safe handling of launching a rocket. These users will be undergraduate students, graduate students, and professors included in the rocket team. They will have sufficient knowledge of the operation and safety requirements of launching a hybrid rocket according to the safety regulation of ESRA.
 
-\subsection{2.4 Constraints}
+\subsection{Constraints}
 \subsubsection{ Regulatory Policies -} Operation of our software must stay in the bounds set by ESRA and the safe handling and operation of launching a hybrid rocket.  
 \subsubsection{ Hardware Limitations -}HyRo OS will be onboard a BBB with only 512 megabytes of ram and 4 gigabytes of storage and must function under these restrictions. The BBB will also be inside of a volatile environment inside the rocket that could cause it to overheat. Timing is also a major concern in communicating sensor data and commands. All communication between the rocket, its sensors, its launching components, and the ground team must be within 100 milliseconds or less.
 \subsubsection{ Interfaces to other applications-} If GPS is used we will have to output data to a GPS application in the correct format for that application.
@@ -194,17 +200,17 @@ Intended users of this software require a knowledge of rocketry and safe handlin
 \subsubsection{Reliability Requirements-} Data in our system must be transferred and interpreted in a complete and reliable fashion. Incomplete commands will be ignored. Incomplete sensor data will also be ignored. Data loss will not exceed 10 percent or our system will not be reliable.
 \subsubsection{Safety Considerations -} Our software must not stage and launch the rocket without receiving the appropriate sequence of commands from the ground team. Failure to do so may result in harm to team members.
 
-\subsection{2.5 Assumptions and dependencies}
+\subsection{Assumptions and dependencies}
 Our onboard software system HyRo OS assumes that it will be installed on a Debian Linux OS that is running on a BBB.  HyRo OS assumes it will be connect to a XBee radio transceiver, a TGY6114MD servo, a LSM9DS0 accelerometer/gyroscope, and a BMP180 Barometric pressure altitude sensor.\par
 	Our HyRo VS software running on a traditional computer assumes that it will be communicating with a XBee radio transceiver.
 
-\subsection{2.6 Apportioning of Requirements}
+\subsection{Apportioning of Requirements}
 \subsubsection{GPS -} A GPS sensor might be installed on the rocket. This will require the HyRo OS to be able to communicate with this sensor and transmit its data. The HyRo VS then will need to be able to collect this data and either display it in a GPS window of our design or pass it onto to a GPS application that will interpret the data to find the rockets location.
 \subsubsection{Throttling -} If the system is stable in time the team would like to be able to automatically throttle the rocket in flight. Throttling will enable the rocket to reach a higher altitude. The HyRo OS will need to make inflight calculations and adjust the Oxidizer valve to the appropriate throttling level. This will require advanced math calculations and accurate valve adjusting.
 
 \section{ Specific requirements}
-\subsection{3.1 External Interface Requirements}
-\subsubsection{3.1.1 User Interfaces}
+\subsection{External Interface Requirements}
+\subsubsection{ User Interfaces}
 \begin{enumerate}
 \item Fill Command Button Input –
 The fill command input button is meant to activate the fill servo to fill the chamber with oxidizer. This command is inputted from a button on the command menu. The command will be formatted in an English representation.  This command must be sent within 100 milliseconds. This command must be made before the arming command is given. Other commands will not function out of this sequence. It will be located in the command menu of the left hand side of the screen.
@@ -231,7 +237,7 @@ The sensor data input shall receive data from the radio transceiver to be output
 The sensor data output will convert the data into a graph and display it on the user interface. It will have received this data from the sensor input. The data will either be graphed in a normal plot graph or into a gauge with a needle relating the data to a set visual representation of the appropriate level. The range will depend on the type of data received and be preprogrammed in the software. Units will depend on which sensor supplied the data. Each graph or gauge will take up a section of the right hand window of the user interface in its appropriate sub window. 
 \end{enumerate}
 
-\subsubsection{3.1.2 Hardware interfaces }
+\subsubsection{Hardware interfaces }
 \begin{enumerate}
 \item {\bf Radio Transceiver Input/Output -}
 		Both software components will have an interface to their respective radio transceivers meant to support data transfer between the rocket and the traditional computer. Any commands or data received from the various input sources will be placed onto this interface to be transmitted to the other radio transceiver. Data will be formatted with an English name representing what input it came from appended by the actual data.
@@ -241,49 +247,48 @@ Sensor data input will be received from the various sensors on the system to be 
 This interface will monitor input from the electronic controls of the system and output their status to the radio transceiver. Data format of this part will be component name appended by the state of the component. Commands will be received to change the state of these components and appropriate electronic signal will be outputted to corresponding electronic components. Timing is critical and input and output must be performed in under 100 milliseconds.
 \end{enumerate}
 
-\subsubsection{3.1.3 Software Interfaces}
+\subsubsection{Software Interfaces}
 {\bf Linux OS Interface -} This interface will need to connect to the operating systems file descriptors and GPIO lines in order to communicate to sensors and electronics components. Inputs will be from OS and API interfaces to the operating system. These are prepackaged and will be connected to in software. Components will need to connect to the OS interfaces within 100 milliseconds. 
 
-\subsubsection{3.1.4 Communication Interfaces}
+\subsubsection{Communication Interfaces}
 {\bf Serial Communication Interface -} All communication except for to the electronic launch components will be done via serial ports. Input and Output to these port act like file descriptors and will be read and written too in such a manner. Serial communication encompasses sensor input, data output, and command input and output.
 
-\subsection{3.2 Functions}
-\subsubsection{3.2.1 Command Input}
-	3.2.1.1 Inputs must be done in previously mentioned sequence or are otherwise considered invalid. \par
-	3.2.1.2 If command is not delivered user will have to repeat the command input.\par
-	3.2.1.3 If the rocket components are not ready for a particular input, the command will be ignored. \par
-\subsubsection{3.2.2 Command Output}
-		3.2.2.1  Sequence of the command will be checked before output.\par
-	3.2.2.2 Command will be check against programmed commands to make sure that is valid.\par
-	3.2.2.3 If a command is received out of sequence or is invalid the system will report back to the user interface that the command could not be 		completed.\par
-	3.2.2.4 If a command is successfully output status is returned to user interface to allow for next command to be inputted.\par
-\subsubsection{3.2.3 Status Input}
-	3.2.3.1  Status input will be checked for completeness of status packet size to make sure that it is valid.\par
-	3.2.3.2 If status input is missing no status data will be transferred and the user interface will receive a message stating the status could not be processed.\par
-	3.2.3.3 If status message is in tacked it will be sent to the status output.\par
-\subsubsection{3.2.4 Status Output}
-	3.2.4.1 Data will be checked for validity if it is out of bounds data will not be output to the user interface.\par
-	3.2.4.2 Valid data will be displayed in the status window of the user interface.\par
-\subsubsection{3.2.5 Sensor Input}
-	3.2.5.1 Sensor input will be checked for completeness according to the datasheet of the sensor outputting the data.\par
-	3.2.5.2 Sensor input that is found to be invalid will be dismissed. Data loss tolerance is acceptable in order to meet timing requirements.\par
-	3.2.5.3 If sensor fails to produce data the user interface will be informed of the state of the sensor and its data will not be outputted.\par
-	3.2.5.4 Sensor data will be gathered in a loop and packed into a packet to be sent to the radio transceiver.\par
-\subsubsection{3.2.6 Sensor Output}
-	3.2.6.1 Sensor output will be displayed on the user interface in graphical format.\par
-	3.2.6.2  Sensor data will arrive in time in order as to be able to display in a time oriented graph.\par
-	3.2.6.1 Sensor data will be converted to its output format depending on the type of data supplied by the sensor. The exact formulas are yet to be 		determined until further work is done on designing the hybrid rocket.\par
-	3.2.6.3 Sensor data will not be outputted if it is found to contain errors or is out of bounds of the range of the sensor.\par
+\subsection{Functions}
+\subsubsection{Command Input}
+	\paragraph{ Requirement 1}Inputs must be done in previously mentioned sequence or are otherwise considered invalid. \par
+	\paragraph{ Requirement 2}If command is not delivered user will have to repeat the command input.\par
+	\paragraph{ Requirement 3}If the rocket components are not ready for a particular input, the command will be ignored. \par
+\subsubsection{Command Output}
+	\paragraph{ Requirement 1}Sequence of the command will be checked before output.\par
+	\paragraph{ Requirement 2}Command will be check against programmed commands to make sure that is valid.\par
+	\paragraph{ Requirement 3}If a command is received out of sequence or is invalid the system will report back to the user interface that the command could not be 	completed.\par
+	\paragraph{ Requirement 4}If a command is successfully output status is returned to user interface to allow for next command to be inputted.\par
+\subsubsection{Status Input}
+	\paragraph{ Requirement 1}Status input will be checked for completeness of status packet size to make sure that it is valid.\par
+	\paragraph{ Requirement 2}If status input is missing no status data will be transferred and the user interface will receive a message stating the status could not be processed.\par
+	\paragraph{ Requirement 3} If status message is in tacked it will be sent to the status output.\par
+\subsubsection{Status Output}
+	\paragraph{ Requirement 1}Data will be checked for validity if it is out of bounds data will not be output to the user interface.\par
+	\paragraph{ Requirement 2}Valid data will be displayed in the status window of the user interface.\par
+\subsubsection{Sensor Input}
+	\paragraph{ Requirement 1}Sensor input will be checked for completeness according to the datasheet of the sensor outputting the data.\par
+	\paragraph{ Requirement 2} Sensor input that is found to be invalid will be dismissed. Data loss tolerance is acceptable in order to meet timing requirements.\par
+	\paragraph{ Requirement 3}If sensor fails to produce data the user interface will be informed of the state of the sensor and its data will not be outputted.\par
+	\paragraph{ Requirement 4}Sensor data will be gathered in a loop and packed into a packet to be sent to the radio transceiver.\par
+\subsubsection{Sensor Output}
+	\paragraph{ Requirement 1}Sensor output will be displayed on the user interface in graphical format.\par
+	\paragraph{ Requirement 2}Sensor data will arrive in time in order as to be able to display in a time oriented graph.\par
+	\paragraph{ Requirement 3}Sensor data will be converted to its output format depending on the type of data supplied by the sensor. The exact formulas are yet to be determined until further work is done on designing the hybrid rocket.\par
+	\paragraph{ Requirement 4}Sensor data will not be outputted if it is found to contain errors or is out of bounds of the range of the sensor.\par
 
-\subsection{3.3 Performance Requirements}
+\subsection{ Performance Requirements}
 There will be only one user interface open at any given time. Supporting the interaction of only one user at a time. The system will need to be able to handle data in the amount of about 100 megabytes a minute. This measurement is from last year’s data and may change. 95 percent of received data packets need to be processed in under 100 milliseconds. 100 percent of command data packets need to be processed in under 100 milliseconds.
 
-\subsection{3.4 Software System Attributes}
-\subsubsection{3.3.1 Reliability} Reliability will be measured with time constraints, correct data transfer, correct data visualization, and correct communication to launch the rocket. Timing is critical to many components and data needs to be communicated in less than 100 milliseconds for most components in order for the system to perform correctly. Data needs to be accurate or commands and visualization will not portray what they were intended to portray. Sequences must be followed to insure safety and proper launching of the hybrid rocket.
-\subsubsection{3.3.2 Maintainability} The software should be well documented and modularized so next year’s rocket team can build off of it with ease.
-\subsubsection{3.3.4 Portability} HyRo OS will only be portable too other Debian Linux system since the APIs used to access system components are built for this type of OS. The HyRo VS is to be written in Python which is portable to many OS’s including Windows, Linux and mac OS.
+\subsection{Software System Attributes}
+\subsubsection{Reliability} Reliability will be measured with time constraints, correct data transfer, correct data visualization, and correct communication to launch the rocket. Timing is critical to many components and data needs to be communicated in less than 100 milliseconds for most components in order for the system to perform correctly. Data needs to be accurate or commands and visualization will not portray what they were intended to portray. Sequences must be followed to insure safety and proper launching of the hybrid rocket.
+\subsubsection{Maintainability} The software should be well documented and modularized so next year’s rocket team can build off of it with ease.
+\subsubsection{Portability} HyRo OS will only be portable too other Debian Linux system since the APIs used to access system components are built for this type of OS. The HyRo VS is to be written in Python which is portable to many OS’s including Windows, Linux and mac OS.
 
-\section{Table of Contents}
 \section{Index}
 \newpage
 
