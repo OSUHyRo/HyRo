@@ -14,14 +14,38 @@
 \usepackage{tikz}
 \usepackage[section]{placeins}
 \usepackage{makeidx}
+\newcommand{\subparagraph}{}
+\usepackage{titlesec}
 
+\makeatletter
+\renewcommand{\@IEEEsectpunct}{ \\ \\ \,}% Modified from {:\ \,}
+\makeatother
+
+\setlength{\parindent}{0em}
+\setlength{\parskip}{1em}
 \renewcommand\thesection{\arabic{section}}
 \renewcommand\thesubsection{\thesection.\arabic{subsection}}
 \renewcommand\thesubsubsection{\thesubsection.\arabic{subsubsection}}
 
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+                                    {0ex \@plus0ex \@minus.0ex}%
+                                    {0em}%
+                                    {\normalfont\normalsize\bfseries}}
+\makeatother
+
 \renewcommand\thesectiondis{\arabic{section}}
 \renewcommand\thesubsectiondis{\thesectiondis.\arabic{subsection}}
 \renewcommand\thesubsubsectiondis{\thesubsectiondis.\arabic{subsubsection}}
+
+
+\titleformat{\section}
+       {\normalfont\fontfamily{phv}\fontsize{14}{17}\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}
+       {\normalfont\fontfamily{phv}\fontsize{14}{17}\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+       {\normalfont\fontfamily{phv}\fontsize{14}{17}\bfseries}{\thesubsubsection}{1em}{}
+
 
 \newcommand{\namesigdatehrule}[1]{\par\tikz \draw [blue, densely dotted, ultra thick] (0,0) -- (#1,0);\par}
 \newcommand{\namesigdate}[2][5cm]{%
@@ -36,7 +60,7 @@
 
 \newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
 \newcommand*\tick{\textsc{\char13}}
-%\singlespacing
+\linespread{1}
 \setcounter{tocdepth}{5}
 \setcounter{secnumdepth}{5}
 
@@ -68,6 +92,7 @@
 %\sectionfont{\scshape}
 %\title{Abstract}
 
+\setcounter{tocdepth}{2}
 \tableofcontents
 
 \section{ Introduction}
@@ -154,7 +179,7 @@ The HyRo VS component of our system will house the user interface to our system.
 The visualization units have not fully been determined and are listed as options until further development of the hybrid rocket occurs and we have feedback from the rest of the team as to what units will be the most appealing. Users will have the option to either graph the data or display the data in gauge format with a needle pointing to the current value of that data. \par
 
 \begin{figure}
-  \caption{Basic Mock Up of User Interface for Hyro}
+  \caption{Basic Mock Up of User Interface for Hyro showing implementation of UI layout and positioning of objects like buttons, graphs, and dials for the user to process at a glance. This is a test mock up and may not be exact to the final product. }
   \centering
 	\includegraphics[scale=.75]{HyRoUIMockup}
 \end{figure}
@@ -163,9 +188,9 @@ The visualization units have not fully been determined and are listed as options
 \subsubsection{Hardware Interfaces}
 \index{Hardware Interfaces}
 Each of the three components to our software will require specific interfaces to different hardware aspects of the part of the system they are located in.\par
-{\bf HyRo OS -}
+{\bf HyRo OS}
  	HyRo OS will be connected to the onboard electrical systems of the rocket. These systems include sensors that collect data, servos that control various action internal to the rocket, a radio frequency transmitter for communication, and any other electrical device critical to the rockets operation. Many of these components have yet to be determined and will be conceived next term when work begins on the mechanical and electrical aspects of the rocket.  We do know all sensors on board the rocket from last year have pre-built interfaces that can connect to the BBB using common electrical protocols like I2C or SPI. They come with an API that can be used on the BBB to access their data. . Servos and other electrical components will use PWM lines available on the BBB to communicate desired functionality. The radio module used communicates to the BBB via serial communication. All the GPIO, PWM, and Serial lines on the BBB are interfaced through its operating system and come pre-configured for API access.\par
-{\bf HyRo VS -}
+{\bf HyRo VS}
 HyRo VS will need to communicate to a serial port on the computer it is residing on.  This will be done through either a Windows or Linux serial port access API.
 
 \subsubsection{Software Interfaces}
@@ -231,19 +256,19 @@ Intended users of this software require a knowledge of rocketry and safe handlin
 \index{Constraints}
 
 \index{Regulatory Policies}
-\subsubsection{\bf  Regulatory Policies -} Operation of our software must stay in the bounds set by ESRA and the safe handling and operation of launching a hybrid rocket.  
+\subsubsection{\bf  Regulatory Policies} Operation of our software must stay in the bounds set by ESRA and the safe handling and operation of launching a hybrid rocket.  
 \index{Hardware Limitations}
-\subsubsection{\bf  Hardware Limitations -}HyRo OS will be onboard a BBB with only 512 megabytes of ram and 4 gigabytes of storage and must function under these restrictions. The BBB will also be inside of a volatile environment inside the rocket that could cause it to overheat. Timing is also a major concern in communicating sensor data and commands. All communication between the rocket, its sensors, its launching components, and the ground team must be within 1  second or less.
+\subsubsection{\bf  Hardware Limitations}HyRo OS will be onboard a BBB with only 512 megabytes of ram and 4 gigabytes of storage and must function under these restrictions. The BBB will also be inside of a volatile environment inside the rocket that could cause it to overheat. Timing is also a major concern in communicating sensor data and commands. All communication between the rocket, its sensors, its launching components, and the ground team must be within 1  second or less.
 \index{Interfaces to other applications}
-\subsubsection{\bf  Interfaces to other applications-} If GPS is used we will have to output data to a GPS application in the correct format for that application.
+\subsubsection{\bf  Interfaces to other applications} If GPS is used we will have to output data to a GPS application in the correct format for that application.
 \index{Control Functions}
-\subsubsection{\bf Control Functions -} Launching of the rocket must be monitored in the correct order or our software should not continue the sequence to launch the rocket.
+\subsubsection{\bf Control Functions} Launching of the rocket must be monitored in the correct order or our software should not continue the sequence to launch the rocket.
 \index{Reliability Requirements}
-\subsubsection{\bf Reliability Requirements-} Data in our system must be transferred and interpreted in a complete and reliable fashion. Incomplete commands will be ignored. Incomplete sensor data will also be ignored. Data loss will not exceed 10 percent or our system will not be reliable.
+\subsubsection{\bf Reliability Requirements} Data in our system must be transferred and interpreted in a complete and reliable fashion. Incomplete commands will be ignored. Incomplete sensor data will also be ignored. Data loss will not exceed 10 percent or our system will not be reliable.
 \index{Safety Considerations}
-\subsubsection{\bf Safety Considerations -} Our software must not stage and launch the rocket without receiving the appropriate sequence of commands from the ground team. Failure to do so may result in harm to team members.
+\subsubsection{\bf Safety Considerations} Our software must not stage and launch the rocket without receiving the appropriate sequence of commands from the ground team. Failure to do so may result in harm to team members.
 
-\subsection{\bf Assumptions and dependencies}
+\subsection{Assumptions and dependencies}
 \index{Assumptions and dependencies}
 Our onboard software system HyRo OS assumes that it will be installed on a Debian Linux OS that is running on a BBB.  HyRo OS assumes it will be connect to a XBee radio transceiver, a TGY6114MD servo, a LSM9DS0 accelerometer/gyroscope, and a BMP180 Barometric pressure altitude sensor.\par
 	Our HyRo VS software running on a traditional computer assumes that it will be communicating with a XBee radio transceiver.
@@ -251,7 +276,7 @@ Our onboard software system HyRo OS assumes that it will be installed on a Debia
 \subsection{Apportioning of Requirements}
 \index{Gantt Chart for HyRo}
 \begin{figure}
-  \caption{Gantt chart for HyRo Workflow over the course of the project.}
+  \caption{Gantt chart for HyRo Workflow over the course of the project. This chart is highlighting overlapping responsibilities between team members that are broken into manageable chunks to ensure time management. }
   \centering
 	\includegraphics[scale=.75]{GanntChart}
 \end{figure}
@@ -319,7 +344,7 @@ This interface will monitor input from the electronic controls of the system and
 \subsubsection{Communication Interfaces}
 \index{Communication Interfaces}
 \index{Serial Communcation Interface}
-{\bf Serial Communication Interface -} All communication except for to the electronic launch components will be done via serial ports. Input and Output to these port act like file descriptors and will be read and written too in such a manner. Serial communication encompasses sensor input, data output, and command input and output.
+{\bf Serial Communication Interface} All communication except for to the electronic launch components will be done via serial ports. Input and Output to these port act like file descriptors and will be read and written too in such a manner. Serial communication encompasses sensor input, data output, and command input and output.
 
 \subsection{Functions}
 \index{Functions}
