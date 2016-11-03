@@ -233,7 +233,7 @@ Intended users of this software require a knowledge of rocketry and safe handlin
 \index{Regulatory Policies}
 \subsubsection{\bf  Regulatory Policies -} Operation of our software must stay in the bounds set by ESRA and the safe handling and operation of launching a hybrid rocket.  
 \index{Hardware Limitations}
-\subsubsection{\bf  Hardware Limitations -}HyRo OS will be onboard a BBB with only 512 megabytes of ram and 4 gigabytes of storage and must function under these restrictions. The BBB will also be inside of a volatile environment inside the rocket that could cause it to overheat. Timing is also a major concern in communicating sensor data and commands. All communication between the rocket, its sensors, its launching components, and the ground team must be within 100 milliseconds or less.
+\subsubsection{\bf  Hardware Limitations -}HyRo OS will be onboard a BBB with only 512 megabytes of ram and 4 gigabytes of storage and must function under these restrictions. The BBB will also be inside of a volatile environment inside the rocket that could cause it to overheat. Timing is also a major concern in communicating sensor data and commands. All communication between the rocket, its sensors, its launching components, and the ground team must be within 1  second or less.
 \index{Interfaces to other applications}
 \subsubsection{\bf  Interfaces to other applications-} If GPS is used we will have to output data to a GPS application in the correct format for that application.
 \index{Control Functions}
@@ -256,8 +256,8 @@ Our onboard software system HyRo OS assumes that it will be installed on a Debia
 	\includegraphics[scale=.75]{GanntChart}
 \end{figure}
 \FloatBarrier
-\subsubsection{\bf GPS -} A GPS sensor might be installed on the rocket. This will require the HyRo OS to be able to communicate with this sensor and transmit its data. The HyRo VS then will need to be able to collect this data and either display it in a GPS window of our design or pass it onto to a GPS application that will interpret the data to find the rockets location.
-\subsubsection{\bf Throttling -} If the system is stable in time the team would like to be able to automatically throttle the rocket in flight. Throttling will enable the rocket to reach a higher altitude. The HyRo OS will need to make inflight calculations and adjust the Oxidizer valve to the appropriate throttling level. This will require advanced math calculations and accurate valve adjusting.
+\subsubsection{\bf GPS - (Stretch Goal)} A GPS sensor might be installed on the rocket. This will require the HyRo OS to be able to communicate with this sensor and transmit its data. The HyRo VS then will need to be able to collect this data and either display it in a GPS window of our design or pass it onto to a GPS application that will interpret the data to find the rockets location.
+\subsubsection{\bf Throttling - (Stretch Goal)} If the system is stable in time the team would like to be able to automatically throttle the rocket in flight. Throttling will enable the rocket to reach a higher altitude. The HyRo OS will need to make inflight calculations and adjust the Oxidizer valve to the appropriate throttling level. This will require advanced math calculations and accurate valve adjusting.
 
 \section{ Specific requirements}
 \subsection{External Interface Requirements}
@@ -266,29 +266,29 @@ Our onboard software system HyRo OS assumes that it will be installed on a Debia
 \index{User Interfaces}
 \paragraph {\bf Fill Command Button Input}
 \index{Fill Command}
-The fill command input button is meant to activate the fill servo to fill the chamber with oxidizer. This command is inputted from a button on the command menu. The command will be formatted in an English representation.  This command must be sent within 100 milliseconds. This command must be made before the arming command is given. Other commands will not function out of this sequence. It will be located in the command menu of the left hand side of the screen.
+The fill command input button is meant to activate the fill servo to fill the chamber with oxidizer. This command is inputted from a button on the command menu. The command will be formatted in an English representation.  This command must be sent within 1 second. This command must be made before the arming command is given. Other commands will not function out of this sequence. It will be located in the command menu of the left hand side of the screen.
 
 \paragraph{\bf Arming Command Button Input}
 \index{Arming Command}
-The arming command input button is meant to put a command on the system that will arm the rocket. This command is inputted from a button on the command menu. The command will be formatted in an English representation.  This command must be sent within 100 milliseconds. This command must be made before the ignition command is given. Other commands will not function out of this sequence. It will be located in the command menu of the left hand side of the screen.
+The arming command input button is meant to put a command on the system that will arm the rocket. This command is inputted from a button on the command menu. The command will be formatted in an English representation.  This command must be sent within 1 second. This command must be made before the ignition command is given. Other commands will not function out of this sequence. It will be located in the command menu of the left hand side of the screen.
 \paragraph{\bf Ignition Command Button Input}
 \index{Ignition Command}
-The ignition command input button is meant to activate the ignition system of the rocket. This command is inputted from a button on the command menu. The command will be formatted in an English representation.  This command must be sent within 100 milliseconds. This command must be made before the launch command is given. Other commands will not function out of this sequence. It will be located in the command menu of the left hand side of the screen.
+The ignition command input button is meant to activate the ignition system of the rocket. This command is inputted from a button on the command menu. The command will be formatted in an English representation.  This command must be sent within 1 seconds. This command must be made before the launch command is given. Other commands will not function out of this sequence. It will be located in the command menu of the left hand side of the screen.
 \paragraph{\bf Launch Command Button Input}
 \index{Launch Command}
-The launch command input button is meant to release the rocket when it is ignited. This command is inputted from a button on the command menu. The command will be formatted in an English representation.  This command must be sent within 100 milliseconds. This command must be made last in the sequence of commands. Other commands will not function out of this sequence. It will be located in the command menu of the left hand side of the screen.
+The launch command input button is meant to release the rocket when it is ignited. This command is inputted from a button on the command menu. The command will be formatted in an English representation.  This command must be sent within 1 second. This command must be made last in the sequence of commands. Other commands will not function out of this sequence. It will be located in the command menu of the left hand side of the screen.
 \paragraph{\bf Disarm Command Button Input}
 \index{Disarm Command}
-The disarm command input button is meant disable the arming of the rocket. This command is inputted from a button on the command menu. The command will be formatted in an English representation.  This command must be sent within 100 milliseconds. This command can be issued anytime the rocket has been armed. It will be located in the command menu of the left hand side of the screen.
+The disarm command input button is meant disable the arming of the rocket. This command is inputted from a button on the command menu. The command will be formatted in an English representation.  This command must be sent within 1 second. This command can be issued anytime the rocket has been armed. It will be located in the command menu of the left hand side of the screen.
 \paragraph{\bf Abort Command Button Input}
 \index{Abort Command}
-The abort command input button is meant to return the system to its pre-launch state and stop the rocket from launching. This command is inputted from a button on the command menu. The command will be formatted in an English representation.  This command must be sent within 100 milliseconds. This command can be issued at any time and is not effected by other command buttons. Other commands will not function out of this sequence. It will be located in the command menu of the left hand side of the screen.
+The abort command input button is meant to return the system to its pre-launch state and stop the rocket from launching. This command is inputted from a button on the command menu. The command will be formatted in an English representation.  This command must be sent within 1 second. This command can be issued at any time and is not effected by other command buttons. Other commands will not function out of this sequence. It will be located in the command menu of the left hand side of the screen.
 \paragraph{\bf Command Output to radio transceiver}
 \index{Command Output}
-	Any time a command is received from the command menu the HyRo VS will send the command to the radio transceiver. The commands will all be formatted in plain English. Commands must be delivered in under 100 milliseconds.
+	Any time a command is received from the command menu the HyRo VS will send the command to the radio transceiver. The commands will all be formatted in plain English. Commands must be delivered in under 1 second.
 \paragraph{\bf System Status Input}
 \index{System Status Input/Output}
-	The system status input receives status data from the radio transceiver to be passed to the user interface. The status will be formatted with the item name appended by the status data from that part of the system. Status messages will be delivered in under 100 milliseconds. 
+	The system status input receives status data from the radio transceiver to be passed to the user interface. The status will be formatted with the item name appended by the status data from that part of the system. Status messages will be delivered in under 1 second. 
 \paragraph{\bf System Status Output}
 The system status output places the status data from the status input onto the user interface. This will be done as soon as the data is received. The status will be displayed under the command menu on the left side of the screen. We will display the system components name and the data we received together to inform the ground team the status of that rocket component.
 \paragraph{\bf Sensor Data Input}
@@ -308,13 +308,13 @@ The sensor data output will convert the data into a graph and display it on the 
 Sensor data input will be received from the various sensors on the system to be transmitted to the ground teams user interface. Accuracy of data depends on the accuracy of the sensors and the ability of the radio transceivers to communicate entire data package. When sensor data is inputted it is packaged and transmitted to the radio transceiver. Data format will be dictated by the format of the sensor output that has yet to be determined.
 \paragraph{\bf Launch Control Electronics Input/Output}
 \index{Launch Control Electronics}
-This interface will monitor input from the electronic controls of the system and output their status to the radio transceiver. Data format of this part will be component name appended by the state of the component. Commands will be received to change the state of these components and appropriate electronic signal will be outputted to corresponding electronic components. Timing is critical and input and output must be performed in under 100 milliseconds.
+This interface will monitor input from the electronic controls of the system and output their status to the radio transceiver. Data format of this part will be component name appended by the state of the component. Commands will be received to change the state of these components and appropriate electronic signal will be outputted to corresponding electronic components. Timing is critical and input and output must be performed in under 1 second.
 
 
 \subsubsection{Software Interfaces}
 \index{Software Interfaces}
 \index{Linux OS Interface}
-\paragraph{\bf Linux OS Interface} This interface will need to connect to the operating systems file descriptors and GPIO lines in order to communicate to sensors and electronics components. Inputs will be from OS and API interfaces to the operating system. These are prepackaged and will be connected to in software. Components will need to connect to the OS interfaces within 100 milliseconds. 
+\paragraph{\bf Linux OS Interface} This interface will need to connect to the operating systems file descriptors and GPIO lines in order to communicate to sensors and electronics components. Inputs will be from OS and API interfaces to the operating system. These are prepackaged and will be connected to in software. Components will need to connect to the OS interfaces within 1 second. 
 
 \subsubsection{Communication Interfaces}
 \index{Communication Interfaces}
@@ -358,7 +358,7 @@ This interface will monitor input from the electronic controls of the system and
 
 \subsection{ Performance Requirements}
 \index{Performance Requirements}
-There will be only one user interface open at any given time. Supporting the interaction of only one user at a time. The system will need to be able to handle data in the amount of about 100 megabytes a minute. This measurement is from last year's data and may change. 95 percent of received data packets need to be processed in under 100 milliseconds. 100 percent of command data packets need to be processed in under 100 milliseconds.
+There will be only one user interface open at any given time. Supporting the interaction of only one user at a time. The system will need to be able to handle data in the amount of about 100 megabytes a minute. This measurement is from last year's data and may change. 95 percent of received data packets need to be processed in under 1 second. 100 percent of command data packets need to be processed in under 1 second.
 
 \subsection{Logical database requirements}
 \index{Logical database requirements}
@@ -375,7 +375,7 @@ There are no explicit standards or regulations imposed on our project.
 \subsection{Software System Attributes}
 \index{Software System Attributes}
 \index{Reliability}
-\subsubsection{Reliability} Reliability will be measured with time constraints, correct data transfer, correct data visualization, and correct communication to launch the rocket. Timing is critical to many components and data needs to be communicated in less than 100 milliseconds for most components in order for the system to perform correctly. Data needs to be accurate or commands and visualization will not portray what they were intended to portray. Sequences must be followed to insure safety and proper launching of the hybrid rocket.
+\subsubsection{Reliability} Reliability will be measured with time constraints, correct data transfer, correct data visualization, and correct communication to launch the rocket. Timing is critical to many components and data needs to be communicated in less than 1 second for most components in order for the system to perform correctly. Data needs to be accurate or commands and visualization will not portray what they were intended to portray. Sequences must be followed to insure safety and proper launching of the hybrid rocket.
 \index{Availability}
 \subsubsection{Availability}
 Our HyRo VS system must maintain communication with the onboard HyRo OS system in order to maintain availability of the user interface. If data communication is broken the interface will not be able to allow humans to issue commands or see visualized data. If communication is broken the program will attempt to reestablish connection until it either establishes communication or the user exits the interface.
