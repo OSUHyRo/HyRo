@@ -117,14 +117,18 @@ HyRo VS is software residing on a traditional computer that will receive and com
 \subsubsection{\bf Chamber:} Where the two fuels mix.
 \subsubsection{\bf PSI:}Pounds per square inch. A unit measuring pressure. 
 \subsubsection{\bf Pa:} Pascals. A unit measuring pressure.
-\subsubsection{\bf PWM:} Pulse Width Modulation - An electronical control signal used to change state of electrical components.
-\subsubsection{\bf GPI:}  General Purpose Input Output lines are used to communicate to sensors and electronic components.
+\subsubsection{\bf PWM:} Pulse Width Modulation - An electronic control signal used to change state of electrical components.
+\subsubsection{\bf GPIO:}  General Purpose Input Output lines are used to communicate to sensors and electronic components.
+\subsubsection{\bf SPI:}  Serial Peripheral Interface - A protocol to communicate with micro controllers.
+\subsubsection{\bf I2C:}  Inter-Integrate Circuit - A protocol to communicate with micro controllers.
 \subsubsection{\bf OS:} Operating System - the main system running on a micro controller or a traditional computer.
 \subsubsection{\bf LSM9DS0:} The LSM9DS0 is a system-in-package featuring a 3D digital linear acceleration sensor,  a 3D digital angular rate sensor, and a 3D digital magnetic sensor.
 \subsubsection{\bf TGY6114MD:}A powerful high specification digital sail winch servo with metal gears that can be programmed to operate from 1 to 6 turns.
 \subsubsection{\bf BM180:}Digital pressure sensor.
 \subsubsection{\bf API:}An application program interface is a set of routines, protocols, and tools for building software applications. An API specifies how software components should interact.
 \subsubsection{\bf RAM:}Random Access Memory
+\subsubsection{\bf Gauge:}A graphical device to display the readout of a sensor. For example a speedometer.
+\subsubsection{\bf Serial Communication:}Data sent back to back through a medium.
 
 \subsection{ References}
 Beagle Bone Black hardware specifications from elinux.org [http://elinux.org/Beagleboard:BeagleBoneBlack]\\
@@ -160,7 +164,7 @@ The visualization units have not fully been determined and are listed as options
 \index{Hardware Interfaces}
 Each of the three components to our software will require specific interfaces to different hardware aspects of the part of the system they are located in.\par
 {\bf HyRo OS -}
- 	HyRo OS will be connected to the onboard electrical systems of the rocket. These systems include sensors that collect data, servos that control various action internal to the rocket, a radio frequency transmitter for communication, and any other electrical device critical to the rockets operation. Many of these components have yet to be determined and will be conceived next term when work begins on the mechanical and electrical aspects of the rocket.  We do know all sensors on board the rocket from last year have pre-built interfaces that can connect to the BBB using common electrical protocols like I2c or SPI. They come with an API that can be used on the BBB to access their data. . Servos and other electrical components will use PWM lines available on the BBB to communicate desired functionality. The radio module used communicates to the BBB via serial communication. All the GPIO, PWM, and Serial lines on the BBB are interfaced through its operating system and come pre-configured for API access.\par
+ 	HyRo OS will be connected to the onboard electrical systems of the rocket. These systems include sensors that collect data, servos that control various action internal to the rocket, a radio frequency transmitter for communication, and any other electrical device critical to the rockets operation. Many of these components have yet to be determined and will be conceived next term when work begins on the mechanical and electrical aspects of the rocket.  We do know all sensors on board the rocket from last year have pre-built interfaces that can connect to the BBB using common electrical protocols like I2C or SPI. They come with an API that can be used on the BBB to access their data. . Servos and other electrical components will use PWM lines available on the BBB to communicate desired functionality. The radio module used communicates to the BBB via serial communication. All the GPIO, PWM, and Serial lines on the BBB are interfaced through its operating system and come pre-configured for API access.\par
 {\bf HyRo VS -}
 HyRo VS will need to communicate to a serial port on the computer it is residing on.  This will be done through either a Windows or Linux serial port access API.
 
@@ -170,7 +174,7 @@ HyRo VS will need to communicate to a serial port on the computer it is residing
 
 \subsubsection{Communication Interfaces}
 \index{Communication Interfaces}
-There are two interfaces for communication in our system and both require the use of a serial interface. The first is radio communication with a radio frequency transceiver. There will be one onboard the rocket connected to the BBB and one connected to the traditional computer via a USB interface. The serial communication is accessed through an API and acts like a file descriptor. We will design a protocol to transfer commands and data over these serial interfaces. Each command will have a name and parameters associated with it. Data will have a name associated with it followed by the actual data. Exact definition of this protocol is yet to be determined until further development of the rocket.
+There are two interfaces for communication in our system and both require the use of a serial interface. The first is radio communication with a radio frequency transceiver. There will be one onboard the rocket connected to the BBB and one connected to the traditional computer via a USB interface. The serial communication is accessed through an API and acts like a file descriptor. We will design a protocol to transfer commands and data over these serial interfaces. Each command will have a name and parameters associated with it. Data will have a name associated with it followed by the actual data.
 \subsubsection{Memory Constraints}
 \index{Memory Constraints}
 The HyRo VS aspect of our system will be constrained by the memory of the traditional computer it is located on. Available memory should be significant enough that we should not be constrained. This is because our program will have a small footprint and the data we log will not exceed 200 megabytes.\par 
