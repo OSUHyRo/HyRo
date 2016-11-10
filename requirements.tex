@@ -73,15 +73,19 @@
 %\maketitle
 \begin{titlepage}
 	\centering
-	{\scshape\LARGE HyRo (Working title) \par}
+	{\scshape\LARGE HyRo \par}
+	%\vspace{1cm}
+	{\scshape\LARGE Team 28\par}
 	\vspace{1cm}
-	{\scshape\Large Jason Klindtworth  |  Josh Asher  |   Layne Nolli\par}
-	\vspace{1.5cm}
+	{\scshape\Large Jason Klindtworth  |  Josh Asher  |   Layne Nolli}
+	\noindent\makebox[\linewidth]{\rule{17cm}{2pt}}
+	\vspace{1cm}
 	{\huge\bfseries CS461\par}
 	\vspace{2cm}
 	{\Large\itshape Fall 2016\par}
 	\vspace{4cm}
-	{\large Requirements Document\par}
+	{\large Requirements Document\par}\vspace{8cm}
+	\noindent\makebox[\linewidth]{\rule{17cm}{2pt}}
 	\vfill
 
 % Bottom of the page
@@ -104,7 +108,7 @@
  This system will be used by the OSU Hybrid Rocket team to launch and visualize data from their rocket. Persons involved include Nancy Squires, ME Senior Students, ECE senior students,
  and other rocket club members that have chosen to be part of this team. Our audience members have an inclination to participate in rocketry. The system will be part of the ESRA
 competition and has a potential to be recognized by the AIAA who support this competition.
-\subsection{1.2 Scope}
+\subsection{Scope}
 \index{Scope}
  There are 2 separate components to this avionics system. 
 
@@ -268,7 +272,7 @@ Intended users of this software require a knowledge of rocketry and safe handlin
 \subsubsection{\bf  Regulatory Policies}Operation of our software must stay in the bounds set by ESRA and the safe handling and operation of launching a hybrid rocket.  
 
 \index{Hardware Limitations}
-\subsubsection{\b fHardware Limitations} HyRo OS will be onboard a BBB with only 512 megabytes of ram and 4 gigabytes of storage and must function under these restrictions. The BBB will also be inside of a volatile environment inside the rocket that could cause it to overheat. Timing is also a major concern in communicating sensor data and commands. All communication between the rocket, its sensors, its launching components, and the ground team must be within 1  second or less.
+\subsubsection{\bf Hardware Limitations} HyRo OS will be onboard a BBB with only 512 megabytes of ram and 4 gigabytes of storage and must function under these restrictions. The BBB will also be inside of a volatile environment inside the rocket that could cause it to overheat. Timing is also a major concern in communicating sensor data and commands. All communication between the rocket, its sensors, its launching components, and the ground team must be within 1  second or less.
 
 \index{Interfaces to other applications}
 \subsubsection{\bf  Interfaces to other applications} If GPS is used we will have to output data to a GPS application in the correct format for that application.
@@ -366,7 +370,7 @@ This interface will monitor input from the electronic controls of the system and
 \subsubsection{Communication Interfaces}
 \index{Communication Interfaces}
 \index{Serial Communcation Interface}
-{\bf Serial Communication Interface}All communication except for to the electronic launch components will be done via serial ports. Input and Output to these port act like file descriptors and will be read and written too in such a manner. Serial communication encompasses sensor input, data output, and command input and output.
+\paragraph {\bf Serial Communication Interface}All communication except for to the electronic launch components will be done via serial ports. Input and Output to these port act like file descriptors and will be read and written too in such a manner. Serial communication encompasses sensor input, data output, and command input and output.
 
 \subsection{Functions}
 \index{Functions}
