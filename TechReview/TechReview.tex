@@ -1,0 +1,156 @@
+\documentclass[10pt,draftclsnofoot,onecolumn]{IEEEtran}
+\usepackage[letterpaper, portrait, margin=0.75in]{geometry}
+%\usepackage[myheadings]{fullpage}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{graphicx, wrapfig, subcaption, setspace, booktabs}
+\usepackage[T1]{fontenc}
+\usepackage[font=small, labelfont=bf]{caption}
+%\usepackage{fourier}
+\usepackage[protrusion=true, expansion=true]{microtype}
+\usepackage[english]{babel}
+%\usepackage{sectsty}
+\usepackage{url, lipsum}
+\usepackage{tikz}
+
+
+\newcommand{\namesigdatehrule}[1]{\par\tikz \draw [blue, densely dotted, ultra thick] (0,0) -- (#1,0);\par}
+\newcommand{\namesigdate}[2][5cm]{%
+\begin{minipage}{#1}%
+    #2 \vspace{0.8cm}\namesigdatehrule{#1}\smallskip
+    \small \noindent\textit{Signature}
+    \vspace{0.8cm}\namesigdatehrule{#1}\smallskip
+    \small \textit{Date}
+\end{minipage}
+}
+
+
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+\newcommand*\tick{\textsc{\char13}}
+\singlespacing
+\setcounter{tocdepth}{5}
+\setcounter{secnumdepth}{5}
+
+
+\begin{document}
+%\title{HyRo (Working title)}
+%\author{Jason Klindtworth  |  Josh Asher  |   Layne Nolli}
+%\date{}
+%\maketitle
+\begin{titlepage}
+\centering
+	{\scshape\LARGE HyRo \par}
+	%\vspace{1cm}
+	{\scshape\LARGE Team 28\par}
+	\vspace{1cm}
+	{\scshape\Large Jason Klindtworth  |  Josh Asher  |   Layne Nolli}
+	\noindent\makebox[\linewidth]{\rule{17cm}{2pt}}
+	\vspace{1cm}
+	{\huge\bfseries CS461\par}
+	\vspace{2cm}
+	{\Large\itshape Fall 2016\par}
+	\vspace{4cm}
+	{\large Technology Review\par}
+	\vspace{4cm}
+	{\large Abstract\par}
+	\vspace{1cm}
+	High Altitude rockets have a distinct advantage in using Hybrid propulsion systems. These systems are complex and present challenges in remote telemetry including launch initialization and controlling remote fuel filling/disconnect. High altitude rockets also contain an array of sensors that collect data which needs to be visualized in a human friendly format. The goal of HyRo is to provide mechanisms for remotely launching and controlling the fuel systems on a hybrid propulsion system through onboard embedded circuitry/software that communicates to launch team via radio waves. This circuitry/software will also communicate sensor data to the ground. Sensor data is displayed in our visualization software in an appealing, human readable way. \par
+	\noindent\makebox[\linewidth]{\rule{17cm}{2pt}}
+
+	\vfill
+
+% Bottom of the page
+	{\large \today\par}
+\end{titlepage}
+\tableofcontents
+
+\section{Introduction}
+
+
+\section{Technology Reviews}
+\subsection{Technology 1}
+\subsubsection{Options}
+\subsubsection{Goals}
+\subsubsection{Criteria}
+\subsubsection{Comparison Table}
+\subsubsection{Discussion}
+\subsubsection{Selected Option}
+\subsection{Technology 2}
+\subsection{Technology 1}
+\subsubsection{Options}
+\subsubsection{Goals}
+\subsubsection{Criteria}
+\subsubsection{Comparison Table}
+\subsubsection{Discussion}
+\subsubsection{Selected Option}
+\subsection{Technology 3}
+\subsection{Technology 1}
+\subsubsection{Options}
+\subsubsection{Goals}
+\subsubsection{Criteria}
+\subsubsection{Comparison Table}
+\subsubsection{Discussion}
+\subsubsection{Selected Option}
+\subsection{Technology 4}
+\subsection{Technology 1}
+\subsubsection{Options}
+\subsubsection{Goals}
+\subsubsection{Criteria}
+\subsubsection{Comparison Table}
+\subsubsection{Discussion}
+\subsubsection{Selected Option}
+\subsection{Technology 5}
+\subsection{Technology 1}
+\subsubsection{Options}
+\subsubsection{Goals}
+\subsubsection{Criteria}
+\subsubsection{Comparison Table}
+\subsubsection{Discussion}
+\subsubsection{Selected Option}
+\subsection{Technology 6}
+\subsection{Technology 1}
+\subsubsection{Options}
+\subsubsection{Goals}
+\subsubsection{Criteria}
+\subsubsection{Comparison Table}
+\subsubsection{Discussion}
+\subsubsection{Selected Option}
+\subsection{Technology 7}
+\subsection{Technology 1}
+\subsubsection{Options}
+\subsubsection{Goals}
+\subsubsection{Criteria}
+\subsubsection{Comparison Table}
+\subsubsection{Discussion}
+\subsubsection{Selected Option}
+\subsection{Technology 8}
+\subsection{Technology 1}
+\subsubsection{Options}
+\subsubsection{Goals}
+\subsubsection{Criteria}
+\subsubsection{Comparison Table}
+\subsubsection{Discussion}
+\subsubsection{Selected Option}
+\subsection{Technology 9}
+\subsection{Technology 1}
+\subsubsection{Options}
+\subsubsection{Goals}
+\subsubsection{Criteria}
+\subsubsection{Comparison Table}
+\subsubsection{Discussion}
+\subsubsection{Selected Option}
+\subsection{Technology 10}
+\subsection{Technology 1}
+\subsubsection{Options}
+\subsubsection{Goals}
+\subsubsection{Criteria}
+\subsubsection{Comparison Table}
+\subsubsection{Discussion}
+\subsubsection{Selected Option}
+\subsection{Traditional Computer Software}
+
+\section{Conclusion}
+\section{Bibliography}
+
+
+\end{document}
