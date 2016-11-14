@@ -261,27 +261,22 @@ The way that the user interface is organized is an important consideration to th
 	The final type of UI we discussed is a data dense UI which shows much more data on the interface then the other two methods. We would have almost all of the gathered data in very dense graphs and tables that would update in real time while the rocket is in flight. This would leave less room for functionality commands, but at a glance we would have more visibility to what is happening to the rocket during flight. The benefit of this type of system would be that the user would be able to know exactly what is happening at any given time without having to rely on the logs being analyzed after the flight. A major downside of this design is the cluttering of the data being displayed. Having access to so much data all at once might be distracting to the user and would not look clean or streamlined. \par
 
 	None of these systems are going to work specifically for our needs, so we are designing a new type that is a combination of these existing UI types. We want the system to have high functionality while maintaining good data density. We will still be outputting the data to a log for future analysis, but most of the gathered data will be available on the screen in real time during launch. The system does not need to be super simple as the layout is for gathering complex data, but we want the users to be able to navigate the system without needing extensive training with the system beforehand. \par
-\subsection{Technology 8}
-\subsubsection{Options}
-\subsubsection{Goals}
-\subsubsection{Criteria}
-\subsubsection{Comparison Table}
-\subsubsection{Discussion}
-\subsubsection{Selected Option}
-\subsection{Technology 9}
-\subsubsection{Options}
-\subsubsection{Goals}
-\subsubsection{Criteria}
-\subsubsection{Comparison Table}
-\subsubsection{Discussion}
-\subsubsection{Selected Option}
-\subsection{Technology 10}
-\subsubsection{Options}
-\subsubsection{Goals}
-\subsubsection{Criteria}
-\subsubsection{Comparison Table}
-\subsubsection{Discussion}
-\subsubsection{Selected Option}
+\subsection{the interaction modes you will support}
+Interaction modes are important in order to create a natural and flowing user-experience when attempting to derive meaning from the data displayed. Without a good interaction method, data is just miles of spreadsheets and characters. Interaction modes allow the user to get to their desired viewports and data processing methods with minimal effort or headache.
+Our first option for interaction methods is the gold standard, mouse and keyboard. This interaction mode is the one that requires minimal user training, as most users are already more than well versed with it. Because of its prevalence in today's world of computers, the mouse and keyboard is already second nature for 99.9 percent of potential users of our system. This is a major advantage for us because all we have to do is create a control sceme that compliments this input method in an intuitive way and users will spend minimal time having to learn our UI control scheme.
+Second interaction mode would be a touch screen on a tablet or smartphone. This method is a very powerful way of navigating the UI. Mobile touchscreen interaction is very efficient and very intuitive. whats more intuitive that using your own fingers to navigate a UI? While it can be argued that this mode is very intuitive, the issue with this interaction mode is that our project requires real time interaction with components that just dont mesh well with a mobile device. So while it may be nice as a side project, or secondary method to view data post-launch, it does not suit our needs for data collection and processing (and viewing) within the scope of our project.
+Finally, UI interaction could be supported by way of virtual reality. This method is obviously beyond the scope of our project, designing a virtual reality program for a user to step into and use various "VR wand" inputs to move about a virtual space and interact with data is a rather inefficient and complex process. The concept sounds very cool from a presentation standpoint. But when looking at this idea relative to the requirements of our project, it is just not feasible.
+Our goals for interaction modes in the scope of this problem are to create a system that is intuitive, simple, and powerful. Taking a closer look at these goals; We want to create a system that is not going to take a user a long time to become capable of using it effectively. We want to create a system that involves as few "hurdles" as possible, meaning a user can get to their desired data visualization or graphic with minimal steps. And finally we want a system that offers the full selection of data and processed data visualizations that the user may desire, there should be no case that the user wishes they could see but it is not supported by the system. For this portion of the solution, mouse and keyboard will be the best input method to be paired with the rest of the system.
+
+\subsection{the UI interaction model that embeds the visualizations of the data}
+The UI interaction model, as it pertains to our project, is the marriage of our UI capabilities and our input mode. As discussed prior, our best known interaction mode is via the mouse and keyboard. The UI interaction model itself is a set of decisions that will define how our UI will look and feel for any user trying to make sense of the data collected during our project, it defines what the user can and can't do when interacting with our system.
+One option is to make use of menus, in a tree-like structure, so that a user can navigate through a series of menus that present various data manipulation options as the user progresses, eventually resulting in the desired data being processed and presented on screen.
+Another option is a more graphical approach, displaying data on screen in graphical format right off the bat then letting the user change x or y axis with available data metrics to create graphical representations of the data they are interested in real time. For example a user could want to see the flow rate versus time on a graph, but after viewing this data they may want to see rocket velocity versus time and would interact with the y axis to produce this result.
+Finally we could implement a system of preset data viewing options. So the user would do less navigation or selection of how they personally would like to see the data, and instead they would just be viewing or choosing from a set of available options. This is a much less hands-on approach to presenting useful information to the user, but accomplishes the task based on what we know the user will want to see.
+Within the scope of our project, and because of the incredibly complex formulas that will need to be applied to the data. It makes the most sense for us to go with the last option. We will decide what the user gets to see based on communicating with the user during development of our project and we will present only that pertinent information on the UI. Giving the users total freedom to manipulate data within our system is just not a practical approach, it will be clunky to use and incredibly difficult to create bug-free. A nice dashboard of known data outputs will be all our user will need.
+
+\subsection{the mapping of the data onto a display model}
+The method for mapping the data onto the display model is a critical component for making sense of our projects data output and improving the project in future iterations. There is really only two ways for us to map data into our display model, and both are graphical. It is discussed in this document that we will be using an HTML customized web layout to represent all our UI elements, and beyond that, all data that will be displayed on our UI will be in "graphical" or "gauge" format. An example of the former would be a generic x y plot of velocity over time. An example of the later would be like the engine temp guage on your car dashboard. There is no real comparison required here because both methods will be used and applied to the two different visual data representations desired by our user. The only other method would be to view raw data in table format and that is already fully available to our user, our goal is to make that data more easily understood and/or manipulated.
 
 \section{Conclusion}
 \section{Bibliography}
