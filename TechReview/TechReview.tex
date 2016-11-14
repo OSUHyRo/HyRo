@@ -28,7 +28,7 @@
 \newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
 \newcommand*\tick{\textsc{\char13}}
 \singlespacing
-\setcounter{tocdepth}{5}
+\setcounter{tocdepth}{2}
 \setcounter{secnumdepth}{5}
 
 \setlength{\arrayrulewidth}{1mm}
@@ -228,27 +228,39 @@ Using an array/table of conversions on the traditional computer to convert data 
 
 \subsubsection{Option 2}
 I am choosing to use Object Oriented programming paradigms so that this component of the software is easy to read, and manipulate. Providing convenient inheritance that allows us to not duplicate code. I believe that this problem lends itself best to this paradigm. The rocket components connected to the system as easily visualized as object with their own attributes. Each sensor or controller will have its own class inheriting from a general class. These sub classes will expand the base class with unique attributes form the components. Every object tis self-contained including any conversion formulas required by the data. Objects are also easily iterated through and accessed. 
-\subsection{Technology 5}
-\subsubsection{Options}
-\subsubsection{Goals}
-\subsubsection{Criteria}
-\subsubsection{Comparison Table}
-\subsubsection{Discussion}
-\subsubsection{Selected Option}
-\subsection{Technology 6}
-\subsubsection{Options}
-\subsubsection{Goals}
-\subsubsection{Criteria}
-\subsubsection{Comparison Table}
-\subsubsection{Discussion}
-\subsubsection{Selected Option}
-\subsection{Technology 7}
-\subsubsection{Options}
-\subsubsection{Goals}
-\subsubsection{Criteria}
-\subsubsection{Comparison Table}
-\subsubsection{Discussion}
-\subsubsection{Selected Option}
+
+\subsection{The toolkit you will use to generate the UI}
+The tool kit that we use to display the collected data is a very important part of the system. It will allow the user to interact with the data and draw conclusions about what is happening in the rocket. It will need to be clear and concise but also low enough overhead in order to be fast and reliable. The rocket will be traveling very fast and data collection will need to be able to keep up with the changing conditions of the kinematics and pressures that the rocket is experiencing. The user interface will also need to be very modular in order to fit the unique needs of our customization demands and allow for many different types of data to be displayed in unison in a readable, easily understandable way. The three technologies we will be considering for the visualization tool kit are Unity, a game creation platform; VPython, designed for 3d modeling and rendering; and a JavaScript based web UI platform. \par
+
+Unity is an easy to use highly customizable scripting based software development platform that is very highly used around the world for the creation and deployment of both desktop and mobile applications. One of the major benefits of this platform is the high level of customization that is allowed with things like script interaction, layout, and visualization of data. Another noticeable benefit is the availability of free assets and premade scripts that are used within the system. This will save us development time and cost because a lot of the things we will end up needing are already created and can be used for free within the Unity application. A major downside to using a large application like Unity is the amount of overhead that is required for the software to run. Because we are going to be restricted in the capability of our hardware, we might not have enough resources to run an application this heavy. The other downside is that there is a large learning curve to being able to utilize Unity to its full potential and the time that we make up with the premade scripts and assets we might lose again in learning how to implement those tools successfully. \par
+
+VPython is a very robust and lightweight platform that makes it easy to display 3d models and manipulate those models using physics and kinematics. There is a lot of existing code in Python that the rocket team used last year which will save on some development time for this project, and python is easy to coordinate with other integrated platforms like C or C++. It is also very nice for modeling graphs and data over time changes which our project is going to need for measuring changing in the rocket data. During my research I found that one of the major downsides to VPython is the lack of documentation between integrating a VPython system into the microcontroller that we are using, so there will be a lot of upfront trial and testing to make sure that we can get the systems to work together. Another downside is that when talking to other members of our team (the ECE group that is working on the hardware) they have little to no experience with VPython so it would be a challenge to get it working together with their systems they are designing.\par
+
+The third option available to us is a JavaScript web based application that can be used to display all of the data that we need. This is probably the easiest option to implement and also easy for getting data input from all of the hardware sensors we are going to use. The downside to a web app is security and reliability. Security is not really a problem for our system in general, and it would be relatively simple to add some level of encryption to the data because it will technically be sent across an internet protocol. The other problem is reliability. If we are using a web based application it will rely on the web service being up and running at the time of deployment. This is not usually an issue as these systems are generally always up, but it is one more concern that we would have to be aware of.\par
+
+After doing quite a bit of research on this topic and weighing the pros and cons of all the options, we determined that VPython would be the best platform to use for our needs. The amount of preexisting code from previous teams will be very helpful to our needs and the low overhead over something like Unity will help with data transfer speeds and keep our read times in the projected requirements for the project. Additionally we feel like the downsides of this platform will be manageable\par.
+
+\subsection{The organization of the UI}
+
+There is a near infinite amount of ways to display data. We could use graphs, charts, tables, sliders, gifs, images, the list goes on and one. There are also a few different underlying technologies that can be used to organize the UI. This can be done with frames, objects, pre-rendered images with changing data sets, or a number of other systems in place. The three options we will be discussing to organize the UI for our project are Semantic UI, HTML/CSS, and the IPython with Project Jupyter. \par
+
+Semantic UI is a pre-packaged program in place to design and implement project ideas and user interfaces for data driven UI systems. It works with multiple different languages to combine elements of a user interface into a simple straightforward design. The benefits of this system include an easy to navigate UI that has a consistent feel and layout. It would also be easy to manage different projects and different layouts in order to test different layouts to see one we like without a lot of extra testing or coding. However, the system seems fairly difficult to get up and running and managing a large project like this with multiple different sub groups might be challenging. \par
+
+HTML/CSS would be a local web layout that we could customize to look however we want, we could either use preexisting CSS packages or create our own fairly easily. This type of system would give us the most control over layout style and we could tailor it to look exactly how we need for the project. Another benefit is that it is pretty easy to implement HTML/CSS with other languages that we might use like C++, JavaScript, or Python. The downside of this system would be that in order to make any changes to the layout once we made it would require a large overhaul and re-coding the majority of the system. \par
+
+	IPython is a way to use Python code to create an interactive system which can be used as a customizable user interface that would sever our needs for this project. The main benefit of this system would be that it interacts well with Python and VPython natively and would save a lot of time in trying to get cross systems to work seamlessly in the final integrated system. The problem with IPython is that there is limited support documentation, there is not a whole lot of microcontroller support, and some of the team members have never used it, so we would lose development time learning how to implement the system to make sure it is compatible with the other software systems or microcontroller hardware.\par
+	For the final implementation for this project we are going to go with an HTML/CSS layout for our user interface. The capabilities of higher customization and layout control are very desirable for this project and will benefit the end system. In order to get around the drawbacks of an HTML/CSS system we will do smaller mockups of the final project before deciding on the final design. That way we can test a few different types of layouts before committing additional resources that we might not end up using.\par
+
+\subsection{The organization of the UI}
+The way that the user interface is organized is an important consideration to the usability of the system being designed. There are many ways that a UI can be organized for ease of use, functionality, or density of information being displayed. There is a fine line between these three styles and we need to carefully consider the pros and cons of each and how they will fit into the project goals and requirements for the overall system. \par
+
+	The first type of UI layout we considered is one designed for ease of use. This is a way to make the UI very user friendly so they know what exactly is going on without much clutter or over exposure to large quantities of data. This type will have simple graphs and buttons with minimal data being displayed for the user. The majority of the data will be archived into a file structure and stored in logs to be viewed later instead of being on the screen. This allows for a less cluttered interface for the user. The downside is that the user might be missing out on a specific type of data they want at a given time, or they might need to issue a command or task to the rocket mid-flight that a simple UI would prevent access to that command, in the case of an emergency or unplanned event for example. \par
+	
+	The second type of UI is one designed for high functionality. This is a more complex UI with additional features such as scripts or commands that would send instructions to the rocket that may not ever be needed, but are included in the UI in the rare case that something goes wrong and they are needed after all. It will show about the same amount of data as the first type, but will have many more options available for executing commands. The downsides to this type of UI are that we would be creating and implementing code for obstacles and situations that may never arise, we might use a lot of time developing something that would never be used. The upside, obviously, would be that in the rare case we DID need that functionality, we would have it. \par
+	
+	The final type of UI we discussed is a data dense UI which shows much more data on the interface then the other two methods. We would have almost all of the gathered data in very dense graphs and tables that would update in real time while the rocket is in flight. This would leave less room for functionality commands, but at a glance we would have more visibility to what is happening to the rocket during flight. The benefit of this type of system would be that the user would be able to know exactly what is happening at any given time without having to rely on the logs being analyzed after the flight. A major downside of this design is the cluttering of the data being displayed. Having access to so much data all at once might be distracting to the user and would not look clean or streamlined. \par
+
+	None of these systems are going to work specifically for our needs, so we are designing a new type that is a combination of these existing UI types. We want the system to have high functionality while maintaining good data density. We will still be outputting the data to a log for future analysis, but most of the gathered data will be available on the screen in real time during launch. The system does not need to be super simple as the layout is for gathering complex data, but we want the users to be able to navigate the system without needing extensive training with the system beforehand. \par
 \subsection{Technology 8}
 \subsubsection{Options}
 \subsubsection{Goals}
