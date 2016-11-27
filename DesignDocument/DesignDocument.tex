@@ -16,6 +16,7 @@
 \usepackage{makeidx}
 \newcommand{\subparagraph}{}
 \usepackage{titlesec}
+\usepackage{enumitem}
 
 \makeatletter
 \renewcommand{\@IEEEsectpunct}{ \\ \\ \,}% Modified from {:\ \,}
@@ -100,16 +101,76 @@
 \tableofcontents
 \newpage
 
-\section{ Overview}
+\section{Introduction}
 \subsection{Scope}
 \subsection{Purpose}
 \subsection{Intended Audience}
-\subsection{Conformance}
-\section{Defenitions}
-\section{Conceptual model for software design descriptions}
-\subsubsection{Software design in context}
-\subsubsection{Software design descriptions in context}
-\section{Design description information content}
+\subsection{Definitions}
+\begin{description}
+	\item[Hybrid Rocket] A rocket with an engine that uses both solid and liquid fuel
+	\item[I/O] Input and Output 
+	\item[PWM] Pulse Width Modulation is used to control signal level on a electrical wire
+	\item[Beagle Bone Black] A miniature computer that will be used on-board our hybrid rocket to house our software.
+	\item[Python Dictionary] A associative array accessed by key value pairs.
+	\item[Oxidizer] Liquid gas used to accelerate the burning of solid fuel.
+	\item[Accelerometer] Measures acceleration.
+	\item[Gyroscope] Measure tilt relative to the earth.
+	\item[Magnetometer] Measures the electric field around it.
+	\item[Multi Threaded] A program that runs multiple methods in parallel to the main program allowing components to run independently.
+\end{description}
+\subsection{References}
+\subsection{Overview}
+\section{Design Considerations}
+\section{System Architecture On-board the Rocket }	
+The SDD module design of the software on-board the hybrid rocket detailed here after will explain the approach, methods, and properties of this component of the system. Software running on-board the rocket will communicate to software running on a traditional computer through a radio transceiver connected to the Beagle Bone Black. For convenience a diagram is provided below to show the entirety of the entire system. This section will  only cover the design of the software running on the Beagle Bone Black.
+\subsection{Components} 
+This section is intended to explain the components of the rocket we will be receiving and/or sending data too. It is a general overview of what could be part of the system as the rocket has not yet been designed. Exact sensors are not presented because they have not be chosen yet. Though collection of data from them will be the same regardless. This allows for easy expansion of sensors in the code if time allows.\par
+At the moment we know the rocket will have an accelerometer, barometric/temperature sensor, and a servo to control filling, arming, and launching of the rocket. The sensors will be polled for data every 500 milliseconds and this data will be held in a buffer to be transmitted. Each sensor/servo has drivers built in python that will be used to access the sensors/servo data and in case of the servo sen PWM signals to control the movement of the servo.\par
+The sensors and servo are connected to the Beagle Bone Black physically through I/O lines available on the board. The drivers define these connections and the functions to preform communication. There is a chance that the rocket design will change and we will need to create our own drivers for the new components. If that happens the driver design will be detailed under this section. At the moment all components used last year currently have drivers available.\par
+\subsection{Data Format}
+There are two buffers in this program. One to hold the sensor data and one to hold commands received. They are both globally available to the entire program.
+\subsubsection{Sensor Data Buffer}
+The sensor data buffer will be a python dictionary with keys relating to the name of the sensor out put. For examples the temperature data will be stored in and accessed by the field "temperature".  The timestamps field is important to the radio transceiver polling function (detailed below) as this is what it uses to decided if the data is new.
+\begin{description}
+	\item[Buffer Name] dataBuffer
+	\item[Buffer Keys]  -
+		\begin{description}
+			\item[time\_stamp] Time the current data was written to this buffer.
+			\item[altitude] The altitude above ground level reading from the altitude sensor.
+			\item[temp] The temperature reading from the temperature sensor.
+			\item[a\_x] Accelerometer data from x axis.
+			\item[a\_y] Accelerometer data from y axis.
+			\item[a\_z] Accelerometer data from z axis.
+			\item[g\_x] Gyroscope data from the x axis.
+			\item[g\_y] Gyroscope data from the y axis.
+			\item[g\_z] Gyroscope data from the z axis.
+			\item[m\_x] Magnetometer data from the x axis.
+			\item[m\_y] Magnetometer data from the x axis.
+			\item[m\_z] Magnetometer data from the x axis.
+			\item[tank\_pres] The pressure of the oxidizer tank.
+			\item[chamber\_pres] The pressure of the combustion chamber
+		\end{description}
+\end{description}
+
+\subsubsection{Command Buffer}
+The command buffer will be used to store commands received from the traditional computer software component to be accessed by the command thread. A python list data structure will be used to provide easy pushing and popping of values. When a command is detected it is added to this array and as it is processed it is removed from the array.\par
+{\bf Buffer Name:} commandBuffer \\
+{\bf Example:}\\
+commandBuffer = {} // empty \\
+New command Received = arm add to buffer \\
+commandBuffer = {0 : 'arm'} \\
+New command Received = disarm add to buffer \\
+commandBuffer = {0 : 'arm', 1:  'disarm'} \\
+Command Processed = 'arm' \\
+commandBuffer = { 0 :'disarm'} \\
+Command Processed = 'disarm' \\
+commandBuffer = {} //empty \\
+
+ 
+\subsection{Methods and Threads}
+This component will be designed in a multihreaded fashion.
+\section{System Architecture on Traditional Computer }	
+\section{User Interface Design}
 
 
 \section{Index}
