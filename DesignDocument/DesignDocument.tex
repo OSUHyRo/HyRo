@@ -191,7 +191,7 @@ command\_thread() \par
 rf\_send(message)  \par
 {\bf Process/Algorithm:} \\
 When the thread initializes all servo objects will be instantiated to allow for access their corresponding electrical signal lines. The command processing thread will monitor the command buffer for new commands. If the command buffer length is not zero there is a new command in the buffer.The buffer will be checked  every 250 milliseconds for a new command. Commands will be processed through a set of conditional statements. Commands must be performed in a specific sequence detailed below next to the command explanation. Boolean flags will be used to determine if a command has been previously processed.  Each command will result in a call to the respective servo objects electrical signal line. This will cause the physical servo to change positions. The values output on the signal lines will be determined by the servo used. These details have not been solidified by the rocket team yet. Regardless the functionality will be the same only the values outputted will change once an appropriate device has been chosen. \par
-If a command passes its conditional statement the servo function will be called on the appropriate servo object with a electrical signal value corresponding to its proper adjustments. The adjustment measurements will be determined by the mechanical engineers on the project and hard coded into the software. If a command does not pass a conditional a message will be sent to radio transceiver by calling rf\_send(message) with the appropriate error message. The command will then be dropped and no action will be taken. Once the command sequence has been fulfilled the rocket is put into the launch state. This is dictated by a global boolean variable.\par
+If a command passes its conditional statement the servo function will be called on the appropriate servo object with a electrical signal value corresponding to its proper adjustments. The adjustment measurements will be determined by the mechanical engineers on the project and hard coded into the software. After each command is successfully processed an acknowledgment will be sent to rf\_send(message) to inform the ground software a command was successfully processed. If a command does not pass a conditional a message will be sent to radio transceiver by calling rf\_send(message) with the appropriate error message. The command will then be dropped and no action will be taken. Once the command sequence has been fulfilled the rocket is put into the launch state. This is dictated by a global boolean variable.\par
 {\bf Commands:} \\
 \begin{description}
 	\item[fill] This will adjust a servo to fill the oxidizer tank before launch. Sequence number 1.
@@ -240,8 +240,27 @@ send\_rf() \par
 {\bf Outputs:} \\ Message to radio transceive. \par
 {\bf Process/Algorithm:} \\
 Upon being called in turns calls the write function of the radio transceiver object with the message provided in the message parameter. 
-\section{System Architecture on a Traditional Computer }	
+\subsection{Rationale}
+\subsection{Language}
+\section{System Architecture on a Traditional Computer }
+\subsection{Overview}
+\subsection{GUI and Graphing Toolkits}
+\subsection{Data Format}
+\subsection{Methods and Threads}
+\subsubsection{Main Thread}
+\subsubsection{Data Thread}
+\subsubsection{Redraw Thread}
+\subsubsection{Radio Transceiver Send Function}
+\subsubsection{Initialization Function}
+\subsubsection{Redraw Function}
+\subsubsection{Button Event Listener}
+\subsubsection{Log Function}
+\subsubsection{Converter Functions}
+	\paragraph{convTemp(data)
+	\paragraph{convCHPressure}
+\subsubsection{Drawing Functions}
 \section{User Interface Design}
+
 
 
 \section{Index}
