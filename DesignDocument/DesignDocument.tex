@@ -107,9 +107,9 @@
 \subsection{Intended Audience}
 \subsection{Definitions}
 \begin{description}
-	\item[Hybrid Rocket] A rocket with an engine that uses both solid and liquid fuel
-	\item[I/O] Input and Output 
-	\item[PWM] Pulse Width Modulation is used to control signal level on a electrical wire
+	\item[Hybrid Rocket] A rocket with an engine that uses both solid and liquid fuel.
+	\item[I/O] Input and Output.
+	\item[PWM] Pulse Width Modulation is used to control signal level on a electrical wire.
 	\item[Beagle Bone Black] A miniature computer that will be used on-board our hybrid rocket to house our software.
 	\item[Python Dictionary] A associative array accessed by key value pairs.
 	\item[Oxidizer] Liquid gas used to accelerate the burning of solid fuel.
@@ -117,6 +117,8 @@
 	\item[Gyroscope] Measure tilt relative to the earth.
 	\item[Magnetometer] Measures the electric field around it.
 	\item[Multi Threaded] A program that runs multiple methods in parallel to the main program allowing components to run independently.
+	\item[Mutex Lock] Used to lock control of an area of memory while an operation is completed. If any other parts of the system attempt to access this part of memory while the lock is in place they will not be allowed to.
+	\item[Boolean] A way to represent a true or false value in software.
 \end{description}
 \subsection{References}
 \subsection{Overview}
@@ -168,8 +170,77 @@ commandBuffer = {} //empty \\
 
  
 \subsection{Methods and Threads}
-This component will be designed in a multihreaded fashion.
-\section{System Architecture on Traditional Computer }	
+This component will be designed in using multi threaded approach with helper functions. Each thread will be responsible for a certain aspect of the system. They will communicate through the two buffers detailed above. This will require mutex locks be put on the buffers prior to any action taken from the independent threads. The following is a list of the threads and helper functions with their descriptions and interactions.
+\subsubsection{Sensor Polling Thread}
+{\bf Purpose:} \\
+This thread is used to pull data from the sensors every 500 milliseconds. The data is then placed into the sensor data buffer. \par
+{\bf Definition:} \\ 
+sensor\_thread() \par
+{\bf Inputs:} \\  Sensor data from the varies sensors. This is not a parameter input instead the function reads the data from the sensors as input.
+{\bf Outputs:} \\ Sensor data to the sensor data buffer.
+{\bf Process/Algorithm:} \\
+When the thread starts it initially creates sensor objects to allow access to the sensors data through the use of their read functions. Afterwards this thread will run in a continuous loop. The loop will collect data from each of sensors in a temporary array until all sensors have been polled. Data by calling read or its equivalent of the related sensor object. When the thread has collected data from all sensors it will place a mutex lock on the sensor data buffer and write the new data to the buffer along with a time stamp. \par
+\subsubsection{Command Processing Thread}
+{\bf Purpose:} \\
+The command processing thread will monitor for new commands in the commands buffer. If commands are received it will process them and take appropriate action. This could include sending an error message to the ground computer through the radio transceiver send function. \par
+{\bf Definition:} \\ 
+command\_thread() \par
+{\bf Inputs:} \\  Data from the command buffer. \par
+{\bf Outputs:} \\ Signals to servo and messages to rf\_send() \par
+{\bf Calls:} \\ 
+rf\_send(message)  \par
+{\bf Process/Algorithm:} \\
+When the thread initializes all servo objects will be instantiated to allow for access their corresponding electrical signal lines. The command processing thread will monitor the command buffer for new commands. If the command buffer length is not zero there is a new command in the buffer.The buffer will be checked  every 250 milliseconds for a new command. Commands will be processed through a set of conditional statements. Commands must be performed in a specific sequence detailed below next to the command explanation. Boolean flags will be used to determine if a command has been previously processed.  Each command will result in a call to the respective servo objects electrical signal line. This will cause the physical servo to change positions. The values output on the signal lines will be determined by the servo used. These details have not been solidified by the rocket team yet. Regardless the functionality will be the same only the values outputted will change once an appropriate device has been chosen. \par
+If a command passes its conditional statement the servo function will be called on the appropriate servo object with a electrical signal value corresponding to its proper adjustments. The adjustment measurements will be determined by the mechanical engineers on the project and hard coded into the software. If a command does not pass a conditional a message will be sent to radio transceiver by calling rf\_send(message) with the appropriate error message. The command will then be dropped and no action will be taken. Once the command sequence has been fulfilled the rocket is put into the launch state. This is dictated by a global boolean variable.\par
+{\bf Commands:} \\
+\begin{description}
+	\item[fill] This will adjust a servo to fill the oxidizer tank before launch. Sequence number 1.
+	\item[arm] This will adjust a servo prepare the rocket for ignition. Sequence number 2.
+	\item[ignition] This will send a signal to igniter to ignite the rocket fuel. Sequence number 3.
+	\item[launch] This will adjust a servo to release the rocket from its base. Sequence number 4.
+	\item[disarm] This will adjust a servo to reverse the arming process. Can be used at any time.
+	\item[abort] This will adjust all servos to their initial state. Can be used at any time.
+\end{description}
+\subsubsection{Radio Transceiver Thread}
+{\bf Purpose:} \\
+The radio transceiver thread is responsible for monitoring the radio transceiver for incoming data from the software running on the traditional computer. \par
+{\bf Definition:} \\ 
+comm\_thread() \par
+{\bf Inputs:} \\  Data from the radio transceiver and data from the sensor data buffer. \par
+{\bf Outputs:} \\ Data to the command buffer and data to be sent by the radio transceiver. \par
+{\bf Calls:} \\ rf\_send(message) \par
+{\bf Process/Algorithm:} \\
+When the radio transceiver thread initializes it attempts to read from the radio transceiver every 100 milliseconds. At this point the rocket is in a the pre-launch state which is dictated by a boolean flag. While the rocket is in the pre-launch stage this thread will only poll the radio transceiver object for new messages. When a command is received it is placed into the command buffer by first putting a mutex lock on the buffer and pushing the new command onto the buffer. The thread will repeat this process until it detects that the pre-launch stage has passed.  \par
+After the system has enter the launch stage this thread will change its behavior. Instead of monitoring for commands it will monitor the sensor data buffer for new data every 250 milliseconds. It detects new data by checking the time stamp value in the sensor data buffer dictionary. It initially stores the first time value and then upon finding a newer time value it will replace the old time value with the new time stamp and send the buffer into the radio transceiver by calling rf\_send(messsage) with the values from the dictionary as parameters. It repeats this process indefinitely. \par
+\subsubsection{Main Thread}
+{\bf Purpose:} \\
+The main thread in the entry point into the software. It runs all initialization functions and starts all threads. \par
+{\bf Definition:} \\ 
+main() \par
+{\bf Inputs:} \\  None \par
+{\bf Outputs:} \\ None \par
+{\bf Calls:} \\ init(), comm\_thread(), sensor\_thread(), command\_thread \par
+{\bf Process/Algorithm:} \\
+The main function calls the initialization function then creates the radio transceiver thread, the command processing thread, and the sensor thread. It will shut down all thread on program exit. \par
+\subsubsection{Initialization Function}
+{\bf Purpose:} \\
+Initialize any servos, sensors, or global variables. \par
+{\bf Definition:} \\ 
+init() \par
+{\bf Inputs:} \\  None \par
+{\bf Outputs:} \\ None \par
+{\bf Process/Algorithm:} \\
+Initializes all global variables to default values. Then sets up any global comportments like servos to their default values defined by the mechanical engineering team. \par
+\subsubsection{Radio Transceiver Send Function}
+{\bf Purpose:} \\
+Writes a message to send to the radio transceiver. \par
+{\bf Definition:} \\ 
+send\_rf() \par
+{\bf Inputs:} \\  Message to send. \par
+{\bf Outputs:} \\ Message to radio transceive. \par
+{\bf Process/Algorithm:} \\
+Upon being called in turns calls the write function of the radio transceiver object with the message provided in the message parameter. 
+\section{System Architecture on a Traditional Computer }	
 \section{User Interface Design}
 
 
