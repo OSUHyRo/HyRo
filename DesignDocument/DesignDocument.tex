@@ -279,7 +279,9 @@ Log buffers will hold previously received data for a particular key from the sen
 		\end{description}
 \end{description}
 \subsubsection{Command Response Message Format}
-\subsection{Log Format}
+\subsubsection{Data Log Format}
+\subsubsection{Command Log Format}
+\subsubsection{Response Log Format}
 \subsection{Methods and Threads}
 This component will be designed in using multi threaded approach with helper functions. Each thread will be responsible for a certain aspect of the system. They will communicate through the two buffers detailed above. This will require mutex locks be put on the buffers prior to any action taken from the independent threads. The following is a list of the threads and helper functions with their descriptions and interactions.
 \subsubsection{Main Thread}
@@ -533,6 +535,9 @@ drawTankPAsGraph()\par
 {\bf Outputs:} \\Tank pressure vs time graph on the user interface.\par
 {\bf Process/Algorithm:} \\
 This function will take multiple data points from the tank pressure log buffer and plot them with their timestamps on the user interface in the time graph canvas.  \par
+
+\subsection{Rationale}
+\subsection{Language}
 
 \section{User Interface Design}
 
