@@ -278,6 +278,8 @@ Log buffers will hold previously received data for a particular key from the sen
 			\item[chamber\_pres] The pressure of the combustion chamber
 		\end{description}
 \end{description}
+\subsubsection{Command Response Message Format}
+\subsection{Log Format}
 \subsection{Methods and Threads}
 This component will be designed in using multi threaded approach with helper functions. Each thread will be responsible for a certain aspect of the system. They will communicate through the two buffers detailed above. This will require mutex locks be put on the buffers prior to any action taken from the independent threads. The following is a list of the threads and helper functions with their descriptions and interactions.
 \subsubsection{Main Thread}
@@ -295,7 +297,7 @@ The data thread is responsible for polling the radio transceiver for new data or
 data\_thread() \par
 {\bf Inputs:} \\  None \par
 {\bf Outputs:} \\ New data to converter functions. \par
-{\bf Calls:} \\ convTemp(data), convCHPressure(data), convAlititude(data), convTankPressure(data), convAccell(data), convVelocity(data) \par
+{\bf Calls:} \\ convTemp(data), convCHPressure(data), convAlititude(pressure, temp), convTankPressure(d), convAccell(data), convVelocity(data) \par
 {\bf Process/Algorithm:} \\
 The data thread continuously checks for data coming in on the radio transceiver by callings read on the radio transceiver object every 250 milliseconds. When a data packet arrives this thread processes the data by sending the value of the appropriator key to the appropriate data converter. For example the key "temperature" would be sent to the convTemp function. Which will handle the data from there on. If a command response message is received it is passed to the command response processing function.  \par
 \subsubsection{Redraw Thread}
@@ -327,22 +329,124 @@ init() \par
 This function initializes all global buffers, objects and variables to their default values. It then creates the window object, all button widgets, all canvas widgets for graphs, and the graphing menu widget and buttons. Once all user interface items have been initialized it calls the main windows drawing method to display the initial interface. This function is called before any of the threads in this component are started. \par
 \subsubsection{Process Command Response Function}
 {\bf Purpose:} \\
-Receives command response messages from the data thread and processes them.  \par
+Receives command response messages from the data thread and processes them. This function will inform the user of any failed or out of sequence commands.  \par
 {\bf Definition:} \\ 
 command\_response(message) \par
 {\bf Inputs:} \\  Command response to process. \par
-{\bf Outputs:} \\ Message to radio transceiver. \par
-{\bf Calls:}
+{\bf Outputs:} \\ Logs responses to text file and message to screen. \par
+{\bf Calls: drawMessage()}
 {\bf Process/Algorithm:} \\
-Upon being called in turns calls the write function of the radio transceiver object with the message provided in the message parameter. \par
+Upon receiving a command response message from the data thread this function opens the command response log and appends the message to the log with a newline. It then passes the message to the message draw function. \par
 \subsubsection{Button Event Listener}
-\subsubsection{Log Function}
+\subsubsection{Data Log Function}
+{\bf Purpose:} \\
+Logs the data it is passed to the data log text file.  \par
+{\bf Definition:} \\ 
+data\_log(data) \par
+{\bf Inputs:} \\ Dictionary of data to log. \par
+{\bf Outputs:} \\A line representing the data passed in to the data log text file. \par
+{\bf Calls: drawMessage()}
+{\bf Process/Algorithm:} \\
+This function takes the data from data parameter and converts it to the data log format string. It then writes this string as a new line to the data log text file. \par
+\subsubsection{Command Log Function}
+{\bf Purpose:} \\
+Logs the data it is passed to the command log text file.  \par
+{\bf Definition:} \\ 
+command\_log(data) \par
+{\bf Inputs:} \\ Command to log. \par
+{\bf Outputs:} \\A line representing the command passed in to the command log text file. \par
+{\bf Calls: drawMessage()}
+{\bf Process/Algorithm:} \\
+This function takes the a command message from data parameter and converts it to the command log format string. It then writes this string as a new line to the command log text file. \par
 \subsubsection{Converter Functions}
-	%\paragraph{convTemp(data)
-	%\paragraph{convCHPressure}
-\subsubsection{Drawing Functions}
-\section{User Interface Design}
+Each of the follow functions convert data they receive to the proper format for the drawing functions. They then store the data in the main data buffer for the drawing functions to access.  Each converter function is described in its specific details below. \par
 
+\paragraph{Temperature Converter}
+{\bf Purpose:} \\
+Converts raw temperature sensor data to data suitable for the drawing functions.  \par
+{\bf Definition:} \\ 
+convTemp(data) \par
+{\bf Inputs:} \\ Raw temperature data. \par
+{\bf Outputs:} \\ Converted data to data buffer. \par
+{\bf Process/Algorithm:} \\
+This function receives data from the data thread in its data parameter to convert to a temperature value suitable for graphing. It then will store the converted temperature in the data buffer. It will convert the data by using a multiplier and offset provided on the data sheet of the temperature sensor.Temperature will be converted to Fahrenheit. \par
+
+\paragraph{Chamber Pressure Converter}
+{\bf Purpose:} \\
+Converts raw pressure sensor data to data suitable for the drawing functions.  \par
+{\bf Definition:} \\ 
+convCHPressure(data) \par
+{\bf Inputs:} \\ Raw chamber pressure data. \par
+{\bf Outputs:} \\ Converted data to data buffer. \par
+{\bf Process/Algorithm:} \\
+This function receives data from the data thread in its data parameter to convert to a pressure value suitable for graphing. It then will store the converted pressure in the data buffer. It will convert the data by using a multiplier and offset provided on the data sheet of the pressure sensor used in the chamber of the rocket. Pressure will be converted to pounds per square inch. \par
+
+\paragraph{Altitude Converter}
+{\bf Purpose:} \\
+Converts raw barometric pressure sensor readings to data suitable for the drawing functions.  \par
+{\bf Definition:} \\ 
+convAltitude(pressure, temp) \par
+{\bf Inputs:} \\ Raw barometric pressure data. \par
+{\bf Outputs:} \\ Converted data to data buffer. \par
+{\bf Process/Algorithm:} \\
+This function receives data from the data thread in two parameters. One is pressure and one is temperature, both required to calculate altitude. Altitude will be measured in feet.  It then will store the converted temperature in the data buffer. This conversion is currently provided as a function call in the current sensors library. If the design of the rocket changes the barometric pressure equation will have to be used. If that is the case that will be explained in this section. For now converting the temperature and pressure to altitude requires a call to the altitude conversion function which is part of the altitude sensor library. \par
+
+\paragraph{Tank Pressure Converter}
+{\bf Purpose:} \\
+Converts raw pressure sensor data to data suitable for the drawing functions.  \par
+{\bf Definition:} \\ 
+convTankPressure(data) \par
+{\bf Inputs:} \\ Raw tank pressure data. \par
+{\bf Outputs:} \\ Converted data to data buffer. \par
+{\bf Process/Algorithm:} \\
+This function receives data from the data thread in its data parameter to convert to a pressure value suitable for graphing. It will convert the data by using a multiplier and offset provided on the data sheet of the pressure sensor used on the oxidizer tank of the rocket. Pressure will be converted to pounds per square inch. \par
+
+\paragraph{Acceleration Converter}
+{\bf Purpose:} \\
+Converts raw accelerometer sensor data to data suitable for the drawing functions.  \par
+{\bf Definition:} \\ 
+convAccell(data) \par
+{\bf Inputs:} \\ Raw acceleration data. \par
+{\bf Outputs:} \\ Converted data to data buffer. \par
+{\bf Process/Algorithm:} \\
+This function receives data from the data thread in its data parameter to convert to an acceleration value suitable for graphing. The parameter will be a raw acceleration reading from the sensor. It will convert this to the Meters per second squared with the formula provided by the sensor manufacturer. This may include more math if the accelerometer API is not complete This will be added to this document if need be. It then will store the data in the data buffer. \par
+
+\paragraph{Velocity Converter}
+{\bf Purpose:} \\
+Converts raw acceleration data to velocity data suitable for the drawing functions.  \par
+{\bf Definition:} \\ 
+convVelocity(data) \par
+{\bf Inputs:} \\ Raw acceleration data. \par
+{\bf Outputs:} \\ Converted data to data buffer. \par
+{\bf Process/Algorithm:} \\
+This function receives data from the data thread in its data parameter to convert to a velocity value suitable for graphing. The parameter will be a raw acceleration reading from the sensor. It will convert this to the Meters per second by first converting it to meters per second squared (normal acceleration) with the formula provided by the sensor manufacturer. Then it will take the integral of the acceleration to obtain the velocity.  It then will store the data in the data buffer. \par
+
+\subsubsection{Drawing Functions}
+Each of the following drawing functions are called by the redraw thread when data becomes available to be displayed on the screen. The do not take data as input to be displayed, but instead read the data from the data buffer. Each function is responsible for a different data item and will display it according to the format of that data. The following is a list of the drawing functions and their specific operation.
+
+\paragraph{drawMessage()}
+
+\paragraph{drawStatus()}
+
+\paragraph{drawTemp()}
+
+\paragraph{drawCHPressure()}
+
+\paragraph{drawAltitude()}
+
+\paragraph{drawTankPressure()}
+
+\paragraph{drawVelocity()}
+
+\paragraph{drawTempAsGraph()}
+
+\paragraph{drawCHPAsGraph()}
+
+\paragraph{drawAltAsGraph()}
+
+\paragraph{drawTankPAsGraph()}
+
+\section{User Interface Design}
 
 
 \section{Index}
