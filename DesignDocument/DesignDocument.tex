@@ -85,7 +85,11 @@
 	\vspace{2cm}
 	{\Large\itshape Fall 2016\par}
 	\vspace{4cm}
-	{\large Requirements Document\par}\vspace{8cm}
+	{\large Software Design Document\par}\vspace{2cm}
+	{\large Abstract\par}
+	\vspace{1cm}
+	High Altitude rockets have a distinct advantage in using Hybrid propulsion systems. These systems are complex and present challenges in remote telemetry including launch initialization and controlling remote fuel filling/disconnect. High altitude rockets also contain an array of sensors that collect data which needs to be visualized in a human friendly format. The goal of HyRo is to provide mechanisms for remotely launching and controlling the fuel systems on a hybrid propulsion system through onboard embedded circuitry/software that communicates to launch team via radio waves. This circuitry/software will also communicate sensor data to the ground. Sensor data is displayed in our visualization software in an appealing, human readable way. \par
+
 	\noindent\makebox[\linewidth]{\rule{17cm}{2pt}}
 	\vfill
 
@@ -132,7 +136,7 @@ The sensors and servo are connected to the Beagle Bone Black physically through 
 \subsection{Data Format}
 There are two buffers in this program. One to hold the sensor data and one to hold commands received. They are both globally available to the entire program.
 \subsubsection{Sensor Data Buffer}
-The sensor data buffer will be a python dictionary with keys relating to the name of the sensor out put. For examples the temperature data will be stored in and accessed by the field "temperature".  The timestamps field is important to the radio transceiver polling function (detailed below) as this is what it uses to decided if the data is new.
+The sensor data buffer will be a python dictionary with keys relating to the name of the sensor output. For examples the temperature data will be stored in and accessed by the field "temperature".  The timestamps field is important to the radio transceiver polling function (detailed below) as this is what it uses to decided if the data is new. Some of these data items are not planned on being used by the ground software, but are included for future data visualization expansion.
 \begin{description}
 	\item[Buffer Name] dataBuffer
 	\item[Buffer Keys]  -
@@ -211,7 +215,7 @@ comm\_thread() \par
 {\bf Calls:} \\ rf\_send(message) \par
 {\bf Process/Algorithm:} \\
 When the radio transceiver thread initializes it attempts to read from the radio transceiver every 100 milliseconds. At this point the rocket is in a the pre-launch state which is dictated by a boolean flag. While the rocket is in the pre-launch stage this thread will only poll the radio transceiver object for new messages. When a command is received it is placed into the command buffer by first putting a mutex lock on the buffer and pushing the new command onto the buffer. The thread will repeat this process until it detects that the pre-launch stage has passed.  \par
-After the system has enter the launch stage this thread will change its behavior. Instead of monitoring for commands it will monitor the sensor data buffer for new data every 250 milliseconds. It detects new data by checking the time stamp value in the sensor data buffer dictionary. It initially stores the first time value and then upon finding a newer time value it will replace the old time value with the new time stamp and send the buffer into the radio transceiver by calling rf\_send(messsage) with the values from the dictionary as parameters. It repeats this process indefinitely. \par
+After the system has enter the launch stage this thread will change its behavior. Instead of monitoring for commands it will monitor the sensor data buffer for new data every 250 milliseconds. It detects new data by checking the time stamp value in the sensor data buffer dictionary. It initially stores the first time value and then upon finding a newer time value it will replace the old time value with the new time stamp and send the buffer into the radio transceiver by calling rf\_send(message) with the values from the dictionary as parameters. It repeats this process indefinitely. \par
 \subsubsection{Main Thread}
 {\bf Purpose:} \\
 The main thread in the entry point into the software. It runs all initialization functions and starts all threads. \par
@@ -221,7 +225,7 @@ main() \par
 {\bf Outputs:} \\ None \par
 {\bf Calls:} \\ init(), comm\_thread(), sensor\_thread(), command\_thread \par
 {\bf Process/Algorithm:} \\
-The main function calls the initialization function then creates the radio transceiver thread, the command processing thread, and the sensor thread. It will shut down all thread on program exit. \par
+The main function calls the initialization function then creates the radio transceiver thread, the command processing thread, and the sensor thread. It will shut down all threads on program exit. \par
 \subsubsection{Initialization Function}
 {\bf Purpose:} \\
 Initialize any servos, sensors, or global variables. \par
@@ -235,9 +239,9 @@ Initializes all global variables to default values. Then sets up any global comp
 {\bf Purpose:} \\
 Writes a message to send to the radio transceiver. \par
 {\bf Definition:} \\ 
-send\_rf() \par
+send\_rf(message) \par
 {\bf Inputs:} \\  Message to send. \par
-{\bf Outputs:} \\ Message to radio transceive. \par
+{\bf Outputs:} \\ Message to radio transceiver. \par
 {\bf Process/Algorithm:} \\
 Upon being called in turns calls the write function of the radio transceiver object with the message provided in the message parameter. 
 \subsection{Rationale}
@@ -246,18 +250,96 @@ Upon being called in turns calls the write function of the radio transceiver obj
 \subsection{Overview}
 \subsection{GUI and Graphing Toolkits}
 \subsection{Data Format}
+\subsubsection{Sensor Data Buffer}
+The sensor data buffer will be a python dictionary with keys relating to the name of the sensor output. For examples the temperature data will be stored in and accessed by the field "temperature".  The timestamps field is important to redraw function (detailed below) as this is what it uses to decided if the data is new.
+\begin{description}
+	\item[Buffer Name] dataBuffer
+	\item[Buffer Keys]  -
+		\begin{description}
+			\item[time\_stamp] Time the current data was written to this buffer.
+			\item[altitude] The altitude above ground level reading from the altitude sensor.
+			\item[temp] The temperature reading from the temperature sensor.
+			\item[accell] Accelerometer data from x axis.
+			\item[velocity] Accelerometer data from y axis.
+			\item[tank\_pres] The pressure of the oxidizer tank.
+			\item[chamber\_pres] The pressure of the combustion chamber
+		\end{description}
+\end{description}
+\subsubsection{Log Buffers}
+Log buffers will hold previously received data for a particular key from the sensor data buffer. Each key (listed in the last section) will have its own buffer. As data is processed it will be placed into its log buffer. The log buffers will each hold up to 256 of the last entries. This is to allow time graphs to be plotted. These buffers are 2 dimensional arrays that hold that sensors value and a time stamp.
+\begin{description}
+	\item[Buffers]  -
+		\begin{description}
+			\item[altitude] The altitude above ground level reading from the altitude sensor.
+			\item[temp] The temperature reading from the temperature sensor.
+			\item[accell] Accelerometer data from x axis.
+			\item[velocity] Accelerometer data from y axis.
+			\item[tank\_pres] The pressure of the oxidizer tank.
+			\item[chamber\_pres] The pressure of the combustion chamber
+		\end{description}
+\end{description}
 \subsection{Methods and Threads}
+This component will be designed in using multi threaded approach with helper functions. Each thread will be responsible for a certain aspect of the system. They will communicate through the two buffers detailed above. This will require mutex locks be put on the buffers prior to any action taken from the independent threads. The following is a list of the threads and helper functions with their descriptions and interactions.
 \subsubsection{Main Thread}
+The main thread in the entry point into the software. It runs all initialization functions and starts all threads. \par
+{\bf Definition:} \\ 
+main() \par
+{\bf Inputs:} \\  None \par
+{\bf Outputs:} \\ None \par
+{\bf Calls:} \\ init(), data\_thread, redraw\_thread \par
+{\bf Process/Algorithm:} \\
+The main function calls the initialization function then creates the data thread and the redraw thread. It will shut down all threads on program exit. \par
 \subsubsection{Data Thread}
+The data thread is responsible for polling the radio transceiver for new data or command responses messages. Then passing the data to converter functions or the command response message to the command response function.. \par
+{\bf Definition:} \\ 
+data\_thread() \par
+{\bf Inputs:} \\  None \par
+{\bf Outputs:} \\ New data to converter functions. \par
+{\bf Calls:} \\ convTemp(data), convCHPressure(data), convAlititude(data), convTankPressure(data), convAccell(data), convVelocity(data) \par
+{\bf Process/Algorithm:} \\
+The data thread continuously checks for data coming in on the radio transceiver by callings read on the radio transceiver object every 250 milliseconds. When a data packet arrives this thread processes the data by sending the value of the appropriator key to the appropriate data converter. For example the key "temperature" would be sent to the convTemp function. Which will handle the data from there on. If a command response message is received it is passed to the command response processing function.  \par
 \subsubsection{Redraw Thread}
+The redraw thread is responsible for monitoring for new converted data and passing the data to the appropriate redraw functions.\par
+{\bf Definition:} \\
+redraw\_thread() \par
+{\bf Inputs:} \\  None \par
+{\bf Outputs:} \\ None \par
+{\bf Calls:} \\ drawTemp(data), drawCHPressure(data), drawAlititude(data), drawTankPressure(data), drawAccel(data), drawVelovity(data) \par
+{\bf Process/Algorithm:} \\
+The redraw function will check the time stamp value of the data buffer and if it is newer than the one it had previously recorded it will process the data. Upon detecting new data the redraw function will send each new data value to its appropriate draw function. The data at this point has already been converted for the drawing functions so it may be passed directly to them. For example it will pass the temperature data from the data buffer to the drawTemp() function. This thread is only responsible for data delivery to the temperature, chamber pressure, altitude, tank pressure, acceleration, and velocity redraw functions. Each draw function is responsible for graphing the data to its specific canvas.\par
 \subsubsection{Radio Transceiver Send Function}
+{\bf Purpose:} \\
+Writes a message to send to the radio transceiver. \par
+{\bf Definition:} \\ 
+send\_rf(message) \par
+{\bf Inputs:} \\  Message to send. \par
+{\bf Outputs:} \\ Message to radio transceiver. \par
+{\bf Process/Algorithm:} \\
+Upon being called in turns calls the write function of the radio transceiver object with the message provided in the message parameter. \par
 \subsubsection{Initialization Function}
-\subsubsection{Redraw Function}
+{\bf Purpose:} \\
+Initializes global buffers, global objects, global variables, and the user interface. \par
+{\bf Definition:} \\ 
+init() \par
+{\bf Inputs:} \\ None. \par
+{\bf Outputs:} \\None. \par
+{\bf Process/Algorithm:} \\
+This function initializes all global buffers, objects and variables to their default values. It then creates the window object, all button widgets, all canvas widgets for graphs, and the graphing menu widget and buttons. Once all user interface items have been initialized it calls the main windows drawing method to display the initial interface. This function is called before any of the threads in this component are started. \par
+\subsubsection{Process Command Response Function}
+{\bf Purpose:} \\
+Receives command response messages from the data thread and processes them.  \par
+{\bf Definition:} \\ 
+command\_response(message) \par
+{\bf Inputs:} \\  Command response to process. \par
+{\bf Outputs:} \\ Message to radio transceiver. \par
+{\bf Calls:}
+{\bf Process/Algorithm:} \\
+Upon being called in turns calls the write function of the radio transceiver object with the message provided in the message parameter. \par
 \subsubsection{Button Event Listener}
 \subsubsection{Log Function}
 \subsubsection{Converter Functions}
-	\paragraph{convTemp(data)
-	\paragraph{convCHPressure}
+	%\paragraph{convTemp(data)
+	%\paragraph{convCHPressure}
 \subsubsection{Drawing Functions}
 \section{User Interface Design}
 
