@@ -84,7 +84,7 @@
 	{\huge\bfseries CS461\par}
 	\vspace{2cm}
 	{\Large\itshape Fall 2016\par}
-	\vspace{2cm}
+	\vspace{4cm}
 	{\large Software Design Document\par}\vspace{2cm}
 	{\large Abstract\par}
 	\vspace{1cm}
@@ -107,8 +107,25 @@
 
 \section{Introduction}
 \subsection{Scope}
+This Design Document described in detail both the structure and the components of the HyRo deployment software interface and database. It also includes the implementation details required to accurately and completely incorporate the specific requirements associated with this project as detailed in the Requirements Document. Because of the contents of this document, it is assumed that the reader has familiarized themselves with the projects Requirements Document and is aware of the specific needs of this software package and graphical user interface. There is also an assumed general knowledge of computer programing knowledge as this document will rely heavily on the explanation of specific software functions and processes that will be designed in order to accomplish all of the needed requirements for this project. 
 \subsection{Purpose}
+This Design Document serves the following purposes:
+\begin{itemize}
+	\item To fully describe the structure, functions, data, and algorithms which will be implemented in the software package.
+	\item To point out and identify both specific and general system resources that will be utilized.
+	\item To assist the HyRo team in the production and implementation of test cases.
+	\item To be used in order to verify full compliance with the requirements of the project.
+	\item To aid the team in the general overview of the software package and what the capabilities are.
+\end{itemize}
 \subsection{Intended Audience}
+The majority of the document is written for the benefit of knowledgeable software development and design professionals in order to gain specific knowledge of the HyRo software system and its intended capabilities. The intended audience for this documents is the HyRo team, including the following:
+\begin{itemize}
+	\item The project supervisor 
+	\item The computer science sub-team working on the software package itself.
+	\item The electrical engineering sub-team working on the hardware in which the software package will be incorporated into.
+	\item the mechanical engineering sub-team working on the mechanical operations of the rocket which the software package will control or manipulate.
+	\item Any related sub-team for the project that requires knowledge of the computer system or interface system for the rocket.
+\end{itemize}
 \subsection{Definitions}
 \begin{description}
 	\item[Hybrid Rocket] A rocket with an engine that uses both solid and liquid fuel.
@@ -279,9 +296,7 @@ Log buffers will hold previously received data for a particular key from the sen
 		\end{description}
 \end{description}
 \subsubsection{Command Response Message Format}
-\subsubsection{Data Log Format}
-\subsubsection{Command Log Format}
-\subsubsection{Response Log Format}
+\subsection{Log Format}
 \subsection{Methods and Threads}
 This component will be designed in using multi threaded approach with helper functions. Each thread will be responsible for a certain aspect of the system. They will communicate through the two buffers detailed above. This will require mutex locks be put on the buffers prior to any action taken from the independent threads. The following is a list of the threads and helper functions with their descriptions and interactions.
 \subsubsection{Main Thread}
@@ -424,120 +439,29 @@ convVelocity(data) \par
 This function receives data from the data thread in its data parameter to convert to a velocity value suitable for graphing. The parameter will be a raw acceleration reading from the sensor. It will convert this to the Meters per second by first converting it to meters per second squared (normal acceleration) with the formula provided by the sensor manufacturer. Then it will take the integral of the acceleration to obtain the velocity.  It then will store the data in the data buffer. \par
 
 \subsubsection{Drawing Functions}
-Each of the following drawing functions are called by the redraw thread when data becomes available to be displayed on the screen. They do not take data as input to be displayed, but instead read the data from the data buffer or the log buffer. Except for the message drawing routing it takes a input message to be drawn in the message window. Each function is responsible for a different data item and will display it according to the format of that data. The following is a list of the drawing functions and their specific operation.
+Each of the following drawing functions are called by the redraw thread when data becomes available to be displayed on the screen. The do not take data as input to be displayed, but instead read the data from the data buffer. Each function is responsible for a different data item and will display it according to the format of that data. The following is a list of the drawing functions and their specific operation.
 
-\paragraph{Message Drawing Routine}
-{\bf Purpose:} \\
-Display command response message in the message window.  \par
-{\bf Definition:} \\ 
-drawMessage(message) \par
-{\bf Inputs:} \\ Message string to draw.\par
-{\bf Outputs:} \\Message to the message window. \par
-{\bf Process/Algorithm:} \\
-This function will take as its input parameter a command message and then draw the string in the message window of the user interface. \par
+\paragraph{drawMessage()}
 
-\paragraph{Temperature Drawing Routine}
-{\bf Purpose:} \\
-Draw the temperature data on the user interface.  \par
-{\bf Definition:} \\ 
-drawTemp() \par
-{\bf Inputs:} \\None. \par
-{\bf Outputs:} \\Temperature gauge on the user interface.\par
-{\bf Process/Algorithm:} \\
-This function will pull temperature data from the data buffer and draw a gauge representing the data on the temperature canvas. \par
+\paragraph{drawStatus()}
 
-\paragraph{Chamber Pressure Drawing Routing}
-{\bf Purpose:} \\
-Draw chamber pressure on the user interface. \par
-{\bf Definition:} \\ 
-drawCHPressure() \par
-{\bf Inputs:} \\None. \par
-{\bf Outputs:} \\Chamber pressure gauge on the user interface.\par
-{\bf Process/Algorithm:} \\
-This function will pull chamber pressure data from the data buffer and draw a gauge representing the data on the chamber pressure canvas. \par
+\paragraph{drawTemp()}
 
-\paragraph{Altitude Drawing Routine}
-{\bf Purpose:} \\
-Draw rocket altitude on the user interface. \par
-{\bf Definition:} \\ 
-drawAltitude() \par
-{\bf Inputs:} \\None. \par
-{\bf Outputs:} \\Altitude gauge on the user interface.\par
-{\bf Process/Algorithm:} \\
-This function will pull altitude data from the data buffer and draw a gauge representing the data on the altitude canvas. \par
+\paragraph{drawCHPressure()}
 
-\paragraph{Tank Pressure Drawing Routine}
-{\bf Purpose:} \\
-Draw oxidizer tank pressure on the user interface. \par
-{\bf Definition:} \\ 
-drawTankPressure() \par
-{\bf Inputs:} \\None. \par
-{\bf Outputs:} \\Oxidizer tank pressure gauge on the user interface.\par
-{\bf Process/Algorithm:} \\
-This function will pull tank pressure data from the data buffer and draw a gauge representing the data on the tank pressure canvas. \par
+\paragraph{drawAltitude()}
 
-\paragraph{Acceleration Drawing Routine}
-{\bf Purpose:} \\
-Draw acceleration graph on the user interface. \par
-{\bf Definition:} \\ 
-drawAccell() \par
-{\bf Inputs:} \\None. \par
-{\bf Outputs:} \\Acceleration graph on the user interface.\par
-{\bf Process/Algorithm:} \\
-This function will pull acceleration data from the data buffer and draw a graph representing the data on the acceleration canvas. \par
+\paragraph{drawTankPressure()}
 
 \paragraph{drawVelocity()}
-{\bf Purpose:} \\
-Draw velocity graph on the user interface. \par
-{\bf Definition:} \\ 
-drawVelocity() \par
-{\bf Inputs:} \\None. \par
-{\bf Outputs:} \\Velocity graph on the user interface.\par
-{\bf Process/Algorithm:} \\
-This function will pull velocity data from the data buffer and draw a graph representing the data on the velocity canvas. \par
 
-\paragraph{Draw Temperature as Graph Routine}
-{\bf Purpose:} \\
-Draws temperature vs time as graph on the user interface. \par
-{\bf Definition:} \\ 
-drawTempAsGraph() \par
-{\bf Inputs:} \\None. \par
-{\bf Outputs:} \\Temperature vs time graph on the user interface.\par
-{\bf Process/Algorithm:} \\
-This function will take multiple data points from the temperature log buffer and plot them with their timestamps on the user interface in the time graph canvas.  \par
+\paragraph{drawTempAsGraph()}
 
-\paragraph{Draw Chamber Pressure as Graph Routine}
-{\bf Purpose:} \\
-Draws chamber pressure vs time as graph on the user interface. \par
-{\bf Definition:} \\ 
-drawCHPAsGraph() \par
-{\bf Inputs:} \\None. \par
-{\bf Outputs:} \\Chamber pressure vs time graph on the user interface.\par
-{\bf Process/Algorithm:} \\
-This function will take multiple data points from the chamber pressure log buffer and plot them with their timestamps on the user interface in the time graph canvas.  \par
+\paragraph{drawCHPAsGraph()}
 
-\paragraph{Draw Altitude as Graph Routine}
-{\bf Purpose:} \\
-Draws altitude vs time as graph on the user interface. \par
-{\bf Definition:} \\ 
-drawAltAsGraph() \par
-{\bf Inputs:} \\None. \par
-{\bf Outputs:} \\Altitude vs time graph on the user interface.\par
-{\bf Process/Algorithm:} \\
-This function will take multiple data points from the altitude log buffer and plot them with their timestamps on the user interface in the time graph canvas.  \par
+\paragraph{drawAltAsGraph()}
 
-\paragraph{Draw Tank Pressure as Graph Routine}
-{\bf Purpose:} \\
-Draws tank pressure vs time as graph on the user interface. \par
-{\bf Definition:} \\ 
-drawTankPAsGraph()\par
-{\bf Inputs:} \\None. \par
-{\bf Outputs:} \\Tank pressure vs time graph on the user interface.\par
-{\bf Process/Algorithm:} \\
-This function will take multiple data points from the tank pressure log buffer and plot them with their timestamps on the user interface in the time graph canvas.  \par
-
-\subsection{Rationale}
-\subsection{Language}
+\paragraph{drawTankPAsGraph()}
 
 \section{User Interface Design}
 
