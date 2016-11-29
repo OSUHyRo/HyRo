@@ -84,7 +84,7 @@
 	{\huge\bfseries CS461\par}
 	\vspace{2cm}
 	{\Large\itshape Fall 2016\par}
-	\vspace{4cm}
+	\vspace{2cm}
 	{\large Software Design Document\par}\vspace{2cm}
 	{\large Abstract\par}
 	\vspace{1cm}
@@ -422,29 +422,117 @@ convVelocity(data) \par
 This function receives data from the data thread in its data parameter to convert to a velocity value suitable for graphing. The parameter will be a raw acceleration reading from the sensor. It will convert this to the Meters per second by first converting it to meters per second squared (normal acceleration) with the formula provided by the sensor manufacturer. Then it will take the integral of the acceleration to obtain the velocity.  It then will store the data in the data buffer. \par
 
 \subsubsection{Drawing Functions}
-Each of the following drawing functions are called by the redraw thread when data becomes available to be displayed on the screen. The do not take data as input to be displayed, but instead read the data from the data buffer. Each function is responsible for a different data item and will display it according to the format of that data. The following is a list of the drawing functions and their specific operation.
+Each of the following drawing functions are called by the redraw thread when data becomes available to be displayed on the screen. They do not take data as input to be displayed, but instead read the data from the data buffer or the log buffer. Except for the message drawing routing it takes a input message to be drawn in the message window. Each function is responsible for a different data item and will display it according to the format of that data. The following is a list of the drawing functions and their specific operation.
 
-\paragraph{drawMessage()}
+\paragraph{Message Drawing Routine}
+{\bf Purpose:} \\
+Display command response message in the message window.  \par
+{\bf Definition:} \\ 
+drawMessage(message) \par
+{\bf Inputs:} \\ Message string to draw.\par
+{\bf Outputs:} \\Message to the message window. \par
+{\bf Process/Algorithm:} \\
+This function will take as its input parameter a command message and then draw the string in the message window of the user interface. \par
 
-\paragraph{drawStatus()}
+\paragraph{Temperature Drawing Routine}
+{\bf Purpose:} \\
+Draw the temperature data on the user interface.  \par
+{\bf Definition:} \\ 
+drawTemp() \par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Temperature gauge on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will pull temperature data from the data buffer and draw a gauge representing the data on the temperature canvas. \par
 
-\paragraph{drawTemp()}
+\paragraph{Chamber Pressure Drawing Routing}
+{\bf Purpose:} \\
+Draw chamber pressure on the user interface. \par
+{\bf Definition:} \\ 
+drawCHPressure() \par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Chamber pressure gauge on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will pull chamber pressure data from the data buffer and draw a gauge representing the data on the chamber pressure canvas. \par
 
-\paragraph{drawCHPressure()}
+\paragraph{Altitude Drawing Routine}
+{\bf Purpose:} \\
+Draw rocket altitude on the user interface. \par
+{\bf Definition:} \\ 
+drawAltitude() \par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Altitude gauge on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will pull altitude data from the data buffer and draw a gauge representing the data on the altitude canvas. \par
 
-\paragraph{drawAltitude()}
+\paragraph{Tank Pressure Drawing Routine}
+{\bf Purpose:} \\
+Draw oxidizer tank pressure on the user interface. \par
+{\bf Definition:} \\ 
+drawTankPressure() \par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Oxidizer tank pressure gauge on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will pull tank pressure data from the data buffer and draw a gauge representing the data on the tank pressure canvas. \par
 
-\paragraph{drawTankPressure()}
+\paragraph{Acceleration Drawing Routine}
+{\bf Purpose:} \\
+Draw acceleration graph on the user interface. \par
+{\bf Definition:} \\ 
+drawAccell() \par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Acceleration graph on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will pull acceleration data from the data buffer and draw a graph representing the data on the acceleration canvas. \par
 
 \paragraph{drawVelocity()}
+{\bf Purpose:} \\
+Draw velocity graph on the user interface. \par
+{\bf Definition:} \\ 
+drawVelocity() \par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Velocity graph on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will pull velocity data from the data buffer and draw a graph representing the data on the velocity canvas. \par
 
-\paragraph{drawTempAsGraph()}
+\paragraph{Draw Temperature as Graph Routine}
+{\bf Purpose:} \\
+Draws temperature vs time as graph on the user interface. \par
+{\bf Definition:} \\ 
+drawTempAsGraph() \par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Temperature vs time graph on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will take multiple data points from the temperature log buffer and plot them with their timestamps on the user interface in the time graph canvas.  \par
 
-\paragraph{drawCHPAsGraph()}
+\paragraph{Draw Chamber Pressure as Graph Routine}
+{\bf Purpose:} \\
+Draws chamber pressure vs time as graph on the user interface. \par
+{\bf Definition:} \\ 
+drawCHPAsGraph() \par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Chamber pressure vs time graph on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will take multiple data points from the chamber pressure log buffer and plot them with their timestamps on the user interface in the time graph canvas.  \par
 
-\paragraph{drawAltAsGraph()}
+\paragraph{Draw Altitude as Graph Routine}
+{\bf Purpose:} \\
+Draws altitude vs time as graph on the user interface. \par
+{\bf Definition:} \\ 
+drawAltAsGraph() \par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Altitude vs time graph on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will take multiple data points from the altitude log buffer and plot them with their timestamps on the user interface in the time graph canvas.  \par
 
-\paragraph{drawTankPAsGraph()}
+\paragraph{Draw Tank Pressure as Graph Routine}
+{\bf Purpose:} \\
+Draws tank pressure vs time as graph on the user interface. \par
+{\bf Definition:} \\ 
+drawTankPAsGraph()\par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Tank pressure vs time graph on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will take multiple data points from the tank pressure log buffer and plot them with their timestamps on the user interface in the time graph canvas.  \par
 
 \section{User Interface Design}
 
