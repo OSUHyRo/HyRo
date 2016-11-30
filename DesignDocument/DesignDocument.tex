@@ -263,9 +263,19 @@ send\_rf(message) \par
 Upon being called in turns calls the write function of the radio transceiver object with the message provided in the message parameter. 
 \subsection{Rationale}
 \subsection{Language}
+
+
+
 \section{System Architecture on a Traditional Computer }
+The SDD module design of the software running on a traditional computer detailed here after will explain the approach, methods, and properties of this component of the system. Software running on the traditional computer will communicate to the software detailed above running on-board the rocket. This component of the system will be responsible for monitoring radio transmissions, sending commands, logging, and the user interface back end. \par
+
 \subsection{Overview}
+In the following sections we describe the components of this software minus the actual user interface that is detailed in the next section. We go over the graphical back end toolkits that will be used to draw the user interface, the data format of buffers and logs, worker threads, button listener functions, data conversion functions, and data visualization functions (drawing functions). \par
+
 \subsection{GUI and Graphing Toolkits}
+We will be using the Python TKinter library which provides a basis for windows, buttons, canvas, and other varies components we will need to create our graphical interface. This library includes event listeners to easily detect button presses and canvas to easily draw gauges and graphs. All sub components like buttons are called widgets in TKinter. \par
+On top of Tkinter we will be using Matplotlib which is a graphical plotting library. Matplotlib provides functions to be easily able to graph data and scale those graphs. Graphs will be drawn on TKinter canvas widgets.\par
+
 \subsection{Data Format}
 \subsubsection{Sensor Data Buffer}
 The sensor data buffer will be a python dictionary with keys relating to the name of the sensor output. For examples the temperature data will be stored in and accessed by the field "temperature".  The timestamps field is important to redraw function (detailed below) as this is what it uses to decided if the data is new.
@@ -295,8 +305,26 @@ Log buffers will hold previously received data for a particular key from the sen
 			\item[chamber\_pres] The pressure of the combustion chamber
 		\end{description}
 \end{description}
+
 \subsubsection{Command Response Message Format}
-\subsection{Log Format}
+Command response message will be sent as a string with the command that is being responded too followed by a colon followed then by the response message from the on-board system. All commands have not been finalized by the rocket team, but will follow this format.  For example: \par
+{\bf Launch: Sequence has not been followed. Rocket is not ready to launch. } \par
+
+\subsubsection{Data Log Format}
+When data is logged each entry will be place on a separate line in a text file. The line will consist of a time stamp and then a list of key value pairs from the data buffer. Key value you pairs will have an equal sign between them. The time stamps are formatted as follows: \par 
+{\bf 6-1-2016:12:05:20} \par
+Which represents Month-Day-Year : Hours : Minute : Second \par
+Here is an example complete data log entry: \par
+{\bf 6-1-2016:12:05:20 altitude="740" temp="70" accel="10" velcoity="15" tank\_pres="20" chamber\_pres="30"}\par
+
+\subsubsection{Command Log Format}
+When commands are logged each entry will be placed on a separate line of a text file. The line will consist of a time stamp followed by the command that was issued. Times stamps are in the same format as described in the previous section. Here is an example complete command log entry.\par
+{\bf  6-1-2016:12:05:20 Abort}\par
+
+\subsubsection{Response Log Format}
+When responses are logged each entry will be placed on a separate line of a text file. The line will consist of a time stamp followed by the command that was responded to followed by a colon with the response to the command appended to the end. Times stamps are in the same format as described in the previous section. Here is an example complete response log entry.\par
+{\bf  6-1-2016:12:05:20 Ignite:Sequence has not been followed. Rocket not ready to ignite.}\par
+
 \subsection{Methods and Threads}
 This component will be designed in using multi threaded approach with helper functions. Each thread will be responsible for a certain aspect of the system. They will communicate through the two buffers detailed above. This will require mutex locks be put on the buffers prior to any action taken from the independent threads. The following is a list of the threads and helper functions with their descriptions and interactions.
 \subsubsection{Main Thread}
@@ -344,6 +372,7 @@ init() \par
 {\bf Outputs:} \\None. \par
 {\bf Process/Algorithm:} \\
 This function initializes all global buffers, objects and variables to their default values. It then creates the window object, all button widgets, all canvas widgets for graphs, and the graphing menu widget and buttons. Once all user interface items have been initialized it calls the main windows drawing method to display the initial interface. This function is called before any of the threads in this component are started. \par
+
 \subsubsection{Process Command Response Function}
 {\bf Purpose:} \\
 Receives command response messages from the data thread and processes them. This function will inform the user of any failed or out of sequence commands.  \par
@@ -351,10 +380,23 @@ Receives command response messages from the data thread and processes them. This
 command\_response(message) \par
 {\bf Inputs:} \\  Command response to process. \par
 {\bf Outputs:} \\ Logs responses to text file and message to screen. \par
-{\bf Calls: drawMessage()}
+{\bf Calls: drawMessage()}\par
 {\bf Process/Algorithm:} \\
 Upon receiving a command response message from the data thread this function opens the command response log and appends the message to the log with a newline. It then passes the message to the message draw function. \par
-\subsubsection{Button Event Listener}
+
+\subsubsection{Button Event Listeners}
+Button listeners are provided by Tkinter as call back functions bound to the button the window. There will be two sets of button event listeners in the project. One set will be bound the the command buttons and the other to the graphing options buttons.
+\paragraph{Command Button Listeners}
+Each command button placed on the screen (shown in section 5) will have a function bound to it that will send the corresponding command string to the rf\_send() function. When a button is pressed that string is sent directly to the rf\_send function which in turns write it to the radio transceiver. If a command fails the rocket will send a error response. It is not the responsibility of these functions to make sure the command is in the correct order. Below is an example command button callback function. \\ \\
+{\bf sendFill() }
+\\  \\
+Each button will have its own functions like this. In this example the sendFill() function will call the rf\_send() function with the message "filll".
+
+\paragraph{Graphing Options Buttons}
+Each graphing option button placed on the screen (shown in section 5) will have a function bound to it that will change the graph view of the multi functional graph window. When a graphing button is pressed it call its corresponding draw function that will replace the current graph in this window. Below is an example graphing option callback function: \\ \\
+{\bf tempAsTimeClicked()} \\ \\
+Each button will have its own functions like this. In this example the tempAsTimeClicked() function will call the drawTempAsGraph() function whitch will draw the temperature time graph in the multi functional graph window.
+
 \subsubsection{Data Log Function}
 {\bf Purpose:} \\
 Logs the data it is passed to the data log text file.  \par
@@ -365,6 +407,7 @@ data\_log(data) \par
 {\bf Calls: drawMessage()}
 {\bf Process/Algorithm:} \\
 This function takes the data from data parameter and converts it to the data log format string. It then writes this string as a new line to the data log text file. \par
+
 \subsubsection{Command Log Function}
 {\bf Purpose:} \\
 Logs the data it is passed to the command log text file.  \par
@@ -438,34 +481,142 @@ convVelocity(data) \par
 {\bf Process/Algorithm:} \\
 This function receives data from the data thread in its data parameter to convert to a velocity value suitable for graphing. The parameter will be a raw acceleration reading from the sensor. It will convert this to the Meters per second by first converting it to meters per second squared (normal acceleration) with the formula provided by the sensor manufacturer. Then it will take the integral of the acceleration to obtain the velocity.  It then will store the data in the data buffer. \par
 
-\subsubsection{Drawing Functions}
-Each of the following drawing functions are called by the redraw thread when data becomes available to be displayed on the screen. The do not take data as input to be displayed, but instead read the data from the data buffer. Each function is responsible for a different data item and will display it according to the format of that data. The following is a list of the drawing functions and their specific operation.
+\subsubsection{Drawing Functions}\
+Each of the following drawing functions are called by the redraw thread when data becomes available to be displayed on the screen. They do not take data as input to be displayed, but instead read the data from the data buffer or the log buffer. Except for the message drawing routing it takes a input message to be drawn in the message window. Each function is responsible for a different data item and will display it according to the format of that data. The following is a list of the drawing functions and their specific operation.
 
-\paragraph{drawMessage()}
+\paragraph{Message Drawing Routine}
+{\bf Purpose:} \\
+Display command response message in the message window.  \par
+{\bf Definition:} \\ 
+drawMessage(message) \par
+{\bf Inputs:} \\ Message string to draw.\par
+{\bf Outputs:} \\Message to the message window. \par
+{\bf Process/Algorithm:} \\
+This function will take as its input parameter a command message and then draw the string in the message window of the user interface. \par
 
-\paragraph{drawStatus()}
+\paragraph{Temperature Drawing Routine}
+{\bf Purpose:} \\
+Draw the temperature data on the user interface.  \par
+{\bf Definition:} \\ 
+drawTemp() \par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Temperature gauge on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will pull temperature data from the data buffer and draw a gauge representing the data on the temperature canvas. \par
 
-\paragraph{drawTemp()}
+\paragraph{Chamber Pressure Drawing Routing}
+{\bf Purpose:} \\
+Draw chamber pressure on the user interface. \par
+{\bf Definition:} \\ 
+drawCHPressure() \par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Chamber pressure gauge on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will pull chamber pressure data from the data buffer and draw a gauge representing the data on the chamber pressure canvas. \par
 
-\paragraph{drawCHPressure()}
+\paragraph{Altitude Drawing Routine}
+{\bf Purpose:} \\
+Draw rocket altitude on the user interface. \par
+{\bf Definition:} \\ 
+drawAltitude() \par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Altitude gauge on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will pull altitude data from the data buffer and draw a gauge representing the data on the altitude canvas. \par
 
-\paragraph{drawAltitude()}
+\paragraph{Tank Pressure Drawing Routine}
+{\bf Purpose:} \\
+Draw oxidizer tank pressure on the user interface. \par
+{\bf Definition:} \\ 
+drawTankPressure() \par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Oxidizer tank pressure gauge on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will pull tank pressure data from the data buffer and draw a gauge representing the data on the tank pressure canvas. \par
 
-\paragraph{drawTankPressure()}
+\paragraph{Acceleration Drawing Routine}
+{\bf Purpose:} \\
+Draw acceleration graph on the user interface. \par
+{\bf Definition:} \\ 
+drawAccell() \par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Acceleration graph on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will pull acceleration data from the data buffer and draw a graph representing the data on the acceleration canvas. \par
 
-\paragraph{drawVelocity()}
+\paragraph{Velocity Drawing Routine}
+{\bf Purpose:} \\
+Draw velocity graph on the user interface. \par
+{\bf Definition:} \\ 
+drawVelocity() \par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Velocity graph on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will pull velocity data from the data buffer and draw a graph representing the data on the velocity canvas. \par
 
-\paragraph{drawTempAsGraph()}
+\paragraph{Draw Temperature as Graph Routine}
+{\bf Purpose:} \\
+Draws temperature vs time as graph on the user interface. \par
+{\bf Definition:} \\ 
+drawTempAsGraph() \par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Temperature vs time graph on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will take multiple data points from the temperature log buffer and plot them with their timestamps on the user interface in the time graph canvas.  \par
 
-\paragraph{drawCHPAsGraph()}
+\paragraph{Draw Chamber Pressure as Graph Routine}
+{\bf Purpose:} \\
+Draws chamber pressure vs time as graph on the user interface. \par
+{\bf Definition:} \\ 
+drawCHPAsGraph() \par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Chamber pressure vs time graph on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will take multiple data points from the chamber pressure log buffer and plot them with their timestamps on the user interface in the time graph canvas.  \par
 
-\paragraph{drawAltAsGraph()}
+\paragraph{Draw Altitude as Graph Routine}
+{\bf Purpose:} \\
+Draws altitude vs time as graph on the user interface. \par
+{\bf Definition:} \\ 
+drawAltAsGraph() \par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Altitude vs time graph on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will take multiple data points from the altitude log buffer and plot them with their timestamps on the user interface in the time graph canvas.  \par
 
-\paragraph{drawTankPAsGraph()}
+\paragraph{Draw Tank Pressure as Graph Routine}
+{\bf Purpose:} \\
+Draws tank pressure vs time as graph on the user interface. \par
+{\bf Definition:} \\ 
+drawTankPAsGraph()\par
+{\bf Inputs:} \\None. \par
+{\bf Outputs:} \\Tank pressure vs time graph on the user interface.\par
+{\bf Process/Algorithm:} \\
+This function will take multiple data points from the tank pressure log buffer and plot them with their timestamps on the user interface in the time graph canvas.  \par
+
+\subsection{Rationale}
+\subsection{Language}
 
 \section{User Interface Design}
+The graphical user interface is the driving force behind this entire project. It may not seem as complicated as some modern interfaces, but its serves a very important purpose. The purpose is to visually represent data from a hybrid rocket and provide button to issue the rocket commands. These functions have been lacking in previous years rockets team and are the reason we were brought on board this project. Detailed in the following sections are these sections of the user interface. \par
 
+\begin{itemize}
+\item The Command Buttons
+\item The Message Frame
+\item The Graphing Options Buttons
+\item The Gauges and  Graphs
+\end{itemize}
 
+\subsection{Drawing of Complete Screen}
+Here is a basic drawing of the entire screen. This drawing will be replaced with a screen shot once the program has reached a stage where the components are all visible.
+
+\subsection{The Command Buttons}
+
+\subsection{The Message Frame}
+
+\subsection{The Graphing Options Buttons}
+
+\subsection{The Gauges and Graphs}
 \section{Index}
 \printindex
 
