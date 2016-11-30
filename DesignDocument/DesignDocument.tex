@@ -608,18 +608,68 @@ The graphical user interface is the driving force behind this entire project. It
 \end{itemize}
 
 \subsection{Drawing of Complete Screen}
-Here is a basic drawing of the entire screen. This drawing will be replaced with a screen shot once the program has reached a stage where the components are all visible.
+Here is a basic drawing of the entire screen. This drawing will be replaced with a screen shot once the program has reached a stage where the components are all visible.\par
 
 \subsection{The Command Buttons}
+The command buttons are housed on the left side of the screen as depicted in the image above. These buttons will cause a command to be sent through the radio transceiver on the traditional computer to the radio transceiver on-board the rocket. The rocket will process the command and send a response back to be displayed in the message frame. The command buttons and their descriptions are as follows.\par
+
+\begin{description}
+\item[Fill] This will attempt to initiate the oxidizer fill process while the rocket is on the ground.
+\item[Arm] This will adjust a servo prepare the rocket for ignition. Sequence number 2.
+\item[Ignition] This will send a signal to igniter to ignite the rocket fuel. Sequence number 3.
+\item[Launch] This will adjust a servo to release the rocket from its base. Sequence number 4.
+\item[Disarm] This will adjust a servo to reverse the arming process. Can be used at any time.
+\item[Abort] This will adjust all servos to their initial state. Can be used at any time.
+\end{description}
 
 \subsection{The Message Frame}
+This is a small message box on the left hand side of the user interface directly under the command buttons. This box will display response message from the rocket. As message come in they will be appended to this message box. The box will be able to scroll if the messages exceeded the size of the frame.\par
 
 \subsection{The Graphing Options Buttons}
+These buttons are located on the left side of the user interface under the message frame. Each button will correspond to a specific graphing capability. When clicked on there will change which graph is displayed in the multi functional graphing window. Buttons and their corresponding graphs are listed below. \par
+
+\begin{description}
+\item[Chamber Pressure vs. Time] Clicking this button will change the multi function graph window to a graph of chamber pressure vs. time
+\item[Altitude vs. Time] Clicking this button will change the multi function graph window to a graph of altitude vs. time.
+\item[Tank Pressure vs. Time] Clicking this button will change the multi function graph window to a graph of tank pressure vs. time.
+\item[Temperature vs. Time] Clicking this button will change the multi function graph window to a graph of temperature vs. time.
+
+\end{description}
 
 \subsection{The Gauges and Graphs}
+Taking up most of the user interface on the right hand side are the gauges and graph canvases. Currently their will be 4 gauges that look like traditional gauges you would see on car dash board. They will be a semi circle with marks representing possible values of the data item. A arrow will be draw to represent the current value of the data. Below those gauges are two graphs representing velocity and acceleration these will graph these two data items vs time. Below the velocity and acceleration graphs is the multi function graphing window. This will display a user selected graph from the graphing options buttons selection menu. This will default to altitude vs time. Listed below are the gauges, graphs, and their units.
+
+\subsubsection{Tank Pressure Gauge}
+{\bf Units} \\ Tick marks are measured in pounds per square inch from 0 to 200.\par
+{\bf Description} \\ This gauge represents the current pressure of the oxidizer tank. It will rise and fall along with the tank pressure. This value can also be graphed in the multifunction window.\par
+
+\subsubsection{Temperature Gauge}
+{\bf Units} \\ Tick marks are measured in degrees Fahrenheit from 32 to 300. 
+{\bf Description} \\ This gauge represents the temperature wherever the temperature sensor is located. It will rise and fall along with the temperature surrounding the temperature sensor. This value can also be graphed in the multifunction window. \par
+
+\subsubsection{Chamber Pressure Gauge}
+{\bf Units} \\ Tick marks are measured in pounds per square inch from 0 to 200.\par
+{\bf Description} \\ This gauge represents the pressure of the combustion chamber of the rocket. It will rise and fall along with the chamber pressure of the rocket. This value can also be graphed in the multifunction window. \par
+
+\subsubsection{Altitude Gauge}
+{\bf Units} \\ Tick marks are measured in feet above sea level from 0 to 10000.\par
+{\bf Description} \\ This gauge represents the altitude of the rocket. It will rise and fall along with the altitude of the rocket. This value can also be graphed in the multifunction window. \par
+
+\subsubsection{Acceleration Graph}
+{\bf Units} \\ The x axis of the graph will be measured in meters per second squared and the y axis will be time from launch in seconds.\par
+{\bf Description} \\ This graph represents the acceleration of the rocket with respect to time. The graph will be able to slide if the amount of data points exceeds the size of the graph window. \par
+
+\subsubsection{Velocity Graph}
+{\bf Units} \\ The x axis of the graph will be measured in meters per second and the y axis will be time from launch in seconds.\par
+{\bf Description} \\ This graph represents the velocity of the rocket with respect to time. The graph will be able to slide if the amount of data points exceeds the size of the graph window. \par
+
+\subsubsection{Multi Function Graph}
+{\bf Units} \\ The x axis of the graph will be measured in different units depending on the graph chosen and the y axis will be time from launch in seconds.\par
+{\bf Description} \\ This multi function graph will be the place where user selected graphing items are displayed. \par
+
 \section{Index}
 \printindex
-
+ 
 \newpage
 
 \textbf{Students:}
