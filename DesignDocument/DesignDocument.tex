@@ -145,7 +145,16 @@ The majority of the document is written for the benefit of knowledgeable softwar
 \subsection{Overview}
 \section{Design Considerations}
 \section{System Architecture On-board the Rocket }	
-The SDD module design of the software on-board the hybrid rocket detailed here after will explain the approach, methods, and properties of this component of the system. Software running on-board the rocket will communicate to software running on a traditional computer through a radio transceiver connected to the Beagle Bone Black. For convenience a diagram is provided below to show the entirety of the entire system. This section will  only cover the design of the software running on the Beagle Bone Black.
+The SDD module design of the software on-board the hybrid rocket detailed here after will explain the approach, methods, and properties of this component of the system. Software running on-board the rocket will communicate to software running on a traditional computer through a radio transceiver connected to the Beagle Bone Black. For convenience a diagram is provided below to show the entirety of the entire system. This section will  only cover the design of the software running on the Beagle Bone Black. \par
+
+\begin{figure}[!ht]
+\index{Data Flow Diagram of HyRo}
+  \caption{Data Flow Between System Components.}
+  \centering
+	\includegraphics[scale=.85]{RocketBlockDiagram}
+\end{figure}
+\FloatBarrier
+
 \subsection{Components} 
 This section is intended to explain the components of the rocket we will be receiving and/or sending data too. It is a general overview of what could be part of the system as the rocket has not yet been designed. Exact sensors are not presented because they have not be chosen yet. Though collection of data from them will be the same regardless. This allows for easy expansion of sensors in the code if time allows.\par
 At the moment we know the rocket will have an accelerometer, barometric/temperature sensor, and a servo to control filling, arming, and launching of the rocket. The sensors will be polled for data every 500 milliseconds and this data will be held in a buffer to be transmitted. Each sensor/servo has drivers built in python that will be used to access the sensors/servo data and in case of the servo sen PWM signals to control the movement of the servo.\par
@@ -262,9 +271,9 @@ send\_rf(message) \par
 {\bf Process/Algorithm:} \\
 Upon being called in turns calls the write function of the radio transceiver object with the message provided in the message parameter. 
 \subsection{Rationale}
+Our projects major functions are to get data from a rocket to a traditional computer and visualize it. As far as the software running on the beagle bone black its main function is to process commands and transmit sensor data. The approach we have taken will allow for fast easy maneuvering of data by using a simply multi threaded process that will store the data directly in memory. The threads will allow for simultaneous operation of these features. The approach we chose is procedural instead of object oriented, but this is to provide simplicity. Our program will not be large compared to modern programs, but needs to preform very specific tasks.
 \subsection{Language}
-
-
+We have chosen to use python because of its simplicity and strong API for USB reading and graphic rendering. It also is a stronger cross platform language then other options we explored. Another determining factor in this choice was last years success with this language.
 
 \section{System Architecture on a Traditional Computer }
 The SDD module design of the software running on a traditional computer detailed here after will explain the approach, methods, and properties of this component of the system. Software running on the traditional computer will communicate to the software detailed above running on-board the rocket. This component of the system will be responsible for monitoring radio transmissions, sending commands, logging, and the user interface back end. \par
@@ -595,7 +604,9 @@ drawTankPAsGraph()\par
 This function will take multiple data points from the tank pressure log buffer and plot them with their timestamps on the user interface in the time graph canvas.  \par
 
 \subsection{Rationale}
+This part of our system reads and sends data. A big part of this decision was the choice on Python. There are great graphics libraries available for Python that are tailored to our needs. This will provide us with and easy to use and build graphical user interface. The back in is a procedural based multi threaded system that provides simplicity and easy data access.
 \subsection{Language}
+We have chosen to use python because of its simplicity and strong API for USB reading and graphic rendering. It also is a stronger cross platform language then other options we explored. Another determining factor in this choice was last years success with this language.
 
 \section{User Interface Design}
 The graphical user interface is the driving force behind this entire project. It may not seem as complicated as some modern interfaces, but its serves a very important purpose. The purpose is to visually represent data from a hybrid rocket and provide button to issue the rocket commands. These functions have been lacking in previous years rockets team and are the reason we were brought on board this project. Detailed in the following sections are these sections of the user interface. \par
