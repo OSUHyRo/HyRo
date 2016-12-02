@@ -13,7 +13,7 @@
 \usepackage{url, lipsum}
 \usepackage{tikz}
 \usepackage[section]{placeins}
-\usepackage{makeidx}
+%\usepackage{makeidx}
 \newcommand{\subparagraph}{}
 \usepackage{titlesec}
 \usepackage{enumitem}
@@ -97,9 +97,6 @@
 	{\large \today\par}
 \end{titlepage}
 
-%\newpage
-%\sectionfont{\scshape}
-%\title{Abstract}
 
 \setcounter{tocdepth}{2}
 \tableofcontents
@@ -141,14 +138,14 @@ The majority of the document is written for the benefit of knowledgeable softwar
 	\item[Mutex Lock] Used to lock control of an area of memory while an operation is completed. If any other parts of the system attempt to access this part of memory while the lock is in place they will not be allowed to.
 	\item[Boolean] A way to represent a true or false value in software.
 \end{description}
-\subsection{References}
 \subsection{Overview}
-\section{Design Considerations}
+The HyRo software system is composed of two major different components. The first component is housed on-board a hybrid rocket. This component is responsible for gathering sensor data from sensors on the the rocket, sending this data to a ground computer, and receiving commands from the ground system. These commands will initiate electrical components on the rocket. The second component of this system is software running on a traditional computer that is located on the ground near the launch site. This component is responsible for presenting the user with a graphical user interface that will allow a human to send commands to the rocket and monitor data from the rocket that has been visualized in graphs and gauges. This component will also log any important information, mainly commands, that the rocket team requests. The main purpose of our project is to provide remote filling and data visualization. This paper is sectioned into 3 views. The first two views, System Architecture On-board the Rocket and System Architecture on the traditional computer, are explained from a logical viewpoint. The final section, the user interface, is explained from and interface viewpoint.
+\section{Stake Holders and Concerns}
+The primary stake holders in this project are Nancy Squires and the hybrid rocket team as a whole. The rocket team is composed of Mechanical Engineering students, Electrical Engineering Students, and Computer Science Engineering students. We all have the same design concerns. These concerns include remotely filling and launching a rocket. The launching processes requires a sequence of command to complete. All commands and responses need to be logged in this process. Finally the most important thing is to be able to visualize sensor data while the rocket is in flight. This communication needs to be fast and accurate. This project is an ongoing process and its design will be a living entity. Things will change and we must adapt our design to these changes as the project progresses.
 \section{System Architecture On-board the Rocket }	
 The SDD module design of the software on-board the hybrid rocket detailed here after will explain the approach, methods, and properties of this component of the system. Software running on-board the rocket will communicate to software running on a traditional computer through a radio transceiver connected to the Beagle Bone Black. For convenience a diagram is provided below to show the entirety of the entire system. This section will  only cover the design of the software running on the Beagle Bone Black. \par
 
 \begin{figure}[!ht]
-\index{Data Flow Diagram of HyRo}
   \caption{Data Flow Between System Components.}
   \centering
 	\includegraphics[scale=.85]{RocketBlockDiagram}
@@ -684,6 +681,11 @@ Taking up most of the user interface on the right hand side are the gauges and g
 {\bf Units} \\ The x axis of the graph will be measured in different units depending on the graph chosen and the y axis will be time from launch in seconds.\par
 {\bf Description} \\ This multi function graph will be the place where user selected graphing items are displayed. \par
 
+\section{Summary}
+The previous section have in detailed described our hybrid rockets software system. We have described how we will collect sensors data, send sensor data, receive and act on commands, and provide  a command and visualization interface for the rocket team members on the ground. We have detailed the data formats, log formats, radio transceiver routines, data conversion routines, drawing routines and the threads that will control all these components. These are all housed in a threaded procedural system for simplicity and speed. All these components combined will allow for remote filling, launching, and data visualization of a hybrid rocket. \par
+
+\newpage
+
 \section{Bibliography}
 \begin{thebibliography}{9}
 
@@ -717,11 +719,8 @@ Matplotlib.org,\\
 URL http://matplotlib.org/
 
 \end{thebibliography}
-%\section{Index}
-%\printindex
- 
-\newpage
 
+\newpage
 \textbf{Students:}
 
 \vspace{5mm}
