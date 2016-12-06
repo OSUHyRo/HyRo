@@ -39,17 +39,21 @@
 %\maketitle
 \begin{titlepage}
 	\centering
-	{\scshape\LARGE HyRo (Working title) \par}
+	{\scshape\LARGE HyRo \par}
 	\vspace{1cm}
 	{\scshape\Large Jason Klindtworth  |  Josh Asher  |   Layne Nolli\par}
 	\vspace{1.5cm}
 	{\huge\bfseries CS461\par}
 	\vspace{2cm}
+	{\huge\bfseries Team 28\par}
+	\vspace{2cm}
 	{\Large\itshape Fall 2016\par}
+	\vspace{4cm}
+	{\Large\itshape Fall Term Progress Report\par}
 	\vspace{4cm}
 	{\large Abstract\par}
 	\vspace{1cm}
-	High Altitude rockets have a distinct advantage in using Hybrid propulsion systems. These systems are complex and present challenges in remote telemetry including launch initialization and controlling remote fuel filling/disconnect. High altitude rockets also contain an array of sensors that collect data which needs to be visualized in a human friendly format. The goal of HyRo is to provide mechanisms for remotely launching and controlling the fuel systems on a hybrid propulsion system through onboard embedded circuitry/software that communicates to launch team via radio waves. This circuitry/software will also communicate sensor data to the ground. Sensor data is displayed in our visualization software in an appealing, human readable way. \par
+	Well this will be an abstract in about 2 hours.... \par
 
 	\vfill
 
@@ -57,59 +61,106 @@
 	{\large \today\par}
 \end{titlepage}
 
-%\newpage
-%\sectionfont{\scshape}
-%\title{Abstract}
+
+\section{Overview of Purpose and Goals}
+OSU has for the past 2 years had seniors from MIME and ECE develop a hybrid rocket for their capstone projects. The first years didn't even get off the ground, but through their experimentation lasts years team was able to build a hybrid that went 5000 feet. They were able to build a system to collect a large amount of data from on-board sensors, but had no way to easily visualize it. That's why we were invited aboard. This is the first year a CS team has worked on the hybrid rocket team. Our goals are to provide visualization to their data along with providing remote controls (like filling the oxidizer tank) to allow the team to operate the rocket entirely from a safe distance. This is a multi disciplinary project and we will be working closely with our ECE counter parts that are designing the sensor array for the rocket. \par
+As we went through our problem statement, requirements document, tech review, and design document we had many challenges and learned a lot. In the long run they help us immensely to understand our problem and understand how to develop the software to solve our problem. We learned that our requirements in a nutshell included collection of sensor data, radio transceiver communication, data logging, data conversion, data visualization, and command input and processing. The major metrics of these requirements are time, consistency, monitoring for human error, and the eventual successful launch and processing of the rockets data during flight. \par
+There were many ways to approach our problem as far as technologies are concerned. We took our time to try and understand the best approach for each sub section of the software. We landed on python as a programming language mainly because of the success of last years team and the relative ease of making a graphical user interface using pre-built python libraries. Python might not be the fastest language, but last year it was more than adequate when used in their system. \par
+As we laid out the design document we had two major sub systems to understand and design for. The on-board rocket components would be running on an embedded Linux environment and the user interface would be running on a traditional computer. The on-board system will consist of a multi-threaded python process that will buffer data and commands in memory. There isn't a need to store data for too long so any data that is buffered will be processed quickly. Sensor data will be sent in a packet to the traditional computer through the radio transceiver and commands will be received from the radio transceiver and processed in sequence. This is a basic overview of what this component does, more information can be found in the design document. The traditional computer will be monitoring its radio transceiver via USB for incoming rocket data and monitoring for user input (commands) that it will in turn send out through the radio transceiver. The software on the traditional computer will also use a multi threaded python process to buffer new sensor data after converting the data to graph-able units. One thread is responsible for calling drawing functions to visualize each individual piece of data. Data and commands will also be logged to text files to be viewed later on after the launch. \par
+\section{Where We Are Currently}
+We have completed the first version of our design document and will start building our system over winter break. We know this is a living document and changes are likely to occur. We are receiving components from last year's team to be able to test radio communication and start designing the basic aspects of our user interface. We have not done any coding this term, but coding is about to start! \par
+\section{Major Problems And Solutions}
+The first major problem was collaboration with ourselves and the rocket team meetings. It took a few weeks to get everyone on board and in the same place at the same time. Sadly our client Nancy Squires was teaching a class during our meeting time so we did not get to talked to her much during the whole term. As time went on though, we became friends with this years team and last years team. We solved this process through time and effort. Lots of e-mailing took place between team members to get a good idea of what was going on. \par
+We have to give praises to last years team members who were willing to head each meeting with information from last year. The problem though is that the meetings were not geared to our part of the project, understandably. They did provide us with enough information eventually to get us off the ground. To conquer the this problem we just learned what to ask last years team to understand the system they built. This allowed us to get a good idea of what ours was going to look like. \par
+The biggest problem we had was knowing what sensors and servos were going to be on board the rocket. The MIME students don't start their design until next term and the ECE students were scrambling to find the best sensors for different aspects of the rocket. This created a big challenge for us in planning the design of the system. We had to keep aspects of our design very general because we knew for sure that there were going to be changes. This in a way allowed us to design in aspects that will aspects any kind of sensor. Making our design very expandable. \par
+One of the comical issues we had was getting a hold of Nancy in a timely manner. One crucial week she was not feeling well and was very hard to get a hold of. Once we finally did though she told us to put URGENT on our emails and that solved all our problems. She turned out to be a very pleasant client to deal with. \par
+
+\section{Week by Week Recap}
+The following is a week by week recap from each team member. These were written during the week (starting at week 3) and will be listed week by week and by team mates name.  \par
+\subsection{Week 3}
+\subsubsection{Josh Asher} This week we had our first meeting. Next week we plan to have our problem statement submitted even though we had to get an extension. We will be needing to talk closely with our ECE teammates on this project in order to get a better idea of the software we will be creating. It took a little longer than expected to have our first meeting and we haven't quite got all the information we wanted, but I feel comfortable in going forward. This project is going to be very exciting and challenging. We have basically learned we need to program a avionics system for a rocket including visually display of sensor data. I'm excited!!! \\
+
+\subsubsection{Jason Klindtworth} We are still learning about what this project will entail. We had our first meeting this week with last years rocket team and they got us a lot of good information about the project. We were told that they would provide data models and telemetry from last year and we can use that data to start brainstorming the code and seeing what we might need in the future. \\
+
+\subsubsection{Layne Nolli} Had our first team meeting with the other groups involved with the Hybrid rocket project. Learned a bunch of general information pertaining to the design of the rocket and what our role in that system will be. Met the ECE team. Edited and refined the Problem Statement document.\par
+
+\subsection{Week 4}
+
+\subsubsection{Josh Asher} This week we made a lot of progress. After our second rocket meeting we were able to complete a Problem Statement that satisfied our client. We also learned a lot of stuff about rockets, some of it a little over my head. We have plans to secure lasts year experimental code and the rockets data. This will help us understand what needs to be visualized. Next week we plan to attack the requirements document like blood thirsty hounds.\par
+
+\subsubsection{Jason Klindtworth} This week we made a lot of progress in discovering what exactly the requirement of this project were. We have had 2 meetings with the Hybrid Rocket team from last year and have gone over quite a bit of information about the expectations of the project. We worked together nicely to get the problem statement finalized and sent off to Nancy Squires for approval. We are planing on getting it signed from her on Monday and turned in Tuesday before class. We are still trying to nail down a meeting time with the TA for class as all of the team members have very different schedules and very busy lives (2 of us have children, which makes it difficult). Other then that we have been working very well together and I am excited to see how this project progresses in the coming months.\par
+
+\subsubsection{Layne Nolli} Got a much clearer idea of our purpose on the rocket team. Finished the problem statement edits and refinement. Took the problem statement document to Dr Squires for a signature and review. Got better acquainted with each other as a team and set up a time to meet the TA for regular meetings.\par
+
+\subsection{Week 5}
+
+\subsubsection{Josh Asher} We had a busy week creating the ruff draft to your requirements document. Our rocket has not been fully designed and will not be until next term. We redesigned some aspects of our project all ready and will have to change the problem statement. The requirements were hard and I am worried about accuracy of first draft, this will improve over the week and with feed back. Project keeps getting more exciting! Next week we are going to refine our requirements document and give it to our client to be inspected and hopefully signed without to much changing. Looking ahead we are starting to get a better idea of what is to come in the design document. \par
+
+\subsubsection{Jason Klindtworth} The rough draft of the requirements document took up most of this week. We had a meeting to go over the details of the UI Layout and also some of the commands that we are going to need for our program. We are a little bit concerned about the requirements document because of how long and how stringent the formatting guidelines are for it, but we are going to spend the weekend and next week working on finalizing it and once we get our rough draft back we should have a better idea of what is required in order to make it a lot better. \par
+
+\subsubsection{Layne Noll} Made some good progress on LaTeX learnings. Met as a team to work on our documentation rough draft. Drafted up a sample UI layout and worked on editing the text body of the document. Spent time discussing the formatting output and the desired format for the assignment requirements. More revisions to follow in the coming week. \par
+
+\subsection{Week 6}
+\subsubsection{Josh Asher} This week we worked together to improve upon the ruff draft of the requirements document. The document ended up being fairly long at 20 pages. The hardest part was getting it to look like the IEEE830-1998 document. The defaults in IEEtrans were not cutting it and we had to do a bunch of research and trial and error in latex to smoothing the looks of the document out. We are still waiting for more information from the rocket team to pin down some unknowns. Things should start speeding up next term when the ME's get involved and actually start designing the rocket components. We have not been able to contact our client and we have tried by email and in person wit no luck. Getting a little nervous about this. The project seems to be coming along, next week we plan to get the document signed an turned in. We notified the TA of the delay and hopefully everything is going to work out in a timely manner. Next week we will also be splitting up the project into pieces we each will be responsible for and start working on our individual technology review.\par
+
+\subsubsection{Jason Klindtworth} We had a lot of trouble with the Requirements document. Especially getting it to look and flow like the IEEE830-1998 template. Overall out project is off to a slow start, this is mainly because of the lack of involvement from the other teams that are going to be starting the project in the winter. We are in planning mode, but the planning can only go so far when we don't know exactly what we are going to be doing or supporting as those requirements will be decided at a later date by the project leads.\par
+
+\subsubsection{Layne Nolli} Worked on final edits and revisions for the Req Doc. Had an issue with proofreading merge in github failing. Document is largely complete barring some specifics about implementation that require the ECE and ME teams to have some input. Feeling good about the document as-is though it will need a few final revisions when we have more information about the project specifics beyond our control. \par
+
+\subsection{Week 7}
+\subsubsection{Josh Asher} This week we finally got the signature of our requirements document. Nancy was really busy, but told us to put URGENT on emails in the future and she will make sure to get back to us. We made sure our requirements document was nicely formatted and we began to discuss dividing tasks. We chose to follow closely to the example given by our professor since we are using a data driven UI. I chose to take on the tasks similar too: the generation or capture of the data, the storage or handling of the data, and the processing of the data to make it suitable for visualization. I like these topics a lot. I like being in the low end of things so I am excited to take these categories on! Our rocket meeting went well this week, mainly it was geared again to the ME's, but we got a chance to get more code and discuss what the ECE's have come up for for components. It looks like we are going to be following a lot of last year lead. Which is good though they did say that had major problems communicating wit the XBee radio transceiver. We will get that cleared up this year so communication is smooth. This weekend we are doing our individual technology review and combining it to turn in on Monday. Next week we hope to get a good head start on the Design Document after we turn in our tech review. We might get to see a rocket motor test next week!
+
+\subsubsection{Jason Klindtworth}The project is advancing in the right direction, albeit slowly. We got the requirements document signed and turned in, and are working on breaking up the tech review section so we each have a piece of it. I am going to be doing some of the layout and user interface sections and am looking forward to diving in and getting to know what options are out there and available for us to use for this project. We are having a meeting later to discuss the upcoming deadlines for the project and we should (as a group) have a better understanding of the project as a whole after that.
+
+\subsubsection{Layne Nolli} Still no real code-work on the project, just documentation updates and revisions. Got the req doc signed and submitted. TA meetings are going swimmingly as the team as a whole is on track and capable. We divided up the tech doc components and are working on our individual portions of that for submission on Monday. The team meetings are a little on the mechanical technical side and aren't -SUPER- helpful for us CS students, but it is good listening to get a comprehensive understanding of the project.
+
+\subsection{Week 8}
+
+\subsubsection{Josh Asher} This week we got the git hub repository into directories and added some git ignores to clean it up. Now its a lot more functional. We started to work on the design documents, just the basics right now. I'm going to be doing a bunch of work on this Sunday including studying the IEEE document first. Also found some example design documents to look over for reference. Found out we missed some metrics in the Requirements document which we will get dinged for, but this can be fixed later. We also need to put a page break after our table of contents. Organize it more like A.5 and use description in latex for our definitions. We got these pointers from Nels. The meeting this week was more rocket math that flew over my head, but still interesting. We have a meeting tonight to get signed off to be able to go into the propulsion lab, I'm really exited about this. Hopefully they will burn something for us!! Next week we are going to be working on the design document and putting together slides for the progress report. We will be meeting at Jason's house sometime to put the video together.
+
+\subsubsection{Jason Klindtworth} We have been working on the design document as well as preparing for the upcoming presentation. There is a lot of formatting and data gathering required for this document before the end of the term and the general feeling for the groups is, "I hope we have enough time." I do not have a whole lot of time this week because I will be out of town for a lot of it because of Thanks Giving and visiting family, but I hope to catch back up over the weekend.
+
+\subsubsection{Layne Nolli} Tech document sections completed. Ground meetings with the ME and ECE groups are moving along at a good pace. A lot of the material is not really relevant to us but good for a general understanding of the project. Looking forward to finishing the design doc, doing the video, and getting to get our hands dirty next term.
+
+\subsection{Week 9}
+
+\subsubsection{Josh Asher} After finishing our tech review we have been working on our design document. This week was rather challenging because of thanks giving and our whole team was pretty much out of town. We were able to get a good start on the design document though. IEEE 1016 was hard for me to understand until I read through it like 10 times. I am still a little confused as to what makes a good SDD. I have been looking at a lot of examples and we have been tailoring our document towards those examples. Excited to get working on our progress report and next term should be very exiting! Coding for real!
+
+\subsubsection{Jason Klindtworth}
+
+\subsubsection{Layne Nolli}
+
+\subsection{Week 10}
+
+\subsubsection{Josh Asher} It took us a while to get our Design Document done and it was challenging. We were able to complete it and get it signed which was nice. Nancy is excited about the project and liked the basic design of our UI. She is a very nice lady and said she would give us as much advice as she could if we would like to get into aerospace. There are a lot of jobs in aerospace for CS degree students. We got started on our progress report material and plan to finish it this weekend. Everyone is very busy so that is kind of challenging, but I feel confident we will wrap all this up and be ready for next term.
+
+\subsubsection{Jason Klindtworth}
+
+\subsubsection{Layne Nolli}
 
 
-
-\section{Problem Definition}
-%\sectionfont{\scshape}
-Hybrid rocket motor systems have distinct advantages over traditionally fueled rocket, but tend to be more complex. A hybrid rocket fitted with proper software has improved on-board control of the systems. Humans in the ground control unit will benefit from these improvements, which will make safely handling lauch, controlling the rocket, and visualizing the rocket's data much easier than before.  Desired data to be visualized includes, but is not limited to, tank pressure, chamber pressure, tank temperature, acceleration, barometric pressure, velocity, and GPS coordinates.\par
-Our problem consists of designing software that will run on-board the rocket, on-board a ground control unit, and on a traditional computer. Communication from the rocket to the ground will be done via radio waves and to the computer via serial communication. The on-board software will also be responsible for collecting sensor data and either analyzing that data to adjust on-board system devices like valves and switches or sending the data to the ground control unit for visualization.  The ground unit will  be responsible for communications with the rocket, accepting commands from buttons to be sent to the rocket, and communicating to software on the traditional computer. Software on the traditional computer will be responsible for accepting user input, issuing commands to the system, and receiving data to be visualized.
-
-\section{Problem Solution}
-%\sectionfont{\scshape}
-The system we are designing will need to be able to issue commands to the on-board system in the rocket, these commands include arming, disarming, system related commands, launch, fill, abort and ignition. The system will include a UI to send any vital system commands. The ground control system will be designed to have bidirectional communication with a computer that will house a graphical user interface to visualize data and issue commands to the ground system that will be sent to the rocket.\par
-Our hybrid rocket system has 3 main independent software components working together. Each component will tackle specific problems in their own way. We will have software running on-board the rocket, the ground control unit, and on a traditional computer. This software will be able to communicate together and with it a ground crew will be able to give commands to the rocket and also collect all the required aviation data.\par
-These three components present a solution to controlling a hybrid rocket and visualizing collected sensor data from the rocket. With these systems combined we plan to be able to control a hybrid rocket from a ground control unit in combination with a personal computer along with viewing data in a human friendly way. We will design a protocol for communication between all these system to unify the communication amongst components.
-
-\subsection{On-board Rocket Software}
-%\sectionfont{\scshape}
-This piece of the system will be located on a Beagle Bone Black embedded Linux micro-controller. This embedded device will be connected to the rocket's on-board sensors, system components (like valves and switches), and to a radio frequency device for communicating data to and from the ground unit. It will be responsible for any in-flight adjustments and the sending and receiving of data and commands to the ground unit.
-
-\subsection{Ground Control Unit}
-%\sectionfont{\scshape}
-The ground control unit will be a small enclosed box running software capable of monitoring button input, radio communication to the rocket and serial communication to the traditional computer. Its main responsibility will be to provide the link between the rocket and a traditional computer. Also providing physical buttons to issue the rocket commands. 
-
-\subsection{Traditional Computer Software}
-%\sectionfont{\scshape}
-This software that will run on a traditional computer and operating system. It will be responsible for sending and receiving data from the ground unit, providing a graphical interface to view data and providing inputs to issue commands to the rocket. This UI will present the user with a series of inputs that can be used to send commands to the rocket and a series of windows to display the sensor data from the rocket, including GPS which might be translated into a visual map to give the current location of the rocket. This vision might be expanded to include calculations and suggestions on how to adjust the current state of the rocket. This software will also be responsible for any calculation required to give recommendations on adjusting any on-board rocket system components.
-
-\section{Performance Metrics}
-%\sectionfont{\scshape}
-Our proposed solution to visualizing data and controlling functions on a hybrid rocket has a growing list of metrics that will measure or success at the end. Parts of our system are yet to be designed, but some metrics we have thought of are as follows. Time is a critical metric in our system. All components need to be able to communicate and responds to each other as fast as possible. If they fail to do so launching, control, and visualization of rocket data could completely fail. We must also consider human error. If someone was to misunderstand what we have visualized, we will need to provide safety features to protect against incorrect human input. Another human based metric is that our system will be used by a wide range of engineers and needs to appeal to this interdisciplinary crowd. To do so we will have to developed user cases and test them on each individual team mate to make the platform more appealing to the entire rocket team. If everyone is happy with the system at the end we have succeeded in this metric.\par
-To measure our success on visualizing data on the rocket the system will have to successfully communicate data from on-board the rocket, through radio transmission, through USB communication and be interpreted and visualized on a computer accurately. There are many sub components and metrics to this part. Each individual component will need to be accurate on its own, be able to send a the appropriate amount of data, and deliver it in a time frame suitable for interpretation. We will have to compare raw data to our UI and make sure we are accurately representing that sensor data. This is the same case for any commands sent through the system. Each individual component must accurately check for errors in communication and pass on the message to the onboard rocket system intact. The onboard system then will have to send signals to the onboard components to produce physical changes. This will have to be done fast and accurately as well. Failure to do so will result in lost or incorrect commands.\par
-
-\newpage
-
-\textbf{Students:}
-
-\vspace{5mm}
- 
-
-\noindent \namesigdate{Jason Klindtworth} \hfill \namesigdate[6cm]{Josh Asher}
-\vspace{5mm}
-
-\noindent \namesigdate{Layne Nolli}
- \vspace{5mm}
-
-\textbf{Client:}
-
-\vspace{5mm}
- 
-
-\noindent \namesigdate{Nancy Squires}
-
-
+\section{Retrospective}
+\begin{tabular}{ |p{0.3\linewidth}|p{0.3\linewidth}|p{0.3\linewidth}| }
+\hline
+\multicolumn{3}{|c|}{Retrospective} \\
+\hline
+    Positives & Deltas & Actions \\
+\hline
+    We have an awesome client that is very easy to deal with. She is super nice and helpful not only on the project, but with resources to jobs. & Need to meet more on the weekends & We have began to meet at Jason's house and will continue to do this more often. \\
+\hline
+    We were lucky enough to be guided by some of last year MIME students. They were very gracious and helped us immensely in understanding what we need to do. & Need to have better communication with our client Nancy Squires. & Next term Nancy should able to attend our meetings and we will use this time to become more acquainted with her and her hopes for this project. \\
+\hline
+Our team members get a long very well. There has been no arguments yet and each assignment proved easy to collaborate on. & We need to get equipment and start coding & Over the winter break we plan on getting the needed supplies and meet to begin building our system \\
+\hline
+Our project is really cool. None of us knew what a hybrid rocket was! We are all very excited about launching this complicated amateur rocket & We need to tailor our software on board the rocket to the senors the ECE chooses & We will maintain weekly communication with the ECE team and as they finalize the sensors we will adapt our generalization to the needs of those components \\
+\hline
+We have some of last years code to get ideas from & The rocket team hasn't fully formed and got to know each other & The ME students will be onboard next term and leading the meetings. We will keep close communication with them to form the bonds needed for the entire rocket team. \\
+\hline
+Our project does not seem to be extremely complicated and we believe we can meet some of our stretch goals. & We need to get an earlier start on assignments. We didn't wait to the last minute, but it would be nice to be further ahead so we can do more refining & We will start project earlier next term. This should be easier since we know each other better and have an idea of how to approach our issues. \\
+\hline
+We feel comfortable in LaTex after much trial and error & We need to practice using git hub more. We had some issues using git hub as a team over fall term. & We are all going to watch some videos and do some practicing next term. \\
+\hline
+We have learned a lot about the software development process and what to expect in industry & We all need to get familiar with Python. & We will be starting our project over the break and getting acquainted with the language. \\
+\hline
+\end{tabular}
 \end{document}
