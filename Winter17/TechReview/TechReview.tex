@@ -13,6 +13,8 @@
 \usepackage{url, lipsum}
 \usepackage{tikz}
 \usepackage[utf8]{inputenc}
+\usepackage{array}
+\usepackage{multirow}
 
 \newcommand{\namesigdatehrule}[1]{\par\tikz \draw [blue, densely dotted, ultra thick] (0,0) -- (#1,0);\par}
 \newcommand{\namesigdate}[2][5cm]{%
@@ -251,7 +253,13 @@ After doing quite a bit of research on this topic and weighing the pros and cons
 
 \subsection{Visualization Tool Kit to Display Data in UI}
 
-There is a near infinite amount of ways to display data. We could use graphs, charts, tables, sliders, gifs, images, the list goes on and one. There are also a few different underlying technologies that can be used to organize the UI. This can be done with frames, objects, pre-rendered images with changing data sets, or a number of other systems in place. The three options we will be discussing to organize the UI for our project are Semantic UI, HTML/CSS, and the IPython with Project Jupyter. \par
+There is a near infinite amount of ways to display data. We could use graphs, charts, tables, sliders, gifs, images, the list goes on and on. There are also a few different underlying technologies that can be used to organize the UI. This can be done with frames, objects, pre-rendered images with changing data sets, or a number of other systems in place. The three options we will be discussing to organize the UI for our project are Semantic UI, HTML/CSS, and the IPython with Project Jupyter. \par
+
+\vspace{.5cm}
+
+\textbf{REVISION (2/14/2017):} After much trial and error with different types of UI design elements we have decided to use a layout in Python using both the Tkinter and MatPlotLib libraries. Using these libraries with Python will allow us to easily display the required data including the graphs and button elements that are required for our project. Tkinter is a standard GUI for Python that is an object-oriented layer that sits on top of Tcl/Tk. There are a few different choices for GUI in Python but Tkinter is the most commonly used one as it is both reliable, and fairly simple to implement. MatPlotLib is a plotting library for Python it has a numerical mathematics extension called NumPy. It is used to provide an object-oriented API for embedding and displaying plots and graphs into Python applications. It works well with Tkinter and together these two libraries will allow us to have access to all of the tools we will need in order to display all of the required data for our project. \par
+
+\vspace{.5cm}
 
 Semantic UI is a pre-packaged program in place to design and implement project ideas and user interfaces for data driven UI systems. It works with multiple different languages to combine elements of a user interface into a simple straightforward design. The benefits of this system include an easy to navigate UI that has a consistent feel and layout. It would also be easy to manage different projects and different layouts in order to test different layouts to see one we like without a lot of extra testing or coding. However, the system seems fairly difficult to get up and running and managing a large project like this with multiple different sub groups might be challenging. \par
 
@@ -270,7 +278,11 @@ The way that the user interface is organized is an important consideration to th
 	
 	The final type of UI we discussed is a data dense UI which shows much more data on the interface then the other two methods. We would have almost all of the gathered data in very dense graphs and tables that would update in real time while the rocket is in flight. This would leave less room for functionality commands, but at a glance we would have more visibility to what is happening to the rocket during flight. The benefit of this type of system would be that the user would be able to know exactly what is happening at any given time without having to rely on the logs being analyzed after the flight. A major downside of this design is the cluttering of the data being displayed. Having access to so much data all at once might be distracting to the user and would not look clean or streamlined. \par
 
-	None of these systems are going to work specifically for our needs, so we are designing a new type that is a combination of these existing UI types. We want the system to have high functionality while maintaining good data density. We will still be outputting the data to a log for future analysis, but most of the gathered data will be available on the screen in real time during launch. The system does not need to be super simple as the layout is for gathering complex data, but we want the users to be able to navigate the system without needing extensive training with the system beforehand. \par
+\vspace{.5cm}
+
+	\textbf{REVISION (2/14/2017):}None of these existing systems we tried are going to work specifically for our needs, so we are designing a new type that is a combination of these existing UI types. Using Python libraries Tkinter and MatPlotLib we design the system to have high functionality while maintaining good data density. We will still be outputting the data to a log for future analysis, but most of the gathered data will be available on the screen in real time during launch. The system does not need to be super simple as the layout is for gathering complex data, but we want the users to be able to navigate the system without needing extensive training with the system beforehand. It should remain easy to use, while providing all of the data requirements for our project. \par
+
+\vspace{.5cm}
 	
 \subsection{Interaction Modes}
 Interaction modes are important in order to create a natural and flowing user-experience when attempting to derive meaning from the data displayed. Without a good interaction method, data is just miles of spreadsheets and characters. Interaction modes allow the user to get to their desired viewports and data processing methods with minimal effort or headache.
@@ -338,5 +350,26 @@ PyUSB Team,
 URL https://github.com/walac/pyusb/blob/master/docs/tutorial.rst
 
 \end{thebibliography}
+
+
+\vspace{1cm}
+
+\begin{center}
+\begin{tabular}{ |c|c|c| } 
+\hline
+Name: & Document: & Revisions:  \\
+\hline
+Jason Klindtworth & Tech Document & \multirow{1}{20em}{made changes to "Visualization Took Kit" section to include finalized decisions regarding the tools and libraries we ended up using for our project } \\ 
+\\ & \\ & \\
+
+
+\hline
+Jason Klindtworth & Tech Document & \multirow{1}{20em}{made changes to "Organization of the UI" section to fix wording and also add information about the GUI system we are designing and the libraries and technology we ended up using in the final product.  } \\ 
+\\ & \\ & \\
+\hline
+\end{tabular}
+\end{center}
+
+
 
 \end{document}
