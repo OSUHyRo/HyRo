@@ -402,6 +402,16 @@ We will not be interacting with a logical database in this project.
 \index{Design Constraints}
 We will have limited system memory on the BBB. Our program must run in under 512 megabytes of RAM, and not log over 3 gigs of data on the onboard system. The BBB will be in a heat intense environment, but the Mechanical engineering team is responsible for providing heat shielding to our unit.
 
+\subsection{Design Metrics}
+Our project inherently has metrics involving correct data acquisition, the validity of data, the speed of transferring data, the accuracy of data being displayed on the screen, and the correctness of saving the data. Each of these we can place a unit of measure on. \par
+\begin{itemize}
+\item{\bf Correct Data Acquisition - } If the data the sensors or actually producing matches the data that our program gathers to process we can call our data acquisition a success. To measure this we will have to take measurements with analog, or other known accurate digital devices of the same thing our sensors our. If we control the environment on the data matches up we know this part of our program is accurate. 
+\item{\bf Speed of Transferring Data -} The data must be collected and transfered within a reasonable amount of time. From rocket to ground unit data should be delivered within one second. There are a lot of factors involved and each one will have its own speed metric. These metrics will be listed here thoroughly when the complete rocket system is built.
+\item{\bf Validity of the Data - } If we somehow introduce bit errors into our data or do not convert and process it correctly it will be invalid. To test for this will be the same as for data acquisition only this is at a different stage of our program.
+\item{\bf Accuracy of the Data On Screen - } After data has been transferred and processed we need to accurately represent it on the screen. Each data element will be measured in its own units i.e pounds per square inch. These units need to be accurately represented on the screen to scale. When data arrives and is draw on the screen it needs to be within 1 percent of the actual values. To test this we will compare our on screen values to values processed by another pogram. Similar to above we need to verify we give the same answer as everybody else.
+\item{\bf Correctness of Saved Data - } The logged data needs to match the screen data that was displayed.
+\end{itemize}
+
 \subsection{Standards compliance}
 \index{Standards compliance}
 There are no explicit standards or regulations imposed on our project.
