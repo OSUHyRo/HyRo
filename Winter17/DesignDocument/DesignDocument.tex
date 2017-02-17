@@ -153,6 +153,9 @@ The SDD module design of the software on-board the hybrid rocket detailed here a
 \FloatBarrier
 
 \subsection{Components} 
+
+{\bf Josh Asher}
+\\ \\
 This section is intended to explain the electrical components of the rocket we will be receiving and/or sending data too. Most of the data collection will be coded by our ECE counter parts and passed to us to send to the ground unit. They have designed the electrical subsystem and written the drivers for the sensors. We will in turn make sure to receive this data and send their sub system commands from the ground. \par
 Based on current design plans the rocket will have an accelerometer, barometric/temperature sensor, and a servo to control filling, arming, and launching of the rocket. The sensors will be polled by the ECE sub system and the data will be passed to us. The system is still in design fluctuation, but we for sure will be reciving altitude, pressure, temperature, and acceleration data.\par
 
@@ -362,6 +365,8 @@ This method is the callback function attached to the XBee API object. It is call
 
 
 \subsubsection{Main Thread}
+{\bf Layne Nolli } 
+\\ \\
 The main thread in the entry point into the software. It runs all initialization functions and starts all threads. \par
 {\bf Definition:} \\ 
 main() \par
@@ -527,6 +532,9 @@ convVelocity(data) \par
 This function receives data from the data thread in its data parameter to convert to a velocity value suitable for graphing. The parameter will be a raw acceleration reading from the sensor. It will convert this to the Meters per second by first converting it to meters per second squared (normal acceleration) with the formula provided by the sensor manufacturer. Then it will take the integral of the acceleration to obtain the velocity.\par
 
 \subsubsection{Drawing Functions and Classes}\
+
+{\bf Jason Klindtworth }
+\\ \\
 Each of the following drawing functions are called by the redraw thread when data becomes available to be displayed on the screen. They do not take data as input to be displayed, but instead read the data from the data queues or the larger data arrays. Except for the message drawing routing it takes a input message to be drawn in the message window. Each function is responsible for a different data item and will display it according to the format of that data. The following is a list of the drawing functions and their specific operation. Each of the routines below are part of canvas class associated with the widget and inherit all from one parent redraw function. The redraw function will be called on the canvas object that it associated with as mentioned above.
 
 \subsubsection{Canvas Widget Class}

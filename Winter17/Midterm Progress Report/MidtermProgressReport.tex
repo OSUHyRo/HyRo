@@ -12,7 +12,8 @@
 %\usepackage{sectsty}
 \usepackage{url, lipsum}
 \usepackage{tikz}
-
+\usepackage{listings}
+\usepackage{placeins}
 
 \newcommand{\namesigdatehrule}[1]{\par\tikz \draw [blue, densely dotted, ultra thick] (0,0) -- (#1,0);\par}
 \newcommand{\namesigdate}[2][5cm]{%
@@ -63,20 +64,83 @@
 
 
 \section{Overview of Purpose and Goals}
+{\bf Jason, Josh, and Layne all took equal parts in writing these sections before our individual weekly blogs} \par
 OSU has for the past 2 years had seniors from MIME and ECE develop a hybrid rocket for their capstone projects. The first years didn't even get off the ground, but through their efforts lasts years team was able to build a hybrid that went 5000 feet. They were able to build a system to collect a large amount of data from on-board sensors, but had no way to easily visualize it. That's why we were invited aboard. This is the first year a CS team has worked on the hybrid rocket team. Our goals are to provide visualization to their data along with providing remote controls (like filling the oxidizer tank) to allow the team to operate the rocket entirely from a safe distance. We have been working closely with our ECE counter parts in this second third of our capstone experience. \par
 Last term we had completed our major design documents. This proved challenging on many levels. We had to not only get to know ourselves well, but learn to work well together. Then repeat that same process with a 15 member team. There were a lot of bumps in the road including communication, understanding, and learning. In the long run we all need to develop an entire hybrid rocket, launch it 10000 feet, and visualize the data from the onboard components. \par
 This term we have begun our development of our project. Or goals at this point of the progress report our to get it to an alpha stage. For us that means getting the radio transceiver communication working, setting up the user interface with all of its components, and begin to give those components functionality. Then we want to solidify receiving data, visualizing and logging it. Graphics are not our biggest concern at the moment. We want to get our project as far along as possible so we can spend next term smoothing the data flow and looks out. \par
 Another big goal for this term is to revise our original design documents. During the course of this progress report we all have taken the time to revise our sections. Not a whole lot of things have change, but there were some major changes. These will be mentioned under the next section. The goal in the long run is to have a set of documentation that professionally describes our system and the road we took to get to the solution. Currently we have speeches and a rough draft of our poster to look forward too. \par
-\section{Where We Are Currently}
+\section{Where We Are Currently and Where we Need to Head}
 We have begun development of our user interface and its backend as well as starting work on the communication between the rocket at the ground computer. This communication is going to be done by radio transceivers called XBees. The user interface is at an alpha stage, but we are very comfortable in the amount of progress we have made on it. It has all the buttons that have been requested for the rocket commands. Including the call back functions for the buttons that will send data to the onboard rocket system. This does not yet send data to the XBee, but is one of our current coding problems. We have created classes for drawing the graphs and gauges on our interface. They look fairly ghetto right now, but Jason is going to work on graphics to make them look better. Right now they are draw using the Tkinter canvas drawing functions. We were also successful in implanting the Matplotlib library and using it to draw graphs on the canvas widgets.\par
 As far as the user interface backend is concerned we have all the thread and initialization functions necessary to start XBee communication and initialize the user interface. One of the next steps is to code all of the data buffers and log arrays into the program. When this is done we will code in the loading function that will load data into these arrays to display on the screen. We will have not done much work on the data processing yet, but we are close. \par
 We received the XBees and a Beagle Bone Black to experiment with. On the traditional computer side we installed the XBee python library and were able to get the computer to talk to its XBee that was connected via USB. We did this by creating a python thread that initializes the serial port and XBee then loops with a callback function to receive transmission. This was successful, we will now code the send function. This was a very exciting accomplishment.\par
 There were some major changes that came up this term so far. Mainly we found out that the ECE team will be covering collecting sensor data and controlling electronic components.They will interface with us on the Beagle Bone Black in the system and send us this info. We are responsible for the same communication of commands back to their program. This has saved us a lot of time and we feel we will have time to reach our stretch goal of gps.\par
 The rocket currently has finally begun its development stage. A lot of components were not chosen until this week. This has left us and the ECE team really in the dark as far as design goes. Now the ECE team has finalized there stuff and is ready to communicate with us because the ME team has finally decided on the components and dimensions of their rocket. This is a very fun process to watch, especially test fires. \par
-For the rest of the term we plan on getting our document signed and getting the system into full working beta. There are some unkowns still like the tank pressure, but we want to be far enough along that adding such a component will be easy. First though we will make sure all the currently selected requirements our met by the end of the term. We would like to spend next term refining our product. \par
+For the rest of the term we plan on getting our document signed and getting the system into full working beta. There are some unknowns still like the tank pressure, but we want to be far enough along that adding such a component will be easy. First though we will make sure all the currently selected requirements our met by the end of the term. We would like to spend next term refining our product. \par
 
 \section{Major Problems And Solutions}
- \par
+This term has proven to be a lot less problem prone. Our first term consisted of major communication problems that we have through persistence dealt with. The first half of the second term has a new set of problems. We began developing our project and the major road block in that situation has been time. It has been difficult to get together more than once a week and work together on the program. To deal with this problem we have used our meetings to discuss major decisions in the program and plan out ways to approach individual aspects of the program. This has proven very effective and we have worked well on our individual components. We feel comfortable that we will be at full functional beta by the end of the term. \par
+Another major problem that has persisted since last term is the lack of the other teams components being far enough along to really determine aspects that we have been uncertain about. The ECE team has been working very hard on their components, but they too have been waiting for the ME team to make decisions. That has not been possible until this term. The ME team is now far enough to start making appropriate design decisions. These decisions will trickle down to us and we will be better able to define certain aspect of our system. This problem has made a lot of our work challenging. We have not been able to answer certain questions about what all will be in our software at the end of the year.We have conquered this so far by designing a system that will work with what every data they present us. We have a rough idea of the needs of our client and now they are finally starting to come to fruit. This is always a fun and exciting part on engineering and we knew the process would be like this. As the rocket design moves further along all teams are really getting excited about this launch. So much so that if we do well this year they will use it as a base line for other hybrid rocket projects from other schools. \par
+A common issue that will persist through the entire course of this project is time. We are all taking senior level classes and it is hard to squeeze any time in for anything. Two of us have kids and we all know how much time they take up. We attack this problem by having open communication. We have learned how we best communicate with each other and we email almost daily. This keeps us all on the same page and we know when we have to put extra work in to accomplish our tasks It has been especially weird since we have not had that much class time. We have had to learn to work around this and keep in close contact.\par
+One of our major software related problems is and will be the lack of data. We have some data from last year, but it is hard to fake launching a rocket. Measuring data from a avionics bay that is stationary will not give us an accurate representation of what it is going to look like live. There are two major approaches we are taking to conquer this issue. First we are designing our problem to load old data and are going to run last years data over and over again to test our user interface. Second we are trying to come up with creative ways to make the sensors pick up data. We need to be able to drop our bay from high up. So we plan to find a very tall building and make a mock avionics system. This seems possible as everyone has bought multiple copiers of all major components. We do not want to go into the launch blind, so if we have to jump out of an airplane we will do so. \par
+
+\section{Interesting Piece of Code}
+Here is our current Xbee class, it is an extension of the python threading class that initializes and listens to an XBee radio transceiver. This is pretty cool, that means you can hook up another transceiver to what every you want and communicate with it. \par
+
+\begin{lstlisting}
+class xb_rcv_thread(threading.Thread):
+    def __init__(self, threadID, name, counter, q, port):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+        self.counter = counter
+        self.port = port
+        self.serial = self.init()
+        self.xbee = XBee(self.serial, callback=self.processMessage)
+        self.q = q
+
+    def run(self):
+        print("Starting " + self.name)
+        #self.xbee.tx(dest_addr=b'\x00\x01', data=b'Hello World')
+        self.listen()
+        print("Exiting " + self.name)
+
+    def init(self):
+        try:
+            # Open serial port
+            print("opening comm")
+            #ser = serial.Serial('COM4', 9600)
+            return serial.Serial(self.port, 9600)
+
+            # Send the string 'Hello World' to the module with MY set to 1
+            #xbee.tx(dest_addr=b'\x00\x01', data=b'Hello World')
+       
+        except KeyboardInterrupt:
+            pass
+
+    def end(self):
+        self.xbee.halt()
+        self.ser.close()
+
+    def listen(self):
+        while 1:
+            time.sleep(0.001)
+
+    def processMessage(self, data):
+        #print(data["rf_data"])
+        self.q.put(item=data["rf_data"], block=False)
+
+\end{lstlisting}
+\pagebreak
+
+\section{Current Screen Shot}
+Please forgive us, this is alpha, but here is what the GUI looks like so far. No graphics have been developed yet to make it look pretty. \par
+
+\begin{figure}[!ht]
+  \caption{Current shot of alpha graphical user interface.}
+  \centering
+	\includegraphics[scale=.85]{AlphaGui}
+\end{figure}
+\FloatBarrier
 
 \section{Week by Week Recap}
 The following is a week by week recap from each team member up to week 5 of winter term.  \par
@@ -140,21 +204,20 @@ Learning about the hardware is going well. Josh got us caught up on the hardware
 \hline
     Positives & Deltas & Actions \\
 \hline
-    We have an awesome client that is very easy to deal with. She is super nice and helpful not only on the project, but with resources to jobs. & Need to meet more on the weekends & We have began to meet at Jason's house and will continue to do this more often. \\
+    We have an awesome client that is very easy to deal with. This is a repeat, but we feel really lucky. She is super nice and helpful not only on the project, but with resources to jobs. & Need to meet more on the weekends. This is also a repeat, but we are constantly dealing with it. & We try and have a meeting in the middle at Jason's house on Sundays. \\
 \hline
-    We were lucky enough to be guided by some of last year MIME students. They were very gracious and helped us immensely in understanding what we need to do. & Need to have better communication with our client Nancy Squires. & Next term Nancy should able to attend our meetings and we will use this time to become more acquainted with her and her hopes for this project. \\
+    The rocket is starting to actually be design by the MEs. & Have to meet with Nancy more.& Dr. squires is starting to attend the meetings and we are making efforts to keep her informed. \\
 \hline
-Our team members get a long very well. There has been no arguments yet and each assignment proved easy to collaborate on. & We need to get equipment and start coding & Over the winter break we plan on getting the needed supplies and meet to begin building our system \\
+Our team continues to get along very well. & We need to finish the data structures to hold our data. & We have begun to develop this and should be pretty much done in the next coupe of meetings. \\
 \hline
-Our project is really cool. None of us knew what a hybrid rocket was! We are all very excited about launching this complicated amateur rocket & We need to tailor our software on board the rocket to the senors the ECE chooses & We will maintain weekly communication with the ECE team and as they finalize the sensors we will adapt our generalization to the needs of those components \\
+The ECE team is far in their project and ready to communicate with our system. & Some components on the rocket are still undecided. & We will pay close attention to the ME's and their designs and as soon as we know a component is to be added we will add that component to our system.\\
 \hline
-We have some of last years code to get ideas from & The rocket team hasn't fully formed and got to know each other & The ME students will be onboard next term and leading the meetings. We will keep close communication with them to form the bonds needed for the entire rocket team. \\
+Our GUI is well into the alpha stage and will be ready for beta by the end of the term. & We are going to have a hard time testing the system with accurate data. & We will develop testing procedures to generate live data. This could be difficult, but is essential to our project. \\
 \hline
-Our project does not seem to be extremely complicated and we believe we can meet some of our stretch goals. & We need to get an earlier start on assignments. We didn't wait to the last minute, but it would be nice to be further ahead so we can do more refining & We will start project earlier next term. This should be easier since we know each other better and have an idea of how to approach our issues. \\
+We should have time for a couple stretch goals. & We need to reserve time to connect our system with the ECE team. & We have begun to plan these meetings. They should start before the end of the term. \\
 \hline
-We feel comfortable in LaTex after much trial and error & We need to practice using git hub more. We had some issues using git hub as a team over fall term. & We are all going to watch some videos and do some practicing next term. \\
+Our documents have been easy to revise. & We need to develope better graphics. Our program looks dated currently. & Jason has good software for graphics and is experienced in the subject. He has begun designing elements of the graphical user interface. \\
 \hline
-We have learned a lot about the software development process and what to expect in industry & We all need to get familiar with Python. & We will be starting our project over the break and getting acquainted with the language. \\
-\hline
+
 \end{tabular}
 \end{document}
