@@ -4,7 +4,6 @@ import time
 from xbee import XBee
 import serial
 import serial.tools.list_ports
-#import threads
 
 exitFalg = 0
 
@@ -13,7 +12,7 @@ def sendData(data):
 
 
 class xb_rcv_thread(threading.Thread):
-    def __init__(self, threadID, name, counter, timeStamp, chamberTemp, chamberPres, altitude, accelX, accelY, accelZ, GPSLon, GPSLat, port):
+    def __init__(self, threadID, name, counter, timeStamp, chamberTemp, chamberPres, altitude, accelX, accelY, accelZ, GPSLon, GPSLat, port, sQue):
         threading.Thread.__init__(self)
         self.threadID = threadID
         self.name = name
@@ -30,7 +29,8 @@ class xb_rcv_thread(threading.Thread):
         self.accelZ = accelZ
         self.GPSLon = GPSLon
         self.GPSLat = GPSLat
-         
+        self.sendQue = sQue
+
     def run(self):
         print("Starting " + self.name)
         #self.xbee.tx(dest_addr=b'\x00\x01', data=b'Hello World')
@@ -56,6 +56,7 @@ class xb_rcv_thread(threading.Thread):
 
     def listen(self):
         while 1:
+            self.send()
             time.sleep(0.001)
 
     def processMessage(self, data):
@@ -72,4 +73,16 @@ class xb_rcv_thread(threading.Thread):
         self.accelZ.put(dataStr[6], block=False)
         self.GPSLon.put(dataStr[7], block=False)
         self.GPSLat.put(dataStr[8], block=False)
+
+    def send(self):
+        #self.xbee.tx(dest_addr=b'\x00\x01', data=message)
+        if(self.sendQue.empty()):
+            pass
+        else:
+            self.sendQue.get(False)
+     
+            #log COMMAND with time
+            self.sendQue.task_done()
+            print("Send Fill Message")
+            self.xbee.tx(dest_addr=b'\x00\x01', data=b'FILL')
 

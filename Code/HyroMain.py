@@ -17,6 +17,22 @@ from PIL import ImageTk,Image
 import random
 from scipy import integrate
 
+#the ques for the data
+qChamberTemp = Queue()
+qChamberPressure = Queue()
+qAltitude = Queue()
+qAccelX = Queue()
+qAccelY = Queue()
+qAccelZ = Queue()
+qGPSLong = Queue()
+qGPSLat = Queue()
+qTimeStamp = Queue()
+sQue = Queue()
+
+
+def sendFill():
+       sQue.put("Fill")
+
 class drawCanvas:
         def __init__(self, mainwindow, x, y, w, h):
             self.x = x
@@ -457,19 +473,19 @@ abortButtonImage = PhotoImage(file="abortButtonImage.gif")
 launchButtonImage = PhotoImage(file="launchButtonImage.gif")
 gaugeImage = PhotoImage(file="gaugeBackgroundImage.gif")
 
-armButton = Button(hyroGUI, command = lambda: proccessCommand("Arm"))
-disarmButton = Button(hyroGUI, command = lambda: proccessCommand("Disarm"))
-fillButton = Button(hyroGUI, command = lambda: proccessCommand("Fill"))
-ignitionButton = Button(hyroGUI, command = lambda: proccessCommand("Ignition"))
-abortButton = Button(hyroGUI, command = lambda: proccessCommand("Abort"))
-launchButton = Button(hyroGUI, command = lambda: proccessCommand("Launch"))
+#armButton = Button(hyroGUI, command = lambda: proccessCommand("Arm"))
+#disarmButton = Button(hyroGUI, command = lambda: proccessCommand("Disarm"))
+fillButton = Button(hyroGUI, command = lambda: sendFill())
+#ignitionButton = Button(hyroGUI, command = lambda: proccessCommand("Ignition"))
+#abortButton = Button(hyroGUI, command = lambda: proccessCommand("Abort"))
+#launchButton = Button(hyroGUI, command = lambda: proccessCommand("Launch"))
 
-armButton.config(image=armButtonImage, width="125", height="50", bg="gray", bd=0, relief=SUNKEN, overrelief=RAISED)
-disarmButton.config(image=disarmButtonImage, width="125", height="50", bg="gray", bd=0, relief=SUNKEN, overrelief=RAISED)
+#armButton.config(image=armButtonImage, width="125", height="50", bg="gray", bd=0, relief=SUNKEN, overrelief=RAISED)
+#disarmButton.config(image=disarmButtonImage, width="125", height="50", bg="gray", bd=0, relief=SUNKEN, overrelief=RAISED)
 fillButton.config(image=fillButtonImage, width="125", height="50", bg="gray", bd=0, relief=SUNKEN, overrelief=RAISED)
-ignitionButton.config(image=ignitionButtonImage, width="125", height="50", bg="gray", bd=0, relief=SUNKEN, overrelief=RAISED)
-abortButton.config(image=abortButtonImage, width="125", height="50", bg="gray", bd=0, relief=SUNKEN, overrelief=RAISED)
-launchButton.config(image=launchButtonImage, width="125", height="50", bg="gray", bd=0, relief=SUNKEN, overrelief=RAISED)
+#ignitionButton.config(image=ignitionButtonImage, width="125", height="50", bg="gray", bd=0, relief=SUNKEN, overrelief=RAISED)
+#abortButton.config(image=abortButtonImage, width="125", height="50", bg="gray", bd=0, relief=SUNKEN, overrelief=RAISED)
+#launchButton.config(image=launchButtonImage, width="125", height="50", bg="gray", bd=0, relief=SUNKEN, overrelief=RAISED)
 
 chamberPressure = drawGuage(mainwindow=hyroGUI, x=350, y=125, h=150, w=200, min=10 , max=100)
 chamberTemp = drawGuage(mainwindow=hyroGUI, x=570, y=125, h=150, w=200, min=10, max=100)
@@ -501,26 +517,16 @@ chamberTemp.putScreen()
 acceleration.putScreen()
 velocity.putScreen()
 
-armButton.place(x=50, y=50)
-disarmButton.place(x=50, y=100)
+#armButton.place(x=50, y=50)
+#disarmButton.place(x=50, y=100)
 fillButton.place(x=50, y=150)
-ignitionButton.place(x=50, y=200)
-abortButton.place(x=50, y=250)
-launchButton.place(x=50,y=300)
+#ignitionButton.place(x=50, y=200)
+#abortButton.place(x=50, y=250)
+#launchButton.place(x=50,y=300)
 
-#the ques for the data
-qChamberTemp = Queue()
-qChamberPressure = Queue()
-qAltitude = Queue()
-qAccelX = Queue()
-qAccelY = Queue()
-qAccelZ = Queue()
-qGPSLong = Queue()
-qGPSLat = Queue()
-qTimeStamp = Queue()
 
 # Create new threads
-xbee_thread = xb_rcv_thread(1, "Xbee-Thread", 1,  timeStamp=qTimeStamp, chamberTemp=qChamberTemp, chamberPres=qChamberPressure, altitude=qAltitude, accelX=qAccelX, accelY=qAccelY, accelZ=qAccelZ, GPSLon=qGPSLong, GPSLat=qGPSLat, port="COM3")
+xbee_thread = xb_rcv_thread(1, "Xbee-Thread", 1,  timeStamp=qTimeStamp, chamberTemp=qChamberTemp, chamberPres=qChamberPressure, altitude=qAltitude, accelX=qAccelX, accelY=qAccelY, accelZ=qAccelZ, GPSLon=qGPSLong, GPSLat=qGPSLat, port="COM3",sQue=sQue)
 
 
 # Start new Threads
@@ -591,7 +597,7 @@ while True:
         chamberPressure.reDraw(value=data)
         #convert, store in long term, and write to file with timestamp
         qChamberPressure.task_done()
-
+        
     if(qChamberTemp.empty()):
         pass
     else:
@@ -670,6 +676,7 @@ qAccelY.join()
 qAccelZ.join()
 qGPSLong.join()
 qGPSLat.join()
+sQue.join()
 
 #portfound = False
 #ports = list(serial.tools.list_ports.comports())
