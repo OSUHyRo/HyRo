@@ -21,6 +21,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="drawingFunctions.py" />
     <Compile Include="HyroMain.py" />
     <Compile Include="xbee_threads.py" />
   </ItemGroup>

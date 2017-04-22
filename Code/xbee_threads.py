@@ -30,6 +30,7 @@ class xb_rcv_thread(threading.Thread):
         self.GPSLon = GPSLon
         self.GPSLat = GPSLat
         self.sendQue = sQue
+        self.exit = 0
 
     def run(self):
         print("Starting " + self.name)
@@ -52,10 +53,15 @@ class xb_rcv_thread(threading.Thread):
 
     def end(self):
         self.xbee.halt()
-        self.ser.close()
+        self.serial.close()
+        #set exit flag
+        self.exit = 1
 
     def listen(self):
         while 1:
+            #exit thread if flag is set
+            if(self.exit == 1):
+                    return
             self.send()
             time.sleep(0.001)
 

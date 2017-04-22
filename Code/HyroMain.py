@@ -1,462 +1,31 @@
 # !/usr/bin/python3
-from tkinter import *
-from tkinter import messagebox
-from math import *
-import tkinter as tk
-from tkinter import Tk
-import matplotlib
-import matplotlib.pyplot as plt
-from matplotlib import image
-matplotlib.use("TkAgg")
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
-from matplotlib.figure import Figure
+import datetime
 from xbee_threads import *
 import time
 from queue import Queue
 from PIL import ImageTk,Image
 import random
-from scipy import integrate
+from drawingFunctions import *
+import os
+import tkinter.filedialog as fd
 
 #the ques for the data
 qChamberTemp = Queue()
 qChamberPressure = Queue()
 qAltitude = Queue()
-qAccelX = Queue()
 qAccelY = Queue()
 qAccelZ = Queue()
+qAccelX = Queue()
 qGPSLong = Queue()
 qGPSLat = Queue()
 qTimeStamp = Queue()
 sQue = Queue()
 
+stopflag = 0
 
 def sendFill():
        sQue.put("Fill")
 
-class drawCanvas:
-        def __init__(self, mainwindow, x, y, w, h):
-            self.x = x
-            self.y = y
-            self.window = mainwindow
-            self.width = w
-            self.height = h
-            self.canvas = Canvas(hyroGUI, width=w, height=h)
-            self.canvas.config(background='white')
-
-        def putScreen(self):
-            self.canvas.place(x = self.x, y = self.y)
-
-        def redraw(self):
-            self.canvas.create_line(0, 0, 200, 100)
-            self.canvas.create_line(0, 100, 200, 0, fill="red", dash=(4, 4))
-
-            self.canvas.create_rectangle(50, 25, 150, 75, fill="blue")
-
-
-class AdrawPlot:
-        def __init__(self, mainwindow, x, y, w, h):
-            self.x = x
-            self.y = y
-            self.window = mainwindow
-            self.width = w
-            self.height = h
-
-            j = []
-            k = []
-            readFile = open('ASample.txt', 'r')
-            sepFile = readFile.read().split('\n')
-            readFile.close()
-            
-            if(len(sepFile) <= 1):
-                pass
-
-            else:
-                for plotPair in sepFile:
-                     if(plotPair == ""):
-                        continue
-                aAndB = plotPair.split(',')
-                j.append(float(aAndB[0]))
-                k.append(float(aAndB[1]))
-
-
-            f = Figure(figsize=(self.width,self.height), dpi=100)
-            accel = f.add_subplot(111)
-            accel.plot(j,k)
-            #a.plot([1,2,3,4],[1,7,8,9])
-
-            self.canvas = FigureCanvasTkAgg(f, master=mainwindow)
-            self.canvas.show()
-
-        def reDraw(self):
-            #self.canvas.create_line(0, 0, 200, 100)
-          
-            j = []
-            k = []
-            readFile = open('ASample.txt', 'r')
-            sepFile = readFile.read().split('\n')
-            readFile.close()
-           
-
-            if(len(sepFile) <= 1):
-                pass
-
-            else:
-                for plotPair in sepFile:
-                    if(plotPair == ""):
-                        continue
-                    aAndB = plotPair.split(',')
-                    j.append(float(aAndB[0]))
-                    k.append(float(aAndB[1]))
-
-
-            f = Figure(figsize=(self.width,self.height), dpi=100)
-            accel = f.add_subplot(111)
-            accel.plot(j,k)
-            self.canvas = FigureCanvasTkAgg(f, self.window)
-            self.canvas.show()
-            self.canvas.get_tk_widget().place(x = self.x, y = self.y)
-
-        def putScreen(self):
-            self.canvas.get_tk_widget().place(x = self.x, y = self.y)
-
-class VdrawPlot:
-        def __init__(self, mainwindow, x, y, w, h):
-            self.x = x
-            self.y = y
-            self.window = mainwindow
-            self.width = w
-            self.height = h
-
-            j = []
-            k = []
-            readFile = open('ASample.txt', 'r')
-            sepFile = readFile.read().split('\n')
-            readFile.close()
-            
-            if(len(sepFile) <= 1):
-                pass
-
-            else:
-                for plotPair in sepFile:
-                    if(plotPair == ""):
-                        continue
-                    aAndB = plotPair.split(',')
-                    j.append(float(aAndB[0]))
-                    k.append(float(aAndB[1]))
-
-
-            f = Figure(figsize=(self.width,self.height), dpi=100)
-            velo = f.add_subplot(111)
-            velo.plot(j,k)
-
-            self.canvas = FigureCanvasTkAgg(f, master=mainwindow)
-            self.canvas.show()
-
-        def reDraw(self):
-            #self.canvas.create_line(0, 0, 200, 100)
-          
-            j = []
-            k = []
-            readFile = open('VSample.txt', 'r')
-            sepFile = readFile.read().split('\n')
-            readFile.close()
-           
-
-            if(len(sepFile) <= 1):
-                pass
-
-            else:
-                for plotPair in sepFile:
-                    if(plotPair == ""):
-                        continue
-                    aAndB = plotPair.split(',')
-                    j.append(float(aAndB[0]))
-                    k.append(float(aAndB[1]))
-
-
-            f = Figure(figsize=(self.width,self.height), dpi=100)
-            accel = f.add_subplot(111)
-            accel.plot(j,k)
-            self.canvas = FigureCanvasTkAgg(f, self.window)
-            self.canvas.show()
-            self.canvas.get_tk_widget().place(x = self.x, y = self.y)
-        def putScreen(self):
-            self.canvas.get_tk_widget().place(x = self.x, y = self.y)
-
-class CPdrawPlot:
-        def __init__(self, mainwindow, x, y, w, h):
-            self.x = x
-            self.y = y
-            self.window = mainwindow
-            self.width = w
-            self.height = h
-
-            j = []
-            k = []
-            readFile = open('CPSample.txt', 'r')
-            sepFile = readFile.read().split('\n')
-            readFile.close()
-            
-            if(len(sepFile) <= 1):
-                pass
-
-            else:
-                for plotPair in sepFile:
-                    if(plotPair == ""):
-                        continue
-                    aAndB = plotPair.split(',')
-                    j.append(int(aAndB[0]))
-                    k.append(int(aAndB[1]))
-
-
-            f = Figure(figsize=(self.width,self.height), dpi=100)
-            accel = f.add_subplot(111)
-            accel.plot(j,k)
-
-            self.canvas = FigureCanvasTkAgg(f, master=mainwindow)
-            self.canvas.show()
-
-        def reDraw(self):
-            #self.canvas.create_line(0, 0, 200, 100)
-          
-            j = []
-            k = []
-            readFile = open('CPSample.txt', 'r')
-            sepFile = readFile.read().split('\n')
-            readFile.close()
-           
-
-            if(len(sepFile) <= 1):
-                pass
-
-            else:
-                for plotPair in sepFile:
-                    if(plotPair == ""):
-                        continue
-                    aAndB = plotPair.split(',')
-                    j.append(int(aAndB[0]))
-                    k.append(int(aAndB[1]))
-
-
-            f = Figure(figsize=(self.width,self.height), dpi=100)
-            accel = f.add_subplot(111)
-            accel.plot(j,k)
-            self.canvas = FigureCanvasTkAgg(f, self.window)
-            self.canvas.show()
-            self.canvas.get_tk_widget().place(x = self.x, y = self.y)
-
-        def putScreen(self):
-            self.canvas.get_tk_widget().place(x = self.x, y = self.y)
-
-class CTdrawPlot:
-        def __init__(self, mainwindow, x, y, w, h):
-            self.x = x
-            self.y = y
-            self.window = mainwindow
-            self.width = w
-            self.height = h
-            
-
-            j = []
-            k = []
-            readFile = open('CTSample.txt', 'r')
-            sepFile = readFile.read().split('\n')
-            readFile.close()
-            
-            #if file is blank draw nothing
-        
-            if(len(sepFile) <= 1):
-                pass
-
-            else:
-                for plotPair in sepFile:
-                    if(plotPair == ""):
-                        continue
-                    aAndB = plotPair.split(',')
-                    j.append(int(aAndB[0]))
-                    k.append(int(aAndB[1]))
-
-
-            f = Figure(figsize=(self.width,self.height), dpi=100)
-            accel = f.add_subplot(111)
-            accel.plot(j,k)
-
-            self.canvas = FigureCanvasTkAgg(f, master=mainwindow)
-            self.canvas.show()
-
-        def reDraw(self):
-            #self.canvas.create_line(0, 0, 200, 100)
-          
-            j = []
-            k = []
-            readFile = open('CTSample.txt', 'r')
-            sepFile = readFile.read().split('\n')
-            readFile.close()
-           
-
-            if(len(sepFile) <= 1):
-                pass
-
-            else:
-                for plotPair in sepFile:
-                    if(plotPair == ""):
-                        continue
-                    aAndB = plotPair.split(',')
-                    j.append(int(aAndB[0]))
-                    k.append(int(aAndB[1]))
-
-
-            f = Figure(figsize=(self.width,self.height), dpi=100)
-            accel = f.add_subplot(111)
-            accel.plot(j,k)
-            self.canvas = FigureCanvasTkAgg(f, self.window)
-            self.canvas.show()
-            self.canvas.get_tk_widget().place(x = self.x, y = self.y)
-
-        def putScreen(self):
-            self.canvas.get_tk_widget().place(x = self.x, y = self.y)
-
-class AltdrawPlot:
-        def __init__(self, mainwindow, x, y, w, h):
-            self.x = x
-            self.y = y
-            self.window = mainwindow
-            self.width = w
-            self.height = h
-
-            j = []
-            k = []
-            readFile = open('AltSample.txt', 'r')
-            sepFile = readFile.read().split('\n')
-            readFile.close()
-            
-            if(len(sepFile) <= 1):
-                pass
-
-            else:
-                for plotPair in sepFile:
-                    if(plotPair == ""):
-                        continue
-                    aAndB = plotPair.split(',')
-                    j.append(int(aAndB[0]))
-                    k.append(int(aAndB[1]))
-
-
-            f = Figure(figsize=(self.width,self.height), dpi=100)
-            accel = f.add_subplot(111)
-            accel.plot(j,k)
-
-            self.canvas = FigureCanvasTkAgg(f, master=mainwindow)
-            self.canvas.show()
-
-        def reDraw(self):
-            #self.canvas.create_line(0, 0, 200, 100)
-          
-            j = []
-            k = []
-            readFile = open('AltSample.txt', 'r')
-            sepFile = readFile.read().split('\n')
-            readFile.close()
-           
-
-            if(len(sepFile) <= 1):
-                pass
-
-            else:
-                for plotPair in sepFile:
-                    if(plotPair == ""):
-                        continue
-                    aAndB = plotPair.split(',')
-                    j.append(int(aAndB[0]))
-                    k.append(int(aAndB[1]))
-
-
-            f = Figure(figsize=(self.width,self.height), dpi=100)
-            accel = f.add_subplot(111)
-            accel.plot(j,k)
-            self.canvas = FigureCanvasTkAgg(f, self.window)
-            self.canvas.show()
-            self.canvas.get_tk_widget().place(x = self.x, y = self.y)
-
-        def putScreen(self):
-            self.canvas.get_tk_widget().place(x = self.x, y = self.y)
-
-
-
-
-       # def redraw(self):
-            #self.canvas.create_line(0, 0, 200, 100)
-            #self.canvas.create_line(0, 100, 200, 0, fill="red", dash=(4, 4))
-
-            #self.canvas.create_rectangle(50, 25, 150, 75, fill="blue")
-
-class drawGuage(drawCanvas):
-    def __init__(self, min, max, *args, **kwargs):
-        self.min = min
-        self.max = max
-        super(drawGuage, self).__init__(*args, **kwargs)
-
-    def reDraw(self, value):
-        #self.canvas.create_line(0, 0, 200, 100)
-        self.canvas.delete("all")
-        value = int(value)
-        scale = self.max - self.min
-        r = pi
-        p = pi + (pi * (value / scale))
-        count = 0
-        while r <= 2 * pi:
-            xpos = 100*cos(r) + self.width / 2
-            #print("x")
-            #print(xpos)
-            ypos = 100*sin(r) + self.height
-            #print("y")
-            #print(ypos)
-            if(count % 2 == 0):
-                self.canvas.create_line(75*cos(r) + self.width / 2, 75*sin(r) + self.height, xpos, ypos, width = 4)
-            else:
-                self.canvas.create_line(75*cos(r) + self.width / 2, 75*sin(r) + self.height, xpos, ypos, width = 1)
-            count += 1
-            r += (pi / 2) / 10
-        self.canvas.create_line(self.width / 2, self.height, 95*cos(p) + self.width / 2, 95*sin(p) + self.height, width = 4, fill="red");
-
-class drawGraph(drawCanvas):
-    def reDraw(self):
-        self.canvas.create_line(0, 0, 200, 100)
-
-class drawMultiGraph(drawCanvas):
-    def reDraw(self):
-        self.canvas.create_line(0, 0, 200, 100)
-    
-
-def convVel(value):
-    j = []
-    k = []
-    readFile = open('ASample.txt', 'r')
-    sepFile = readFile.read().split('\n')
-    readFile.close()
-           
-    #need enough points to integrate
-    if(len(sepFile) < 3):
-        pass
-
-    else:
-        for plotPair in sepFile:
-            if(plotPair == ""):
-                continue
-            aAndB = plotPair.split(',')
-            j.append(float(aAndB[0]))
-            k.append(float(aAndB[1]))
-        data = integrate.simps(k, x=j)
-
-        t = round(time.clock())
-        file = open("VSample.txt", "a")
-        file.write("\n")
-        file.write(str(t)+","+str(data));
-        file.close()
-        print("Velocity: " + str(data))
-        velocity.reDraw()
-
-hyroGUI = Tk()
 hyroGUI.geometry("1500x800")
 
 Back = Canvas(hyroGUI, bg="blue", height=800, width=1500)
@@ -464,6 +33,77 @@ backgroundFile = PhotoImage(file = "background.gif")
 background_label = Label(hyroGUI, image=backgroundFile)
 background_label.place(x=0, y=0, relwidth=1, relheight=1)
 Back.pack()
+
+# Create new threads
+xbee_thread = None#xb_rcv_thread(1, "Xbee-Thread", 1,  timeStamp=qTimeStamp, chamberTemp=qChamberTemp, chamberPres=qChamberPressure, altitude=qAltitude, accelX=qAccelX, accelY=qAccelY, accelZ=qAccelZ, GPSLon=qGPSLong, GPSLat=qGPSLat, port="COM3",sQue=sQue)
+
+def start():
+    global xbee_thread
+    global stopflag
+    if(xbee_thread == None):
+        print("Test2")
+        xbee_thread = xb_rcv_thread(1, "Xbee-Thread", 1,  timeStamp=qTimeStamp, chamberTemp=qChamberTemp, chamberPres=qChamberPressure, altitude=qAltitude, accelX=qAccelX, accelY=qAccelY, accelZ=qAccelZ, GPSLon=qGPSLong, GPSLat=qGPSLat, port="COM3",sQue=sQue) 
+        xbee_thread.start()   
+    if not(xbee_thread.is_alive()):
+       print("TEST")
+       xbee_thread = xb_rcv_thread(1, "Xbee-Thread", 1,  timeStamp=qTimeStamp, chamberTemp=qChamberTemp, chamberPres=qChamberPressure, altitude=qAltitude, accelX=qAccelX, accelY=qAccelY, accelZ=qAccelZ, GPSLon=qGPSLong, GPSLat=qGPSLat, port="COM3",sQue=sQue) 
+       xbee_thread.start()
+    stopflag = 0
+    print("Started!")
+    #Start the XBee thread
+
+    collectData()
+
+def stop():
+    global stopflag
+    #Stop the XBee thread
+    xbee_thread.end()
+    print("Stopped!")
+    stopflag = 1
+
+def on_closing():
+    #Join all the queing threads before Closing
+    qTimeStamp.join()
+    qChamberTemp.join()
+    qChamberPressure.join()
+    qAltitude.join()
+    qAccelX.join()
+    qAccelY.join()
+    qAccelZ.join()
+    qGPSLong.join()
+    qGPSLat.join()
+    sQue.join() 
+    hyroGUI.destroy()
+
+def load():
+    directory = fd.askdirectory()
+    #add missing \
+    directory += "/"
+    print("Loading" + directory)
+
+    #redraw gauges at 0 for this
+    chamberPressure.reDraw(value=0)
+    chamberTemp.reDraw(value=0)
+    altitude.reDraw(value=0)
+
+    #redraw the graphs with the selected files
+    chamberPressureGraph.reDraw(directory=directory)
+    chamberTempGraph.reDraw(directory=directory)
+    altitudeGraph.reDraw(directory=directory)
+    velocity.reDraw(directory=directory)
+    acceleration.reDraw(directory=directory)        
+
+
+hyroGUI.protocol("WM_DELETE_WINDOW", on_closing)
+
+menubar = Menu(hyroGUI)
+menubar.add_command(label="Start", command=start)
+menubar.add_command(label="Stop", command=stop)
+menubar.add_command(label="Load Data", command=load)
+menubar.add_command(label="Quit!", command=hyroGUI.quit)
+
+# display the menu
+hyroGUI.config(menu=menubar)
 
 armButtonImage = PhotoImage(file="armButtonImage.gif")
 disarmButtonImage = PhotoImage(file="disarmButtonImage.gif")
@@ -525,158 +165,147 @@ fillButton.place(x=50, y=150)
 #launchButton.place(x=50,y=300)
 
 
-# Create new threads
-xbee_thread = xb_rcv_thread(1, "Xbee-Thread", 1,  timeStamp=qTimeStamp, chamberTemp=qChamberTemp, chamberPres=qChamberPressure, altitude=qAltitude, accelX=qAccelX, accelY=qAccelY, accelZ=qAccelZ, GPSLon=qGPSLong, GPSLat=qGPSLat, port="COM3",sQue=sQue)
+def collectData():
+    global stopflag
+    ts = time.time()
+    st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d-%H-%M-%S')
 
+    #Check if directory exists, it shouldn't but safer, then create it
+    #Each run of this software will create a new time stamped directory with files representing each flight of the rocket
+    directory = "data\\"+st+"\\"
+    #os.chdir(os.path.dirname(os.path.realpath(__file__)))
+    if not os.path.exists(directory):
+        print("TPONE")
+        os.makedirs(directory)
+    
+    file = open(directory+"CTSample.txt", "w")
+    file.truncate()
+    file.close()
 
-# Start new Threads
-xbee_thread.start()
+    file = open(directory+"CPSample.txt", "w")
+    file.truncate()
+    file.close()
 
-file = open("CTSample.txt", "w")
-file.truncate()
-file.close()
-file = open("CPSample.txt", "w")
-file.truncate()
-file.close()
-file = open("AltSample.txt", "w")
-file.truncate()
-file.close()
-file = open("ASample.txt", "w")
-file.truncate()
-file.close()
-file = open("VSample.txt", "w")
-file.truncate()
-file.close()
-#hyroGUI.mainloop()
-CPvalue = 35
-CTvalue = 50
-AltValue = 0
-while True:
-    #if(CPvalue > 40):
-        #CPvalue = 35
-    #CPvalue += 1
-    #chamberPressure.reDraw(value=CPvalue)
-    #if(CTvalue > 60):
-        #CTvalue = 50
-    #CTvalue += 1
-    #chamberTemp.reDraw(value=CTvalue)
-    #if(AltValue > 85):
-        #AltValue = 0
-    #AltValue += 1
-    #altitude.reDraw(value=AltValue)
-    #acceleration.reDraw(random.randrange(0,100),random.randrange(0,100), 0, 100)
+    file = open(directory+"AltSample.txt", "w")
+    file.truncate()
+    file.close()
 
-    time.sleep(0.5)
-    if(qTimeStamp.empty()):
-        pass
-    else:
-        data = qTimeStamp.get(False)
-        print("Time Stampe: " + data)
-        #convert, store in long term, and write to file with timestamp
-        qTimeStamp.task_done()
+    file = open(directory+"ASample.txt", "w")
+    file.truncate()
+    file.close()
 
-    if (qChamberPressure.empty()):
-        pass
-    else:
-        #data = qu.get(False)  
-        # If `False`, the program is not blocked. `Queue.Empty` is thrown if 
-        # the queue is empty
-        #print(data)
-        #qu.task_done()
+    file = open(directory+"VSample.txt", "w")
+    file.truncate()
+    file.close()
 
-        #go through queues and send data to coverter for long term storage
-        data = qChamberPressure.get(False)
+    while True:
+        if(stopflag == 1):
+            print("Stopping!")
+            return
 
-        print("Chamber Pressure: " + data)
-        t = round(time.clock())
-        file = open("CPSample.txt", "a")
-        file.write("\n")
-        file.write(str(t)+","+str(data));
-        file.close()
-        chamberPressureGraph.reDraw()
-        chamberPressure.reDraw(value=data)
-        #convert, store in long term, and write to file with timestamp
-        qChamberPressure.task_done()
+        time.sleep(0.5)
+        if(qTimeStamp.empty()):
+            pass
+        else:
+            data = qTimeStamp.get(False)
+            #print("Time Stamp: " + data)
+            #convert, store in long term, and write to file with timestamp
+            qTimeStamp.task_done()
+
+        if (qChamberPressure.empty()):
+            pass
+        else:
+            #data = qu.get(False)  
+            # If `False`, the program is not blocked. `Queue.Empty` is thrown if 
+            # the queue is empty
+            #print(data)
+            #qu.task_done()
+
+            #go through queues and send data to coverter for long term storage
+            data = qChamberPressure.get(False)
+
+            #print("Chamber Pressure: " + data)
+            t = round(time.clock())
+            file = open(directory+"CPSample.txt", "a")
+            file.write("\n")
+            file.write(str(t)+","+str(data));
+            file.close()
+            chamberPressureGraph.reDraw(directory=directory)
+            chamberPressure.reDraw(value=data)
+            #convert, store in long term, and write to file with timestamp
+            qChamberPressure.task_done()
         
-    if(qChamberTemp.empty()):
-        pass
-    else:
-        data = qChamberTemp.get(False)
-        t = round(time.clock())
-        file = open("CTSample.txt", "a")
-        file.write("\n")
-        file.write(str(t)+","+str(data));
-        file.close()
-        print("Chamber Temperature: " + data)
-        chamberTempGraph.reDraw()
-        chamberTemp.reDraw(value=data)
-        qChamberTemp.task_done()
+        if(qChamberTemp.empty()):
+            pass
+        else:
+            data = qChamberTemp.get(False)
+            t = round(time.clock())
+            file = open(directory+"CTSample.txt", "a")
+            file.write("\n")
+            file.write(str(t)+","+str(data));
+            file.close()
+            #print("Chamber Temperature: " + data)
+            chamberTempGraph.reDraw(directory=directory)
+            chamberTemp.reDraw(value=data)
+            qChamberTemp.task_done()
 
-    if(qAltitude.empty()):
-        pass
-    else:
-        data = qAltitude.get(False)
-        print("Altitude: " + data)
+        if(qAltitude.empty()):
+            pass
+        else:
+            data = qAltitude.get(False)
+            #print("Altitude: " + data)
 
-        t = round(time.clock())
-        file = open("AltSample.txt", "a")
-        file.write("\n")
-        file.write(str(t)+","+str(data));
-        file.close()
-        altitudeGraph.reDraw()
-        altitude.reDraw(value=data)
-        qAltitude.task_done()
+            t = round(time.clock())
+            file = open(directory+"AltSample.txt", "a")
+            file.write("\n")
+            file.write(str(t)+","+str(data));
+            file.close()
+            altitudeGraph.reDraw(directory=directory)
+            altitude.reDraw(value=data)
+            qAltitude.task_done()
 
-    if(qAccelX.empty() | qAccelY.empty() | qAccelX.empty()):
-        pass
-    else:
-        data = qAccelX.get(False)
-        print("Velocity X: " + data)
-        qAccelX.task_done()
+        if(qAccelX.empty() | qAccelY.empty() | qAccelZ.empty()):
+            pass
+        else:
+            data = qAccelX.get(False)
+            #print("Velocity X: " + data)
+            qAccelX.task_done()
 
-        data = qAccelY.get(False)
-        print("Velocity Y: " + data)
-        t = round(time.clock())
-        file = open("ASample.txt", "a")
-        file.write("\n")
-        file.write(str(t)+","+str(data));
-        file.close()
+            data = qAccelY.get(False)
+            #print("Velocity Y: " + data)
+            t = round(time.clock())
+            file = open(directory+"ASample.txt", "a")
+            file.write("\n")
+            file.write(str(t)+","+str(data));
+            file.close()
 
-        convVel(value = data)
-        acceleration.reDraw()
-        qAccelY.task_done()
+            convVel(value = data, directory = directory)
+            velocity.reDraw(directory=directory)
+            acceleration.reDraw(directory=directory)
+            qAccelY.task_done()
 
-        data = qAccelZ.get(False)
-        print("Velocity Z: " + data)
-        qAccelZ.task_done()
+            data = qAccelZ.get(False)
+            #print("Velocity Z: " + data)
+            qAccelZ.task_done()
 
-    if(qGPSLat.empty()):
-        pass
-    else:
-        data = qGPSLat.get(False)
-        print("GPS Lat: " + data)
-        qGPSLat.task_done()
+        if(qGPSLat.empty()):
+            pass
+        else:
+            data = qGPSLat.get(False)
+            #print("GPS Lat: " + data)
+            qGPSLat.task_done()
 
-    if(qGPSLong.empty()):
-        pass
-    else:
-        data = qGPSLong.get(False)
-        print("GPS Lon: " + data)
-        qGPSLong.task_done()
+        if(qGPSLong.empty()):
+            pass
+        else:
+            data = qGPSLong.get(False)
+            #print("GPS Lon: " + data)
+            qGPSLong.task_done()
 
-    hyroGUI.update_idletasks()
-    hyroGUI.update()
+        hyroGUI.update_idletasks()
+        hyroGUI.update()
 
-qTimeStamp.join()
-qChamberTemp.join()
-qChamberPressure.join()
-qAltitude.join()
-qAccelX.join()
-qAccelY.join()
-qAccelZ.join()
-qGPSLong.join()
-qGPSLat.join()
-sQue.join()
+hyroGUI.mainloop()
 
 #portfound = False
 #ports = list(serial.tools.list_ports.comports())
