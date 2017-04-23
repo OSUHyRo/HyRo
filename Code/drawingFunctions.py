@@ -353,8 +353,9 @@ class AltdrawPlot:
 
 
             f = Figure(figsize=(self.width,self.height), dpi=100)
-            accel = f.add_subplot(111)
+            accel = f.add_subplot(111)  
             accel.plot(j,k)
+
             self.canvas = FigureCanvasTkAgg(f, self.window)
             self.canvas.show()
             self.canvas.get_tk_widget().place(x = self.x, y = self.y)
@@ -377,7 +378,7 @@ class drawGuage(drawCanvas):
         self.max = max
         super(drawGuage, self).__init__(*args, **kwargs)
 
-    def reDraw(self, value):
+    def reDraw(self, value, unit):
         #self.canvas.create_line(0, 0, 200, 100)
         self.canvas.delete("all")
         value = int(value)
@@ -385,6 +386,10 @@ class drawGuage(drawCanvas):
         r = pi
         p = pi + (pi * (value / scale))
         count = 0
+
+        #Append the unit to the center of the gauge
+        self.canvas.create_text(self.width / 2, self.height / 2 + 50, text=unit)
+
         while r <= 2 * pi:
             xpos = 100*cos(r) + self.width / 2
             #print("x")
@@ -394,20 +399,13 @@ class drawGuage(drawCanvas):
             #print(ypos)
             if(count % 2 == 0):
                 self.canvas.create_line(75*cos(r) + self.width / 2, 75*sin(r) + self.height, xpos, ypos, width = 4)
+                if not (count == 0 or count == 20):
+                    self.canvas.create_text(xpos, ypos - 10, text=count)
             else:
                 self.canvas.create_line(75*cos(r) + self.width / 2, 75*sin(r) + self.height, xpos, ypos, width = 1)
             count += 1
             r += (pi / 2) / 10
         self.canvas.create_line(self.width / 2, self.height, 95*cos(p) + self.width / 2, 95*sin(p) + self.height, width = 4, fill="red");
-
-class drawGraph(drawCanvas):
-    def reDraw(self):
-        self.canvas.create_line(0, 0, 200, 100)
-
-class drawMultiGraph(drawCanvas):
-    def reDraw(self):
-        self.canvas.create_line(0, 0, 200, 100)
-    
 
 def convVel(value, directory):
     j = []

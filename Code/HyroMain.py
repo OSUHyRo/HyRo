@@ -82,9 +82,9 @@ def load():
     print("Loading" + directory)
 
     #redraw gauges at 0 for this
-    chamberPressure.reDraw(value=0)
-    chamberTemp.reDraw(value=0)
-    altitude.reDraw(value=0)
+    chamberPressure.reDraw(value=0, unit="Pa x 50,000")
+    chamberTemp.reDraw(value=0, unit="C x 1")
+    altitude.reDraw(value=0, unit="M x 200")
 
     #redraw the graphs with the selected files
     chamberPressureGraph.reDraw(directory=directory)
@@ -127,9 +127,9 @@ fillButton.config(image=fillButtonImage, width="125", height="50", bg="#666666",
 #abortButton.config(image=abortButtonImage, width="125", height="50", bg="gray", bd=0, relief=SUNKEN, overrelief=RAISED)
 launchButton.config(image=launchButtonImage, width="150", height="60", bg="#666666", bd=0, relief=SUNKEN, overrelief=RAISED)
 
-chamberPressure = drawGuage(mainwindow=hyroGUI, x=300, y=50, h=150, w=200, min=10 , max=100)
+chamberPressure = drawGuage(mainwindow=hyroGUI, x=300, y=50, h=150, w=200, min=10 , max=100000)
 chamberTemp = drawGuage(mainwindow=hyroGUI, x=600, y=50, h=150, w=200, min=10, max=100)
-altitude = drawGuage(mainwindow=hyroGUI, x=900, y=50, h=150, w=200, min=10 , max=100)
+altitude = drawGuage(mainwindow=hyroGUI, x=900, y=50, h=150, w=200, min=10 , max=4000)
 
 acceleration = AdrawPlot(mainwindow=hyroGUI, x=440, y=290, h=2, w=3.5)
 velocity = VdrawPlot(mainwindow=hyroGUI, x=920, y=290, h=2, w=3.5)
@@ -230,7 +230,7 @@ def collectData():
             file.write(str(t)+","+str(data));
             file.close()
             chamberPressureGraph.reDraw(directory=directory)
-            chamberPressure.reDraw(value=data)
+            chamberPressure.reDraw(value=data, unit="Pa x 50,000")
             #convert, store in long term, and write to file with timestamp
             qChamberPressure.task_done()
         
@@ -245,7 +245,7 @@ def collectData():
             file.close()
             #print("Chamber Temperature: " + data)
             chamberTempGraph.reDraw(directory=directory)
-            chamberTemp.reDraw(value=data)
+            chamberTemp.reDraw(value=data, unit="C x 1")
             qChamberTemp.task_done()
 
         if(qAltitude.empty()):
@@ -260,7 +260,7 @@ def collectData():
             file.write(str(t)+","+str(data));
             file.close()
             altitudeGraph.reDraw(directory=directory)
-            altitude.reDraw(value=data)
+            altitude.reDraw(value=data, unit="M x 200")
             qAltitude.task_done()
 
         if(qAccelX.empty() | qAccelY.empty() | qAccelZ.empty()):
