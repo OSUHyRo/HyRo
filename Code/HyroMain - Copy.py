@@ -8,10 +8,9 @@ import matplotlib.pyplot as plt
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.figure import Figure
+from xbee_threads import *
 import time
-from xbee import XBee
-import serial
-import serial.tools.list_ports
+from queue import Queue
 
 class drawCanvas:
         def __init__(self, mainwindow, x, y, w, h):
@@ -94,12 +93,44 @@ class drawGrpah(drawCanvas):
 class drawMultiGraph(drawCanvas):
     def reDraw(self):
         self.canvas.create_line(0, 0, 200, 100)
-    
+
+#converts chamber temperature to the desired format
+def convertChmbTmp(data):
+    return data
+
+#convert chamber peressure to the desired format
+def convertChmbPres(data):
+    return data
+
+#converts altitude to the desired format
+def convertAlt(data):
+    return data
+
+#convet accelleration to desired fomrat
+def convertAccel(x, y, z):
+    return x
+
+#convert acceleration data into velocity data format
+def convertVelocity(x, y, z):
+    return x
 
 hyroGUI = Tk()
 hyroGUI.geometry("1000x1000")
 def proccessCommand(command):
    msg=messagebox.showinfo( "Command You Clicked", command)
+
+#the ques for the data
+qChamberTemp = Queue()
+qChamberPressure = Queue()
+qAltitude = Queue()
+qAccelX = Queue()
+qAccelY = Queue()
+qAccelZ = Queue()
+qGPSLong = Queue()
+qGPSLat = Queue()
+qTimeStamp = Queue()
+
+#the long term data storage arrays
 
 armButton = Button(hyroGUI, text ="Arm", command = lambda: proccessCommand("Arm"))
 disarmButton = Button(hyroGUI, text ="Disarm", command = lambda: proccessCommand("Disarm"))
@@ -113,7 +144,7 @@ temperature = drawGuage(mainwindow=hyroGUI, x=450, y=25, h=150, w=200, min=10 , 
 chamberPressure = drawGuage(mainwindow=hyroGUI, x=700, y=25, h=150, w=200, min=10, max=100)
 
 acceleration = drawPlot(mainwindow=hyroGUI, x=200, y=400, h=2, w=3)
-velocity = drawPlot(mainwindow=hyroGUI, x=400, y=400, h=2, w=3)
+velocity = drawPlot(mainwindow=hyroGUI, x=600, y=400, h=2, w=3)
 
 
 temperature.putScreen()
@@ -133,16 +164,105 @@ ignButton.place(x=50, y=200)
 abortButton.place(x=50, y=250)
 launchButton.place(x=50,y=300)
 
+#qu = Queue()
+# Create new threads
+xbee_thread = xb_rcv_thread(1, "Xbee-Thread", 1,  timeStamp=qTimeStamp, chamberTemp=qChamberTemp, chamberPres=qChamberPressure, altitude=qAltitude, accelX=qAccelX, accelY=qAccelY, accelZ=qAccelZ, GPSLon=qGPSLong, GPSLat=qGPSLat, port="COM4")
+
+
+# Start new Threads
+xbee_thread.start()
+
 #hyroGUI.mainloop()
 c = 0
-#while True:
-#    if(c > 100):
-#        c = 0
-#   c += 1
-#    tankPressure.reDraw(value=c)
-#    hyroGUI.update_idletasks()
-#    hyroGUI.update()
-#    time.sleep(0.5)
+while True:
+    if(c > 100):
+        c = 0
+    c += 1
+    tankPressure.reDraw(value=c)
+    hyroGUI.update_idletasks()
+    hyroGUI.update()
+  
+    time.sleep(0.5)
+
+    if(qTimeStamp.empty()):
+        pass
+    else:
+        data = qTimeStamp.get(False)
+        print("Time Stampe: " + data)
+        #convert, store in long term, and write to file with timestamp
+        qTimeStamp.task_done()
+
+    if (qChamberPressure.empty()):
+        pass
+    else:
+        #data = qu.get(False)  
+        # If `False`, the program is not blocked. `Queue.Empty` is thrown if 
+        # the queue is empty
+        #print(data)
+        #qu.task_done()
+
+        #go through queues and send data to coverter for long term storage
+        data = qChamberPressure.get(False)
+        print("Chamber Pressure: " + data)
+        #convert, store in long term, and write to file with timestamp
+        qChamberPressure.task_done()
+    if(qChamberTemp.empty()):
+        pass
+    else:
+        data = qChamberTemp.get(False)
+        print("Chamber Temperature: " + data)
+        qChamberTemp.task_done()
+
+    if(qAltitude.empty()):
+        pass
+    else:
+        data = qAltitude.get(False)
+        print("Altitude: " + data)
+        qAltitude.task_done()
+
+    if(qAccelX.empty() | qAccelY.empty() | qAccelX.empty()):
+        pass
+    else:
+        data = qAccelX.get(False)
+        print("Velocity X: " + data)
+        qAccelX.task_done()
+
+        data = qAccelY.get(False)
+        print("Velocity Y: " + data)
+        qAccelY.task_done()
+
+        data = qAccelZ.get(False)
+        print("Velocity Z: " + data)
+        qAccelZ.task_done()
+
+    if(qGPSLat.empty()):
+        pass
+    else:
+        data = qGPSLat.get(False)
+        print("GPS Lat: " + data)
+        qGPSLat.task_done()
+
+    if(qGPSLong.empty()):
+        pass
+    else:
+        data = qGPSLong.get(False)
+        print("GPS Lon: " + data)
+        qGPSLong.task_done()
+  
+    #item = qu.get(block=False)
+    #print(item)
+    #qu.task_done()
+
+#qu.join()
+qTimeStamp.join()
+qChamberTemp.join()
+qChamberPressure.join()
+qAltitude.join()
+qAccelX.join()
+qAccelY.join()
+qAccelZ.join()
+qGPSLong.join()
+qGPSLat.join()
 
 #portfound = False
 #ports = list(serial.tools.list_ports.comports())
@@ -162,19 +282,3 @@ c = 0
 #else:
 #    sys.exit("No serial port seems to have an XBee connected.")
 
-try:
-    
-    # Open serial port
-    print("opening comm")
-    ser = serial.Serial('COM4', 9600)
-    print("Successful")
-    # Create XBee Series 1 object
-    xbee = XBee(ser)
-        
-    # Send the string 'Hello World' to the module with MY set to 1
-    xbee.tx(dest_addr=b'\x00\x00', data=b'Hello World')
-
-except KeyboardInterrupt:
-    pass
-finally:
-    ser.close()

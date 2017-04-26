@@ -1,0 +1,399 @@
+\documentclass[10pt,draftclsnofoot,onecolumn,compsoc]{IEEEtran}
+\usepackage[letterpaper, portrait, margin=0.75in]{geometry}
+%\usepackage[myheadings]{fullpage}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{graphicx,  subcaption,  booktabs}
+\usepackage[T1]{fontenc}
+\usepackage[font=small, labelfont=bf]{caption}
+%\usepackage{fourier}
+\usepackage[protrusion=true, expansion=true]{microtype}
+\usepackage[english]{babel}
+%\usepackage{sectsty}
+\usepackage{url, lipsum}
+\usepackage{tikz}
+\usepackage[section]{placeins}
+\usepackage{makeidx}
+\newcommand{\subparagraph}{}
+\usepackage{titlesec}
+
+\makeatletter
+\renewcommand{\@IEEEsectpunct}{ \\ \\ \,}% Modified from {:\ \,}
+\makeatother
+
+\setlength{\parindent}{0em}
+\setlength{\parskip}{1em}
+\renewcommand\thesection{\arabic{section}}
+\renewcommand\thesubsection{\thesection.\arabic{subsection}}
+\renewcommand\thesubsubsection{\thesubsection.\arabic{subsubsection}}
+
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+                                    {0ex \@plus0ex \@minus.0ex}%
+                                    {0em}%
+                                    {\normalfont\normalsize\bfseries}}
+\makeatother
+
+\renewcommand\thesectiondis{\arabic{section}}
+\renewcommand\thesubsectiondis{\thesectiondis.\arabic{subsection}}
+\renewcommand\thesubsubsectiondis{\thesubsectiondis.\arabic{subsubsection}}
+
+
+\titleformat{\section}
+       {\normalfont\fontfamily{phv}\fontsize{14}{17}\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}
+       {\normalfont\fontfamily{phv}\fontsize{14}{17}\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+       {\normalfont\fontfamily{phv}\fontsize{14}{17}\bfseries}{\thesubsubsection}{1em}{}
+
+
+\newcommand{\namesigdatehrule}[1]{\par\tikz \draw [blue, densely dotted, ultra thick] (0,0) -- (#1,0);\par}
+\newcommand{\namesigdate}[2][5cm]{%
+\begin{minipage}{#1}%
+    #2 \vspace{0.8cm}\namesigdatehrule{#1}\smallskip
+    \small \noindent\textit{Signature}
+    \vspace{0.8cm}\namesigdatehrule{#1}\smallskip
+    \small \textit{Date}
+\end{minipage}
+}
+
+
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+\newcommand*\tick{\textsc{\char13}}
+\linespread{1}
+\setcounter{tocdepth}{5}
+\setcounter{secnumdepth}{5}
+
+\makeindex
+
+\begin{document}
+%\title{HyRo}
+%\author{Jason Klindtworth  |  Josh Asher  |   Layne Nolli}
+%\date{}
+%\maketitle
+\begin{titlepage}
+	\centering
+	{\scshape\LARGE HyRo \par}
+	%\vspace{1cm}
+	{\scshape\LARGE Team 28\par}
+	\vspace{1cm}
+	{\scshape\Large Jason Klindtworth  |  Josh Asher  |   Layne Nolli}
+	\noindent\makebox[\linewidth]{\rule{17cm}{2pt}}
+	\vspace{1cm}
+	{\huge\bfseries CS463\par}
+	\vspace{2cm}
+	{\Large\itshape Spring 2017\par}
+	\vspace{4cm}
+	{\large Requirements Document\par}\vspace{8cm}
+	\noindent\makebox[\linewidth]{\rule{17cm}{2pt}}
+	\vfill
+
+% Bottom of the page
+	{\large \today\par}
+\end{titlepage}
+
+%\newpage
+%\sectionfont{\scshape}
+%\title{Abstract}
+
+\setcounter{tocdepth}{2}
+\tableofcontents
+
+\section{ Introduction}
+%\sectionfont{\scshape}
+\subsection{Purpose}
+\index{Purpose}
+  This document contains the software requirements that describe components of a system for a hybrid rocket that will communicate instructions, retrieve data, log commands, visualize data, and visualize controls for such a rocket.  This document will provide scope, definitions, an overall description, and specific requirements for this system. This system will be used by the OSU Hybrid Rocket team to launch and visualize data from their rocket. It will also provided a way to view logged data. Persons involved include Nancy Squires, ME Senior Students, ECE senior students, and other rocket club members that have chosen to be part of this team. Our audience members have an inclination to participate in rocketry. The system if successful will be used a base design for future hybrid rocket teams. The goal of the team is to eventually enter regular competition.
+\subsection{Scope}
+\index{Scope}
+ There are 2 separate components to this avionics system the internal software on the rocket will be the responsibility of the ECE sub team.
+
+\subsubsection{ECE Subsystem}
+\index{ECE Subsystem}
+The ECE subsystem is a program residing on a Beagle Bone Black embedded Linux computer that will be onboard the hybrid rocket. This software component will collect sensor and possibly GPS data from onboard components, which provide sensor data and command execution, and send this data to the ground team. The ECE subsystem is also responsible for receiving rocket commands from the ground team and responding to those commands by sending the command to the ECE. The purpose of this component is to provide reliable communication to the ground team for commanding the rocket and gathering its data. We are not responsible for this sub system, but it is listed since it is a crucial part of the entire system.  \par
+
+\subsubsection{HyRo VS}
+\index{HyRo VS}
+HyRo VS is software residing on a traditional computer that will send and receive data and commands to the rocket's onboard ECE subsystem. HyRo VS will be the ground teams graphical interface for data visualization, logging, and issuing commands to the system. It will present the ground team with input buttons to issue appropriate commands and data visualization windows to monitor data transferred from the hybrid rockets on board systems. This software will benefit the ground team by providing data visualization from the hybrid rocket that previously was not human readable. It also will provide command input into the system that benefits the ground team by ease of use and safety. Along with providing the ability to load data from previous operations.
+
+\subsection{Definitions, acronyms, and abbreviations}
+\index{Definitions, acronyms, and abbreviations}
+
+\begin{itemize}
+\item{\bf ESRA:}  The Experimental Sounding Rocket Association is a non-profit organization founded in 2003 for the purpose of fostering and promoting engineering in rocketry.
+\item{\bf AIAA:} The American Institute of Aeronautics and Astronautics is the world's largest technical society dedicated to the global aerospace profession.
+\item{\bf Avionics System:}  A system for controlling launch and other system function on a rocket, along with collecting data from onboard sensors.
+\item{\bf Onboard:} Any component of the system that is housed in the rocket chassis.
+\item{\bf Beagle Bone Black(BBB):}   A micro controller running Debian Linux connected to onboard components of the rocket.
+\item{\bf ECE Subsystem:}  The software onboard the rocket.
+\item{\bf HyRo VS:} The HyRo rocket team's command and visualization software running on a traditional computer.
+\item{\bf Embedded:} A software system that is running on microcontroller with no visual output.
+\item{\bf Hybrid Rocket:} A rocket that has both solid fuel and liquid fuel. This creates the ability to throttle the rocket's motor.
+\item{\bf GPS:} Global position satellite. In the aspect of this paper, a sensor that collects positional data in relation to the earth. This data is formatted for use in GPS applications to visualize the location of the sensor.
+\item{\bf Ground Team:} The group of rocket team members controlling the rockets operation and viewing its data. Located a distance from the launch site on the ground.
+\item{\bf Traditional Computer:}A computer, like a laptop, running an operating system. The operating system we will consider are Windows or Linux.
+\item{\bf Remote Filling:} Filling the oxidizer from a safe distance via commands from the ground team.
+\item{\bf Arming:} Preparing the rocket to ignite.
+\item{\bf Disarming:} Reversing the rockets arming condition. 
+\item{\bf Launch:} Releasing the rocket into the skies! 
+\item{\bf Abort:} Completely stopping the rockets launching operations.
+\item{\bf Ignition:} Starting the rocket motors combustion process.
+\item{\bf Liquid Oxidizer:}Liquid part of the rockets fuel. 
+\item{\bf Oxidizer Tank:} Tank were the liquid oxidizer is held. 
+\item{\bf Chamber:} Where the two fuels mix.
+\item{\bf PSI:}Pounds per square inch. A unit measuring pressure. 
+\item{\bf Pa:} Pascals. A unit measuring pressure.
+\item{\bf PWM:} Pulse Width Modulation - An electronic control signal used to change state of electrical components.
+\item{\bf GPIO:}  General Purpose Input Output lines are used to communicate to sensors and electronic components.
+\item{\bf SPI:}  Serial Peripheral Interface - A protocol to communicate with micro controllers.
+\item{\bf I2C:}  Inter-Integrate Circuit - A protocol to communicate with micro controllers.
+\item{\bf OS:} Operating System - the main system running on a micro controller or a traditional computer.
+\item{\bf LSM9DS0:} The LSM9DS0 is a system-in-package featuring a 3D digital linear acceleration sensor,  a 3D digital angular rate sensor, and a 3D digital magnetic sensor.
+\item{\bf TGY6114MD:}A powerful high specification digital sail winch servo with metal gears that can be programmed to operate from 1 to 6 turns.
+\item{\bf BM180:}Digital pressure sensor.
+\item{\bf API:}An application program interface is a set of routines, protocols, and tools for building software applications. An API specifies how software components should interact.
+\item{\bf RAM:}Random Access Memory
+\item{\bf Gauge:}A graphical device to display the readout of a sensor. For example a speedometer.
+\item{\bf Serial Communication:}Data sent back to back through a medium.
+\end{itemize}
+
+\subsection{ References}
+Beagle Bone Black hardware specifications from elinux.org [http://elinux.org/Beagleboard:BeagleBoneBlack]\\
+BMP180 Digital Pressure Sensor data sheet [https://cdn-shop.adafruit.com/datasheets/BST-BMP180-DS000-09.pdf]\\
+LSM9DS0 3D accelerometer, 3D gyroscope, 3D magnetometer data sheet http://www.st.com/content/ccc/resource/technica\\l/document/datasheet/ab/2a/3b/45/f0/92/41/73/DM00087365.pdf/files/DM00087365.pdf/jcr:content/translations\\/en.DM00087365.pdf]
+\index{References}
+\subsection{Overview}
+\index{Overview}
+The rest of this document contains over all descriptions of the different components of this system. Followed by specific requirements and metrics of these components.
+
+\section{ Overall Description}
+\index{Overall Description}
+\subsection{ Product perspective}
+\index{Product perspective}
+Our software components are part of the overall system of the Hybrid Rocket. These components encompass remotely filling, gathering sensor data, and radio communication operations.  On the traditional computer they encompass serial communication to the XBee radio transceiver, data loading and re-visualization, user input, and live user data visualization. Our software may need to calculate the rockets position through GPS. This at the moment is a stretch goal.
+
+\subsubsection{System Interfaces}
+\index{System Interfaces}
+{\bf Josh Asher }
+\\ \\
+The HyRo VS component of our system will house the user interface. This interface will be divided into a command menu and different visualization widgets to display the data. The command menu will house 1 button with the potential for more to be added if necessary. Originally there was a brain storm of around 6 buttons, but the only remote command we need to provide now is fill. The command menu will be located to the left of the screen and take up approximately 1/4 the width of the screen. Buttons in the menu will be evenly spaced and sized. \par
+
+ 
+The visualization windows will be housed in a parent container that will encompass 3/4 of the screen width and the total height of the screen. The current group of data to be visualized includes: Chamber pressure, Chamber temperature, acceleration, barometric pressure, velocity. Stretch goal data includes GPS, tank pressure, and tank temperature. We will have a set of gauges that look like needle gauges you would see in your car. There will be 3 gauges located across the top portion of the screen. These gauges will monitor chamber pressure, Chamber temperature, and Altitude. There will be 5 graphs located under these gauges on the screen. These will graph time vs chamber pressure, chamber temperature, altitude acceleration, and velocity.\par
+
+
+\begin{figure}
+  \caption{Basic Mock Up of User Interface for Hyro showing implementation of UI layout and positioning of objects like buttons, graphs, and dials for the user to process at a glance. This is a test mock up and may not be exact to the final product. }
+  \centering
+	\includegraphics[scale=.45]{HyroGui}
+\end{figure}
+\index{User Interface Mockup}
+\FloatBarrier
+\subsubsection{Hardware Interfaces}
+\index{Hardware Interfaces}
+
+{\bf HyRo VS}
+HyRo VS will need to communicate to a serial port on the computer it is residing on.  This will be done through a python XBee serial communications library. It will also interfaces with files on the traditional computers file system.
+
+\subsubsection{Software Interfaces}
+\index{Software Interfaces}
+	We will be interfacing various outside software products. These include the Debian Linux operating system running on the BBB, the Operating system running on the traditional computer which will be Windows and possibly an external GPS program which is part of our stretch requirements.
+
+\subsubsection{Communication Interfaces}
+\index{Communication Interfaces}
+There are two interfaces for communication in our system and both require the use of a serial interface. The first is radio communication with a radio frequency transceiver. The serial communication is accessed through an API available for the XBee radio transceivers. We will design a protocol to transfer commands and data over these serial interfaces. Each command will have a name and parameters associated with it. Data will have a name associated with it followed by the actual data. All data will be passed in strings delineated by either colons or commas.
+
+\subsubsection{Memory Constraints}
+\index{Memory Constraints}
+The HyRo VS aspect of our system will be constrained by the memory of the traditional computer it is located on. Available memory should be significant enough that we should not be constrained. We are designing our program to have as small a footprint on system resources.\par 
+
+
+\subsubsection {Operations}
+\index{Operations}
+There are 4 modes of operation in our system: pre-launch, staging, in flight, and post flight.  Pre-launch operations will be non-interactive and nothing will be displayed in the visualization windows. \par
+	Staging will be an interactive process where the user will provide input to various command buttons.\par
+	
+	The in-flight mode will disable the command menu begin data collection from the onboard sensors. At this point all sensor data processing function will be activated. The data will be received from the serial port, parsed through the data processor, and sent to the appropriate data processing functions. These functions are responsible for visualizing the data on our graphs and gauges. These operations are to be monitored by the user for visual satisfaction.  The data will also be logged by a logging function in a text format to be used by the post-flight mode. \par
+	Post flight mode will be fully interactive. Data stored by the data logger will be able to be viewed in graphs that related the data over time of flight. These graphs will be viewable by selecting data to load from the data loading menu.\par
+
+\subsubsection{Site Adaption Requirements}
+\index{Site Adaption Requirements}
+When the hybrid rocket is ready to launch the software will be in pre-launch mode and we are required to be over 1000 feet from the rocket. We will have to physically provide a station this far away to run our software at.
+
+\subsection{ Product functions}
+{\bf Jason Klindtworth}
+\index{Product functions}
+Our software as a whole will function as a way to communicate information from the hybrid rocket to a traditional computer on the ground. The ground team will interact with the ground computer to look at the information from the rocket and pass information to the rocket.
+
+\subsubsection{HyRo VS}
+\begin{itemize}
+\item Send and Receive communication from a radio transceiver to communicate with the hybrid rocket.
+\item Collect data sent from the rocket and store it.
+\item Collect data from the rocket and visualize it on the screen in its appropriate gauge or graph while rocket is in flight.
+\item Provide a log of the data.
+\item Provide the ability to load data into the program from previous flights.
+\end{itemize}
+
+\begin{figure}[!ht]
+\index{Data Flow Diagram of HyRo}
+  \caption{Data Flow Between System Components.}
+  \centering
+	\includegraphics[scale=.85]{RocketBlockDiagram}
+\end{figure}
+\FloatBarrier
+\subsection{ User characteristics}
+\index{User characteristisc}
+Intended users of this software require a knowledge of rocketry and safe handling of launching a rocket. These users will be undergraduate students, graduate students, and professors included in the rocket team. They will have sufficient knowledge of the operation and safety requirements of launching a hybrid rocket according to the safety regulation of ESRA and any other involved authority.
+
+\subsection{Constraints}
+\index{Constraints}
+
+\index{Regulatory Policies}
+\subsubsection{\bf  Regulatory Policies}Operation of our software must stay in the bounds set by ESRA and the safe handling and operation of launching a hybrid rocket.  
+
+\index{Hardware Limitations}
+\subsubsection{\bf Hardware Limitations} Timing is a major concern in communicating sensor data and commands. All communication between the rocket, its sensors, its launching components, and the ground team must be within 1  second or less.
+
+\index{Interfaces to other applications}
+\subsubsection{\bf  Interfaces to other applications} If GPS is reached as a stretch goal we will have to output data to a GPS application in the correct format for that application.
+
+\index{Reliability Requirements}
+\subsubsection{\bf Reliability Requirements} Data in our system must be transferred and interpreted in a complete and reliable fashion. Incomplete commands will be ignored. Incomplete sensor data will also be ignored. Data loss will not exceed 10 percent or our system will not be reliable.
+
+\index{Safety Considerations}
+\subsubsection{\bf Safety Considerations} We need to be far away from the rocket when our software is operating.
+
+\subsection{Assumptions and dependencies}
+\index{Assumptions and dependencies}
+Our HyRo VS software running on a traditional computer assumes that it will be communicating with a XBee radio transceiver on a modern Windows operating system.
+
+\subsection{Apportioning of Requirements}
+\index{Gantt Chart for HyRo}
+\begin{figure}
+  \caption{Gantt chart for HyRo Workflow over the course of the project. This chart is highlighting overlapping responsibilities between team members that are broken into manageable chunks to ensure time management. }
+  \centering
+	\includegraphics[scale=.75]{GanntChart}
+\end{figure}
+\FloatBarrier
+\subsubsection{\bf GPS - (Stretch Goal)} A GPS sensor might be installed on the rocket. This will require the HyRo OS to be able to communicate with this sensor and transmit its data. The HyRo VS then will need to be able to collect this data and either display it in a GPS window of our design or pass it onto to a GPS application that will interpret the data to find the rockets location.
+
+\section{ Specific requirements}
+\subsection{External Interface Requirements}
+\index{User Interface Requirements}
+\subsubsection{ User Interfaces}
+\index{User Interfaces}
+\paragraph {\bf Fill Command Button Input}
+\index{Fill Command}
+The fill command input button will activate the fill servo to fill the chamber with oxidizer. This command is inputted from a button on the command menu. The command will be formatted in an English representation.  This command must be sent within 1 second. It will be located in the command menu of the left hand side of the screen.
+
+\paragraph{\bf Command Output to radio transceiver}
+\index{Command Output}
+	Any time a command is received from the command menu the HyRo VS will send the command to the radio transceiver. The UI for the commands will all be formatted in plain English. Commands must be delivered in under 1 second.
+
+\paragraph{\bf Sensor Data Input}
+\index{Sensor Data Input/Output}
+The sensor data input shall receive data from the radio transceiver to be output to the user interface. Each sensor will have its own respective units of measurement, that will be predetermined in the software, once sensors have been finalized and tested. Data will be sent in raw form and need to be converted using predetermined conversion formulas for that particular sensor. Accuracy depends on the accuracy of the sensor that the data came from. Each input will be related to its respective graphical output in the user interface. The data will be formatted with a respective sensor name append by the data from that part of the sensor.
+
+\paragraph{\bf Sensor Data Output}
+The sensor data output will convert the data into a graph and display it on the user interface. It will have received this data from the sensor input. The data will either be graphed on a normal x-y-graph or adapted onto a gauge with a needle indicating current levels of the data within a range. The range will depend on the type of data received and be preprogrammed in the software. Units will depend on which sensor supplied the data. Each graph or gauge will take up a section of the right hand window of the user interface in its appropriate sub window. 
+
+
+\subsubsection{Hardware interfaces }
+\index{Hardware interfaces}
+\paragraph{\bf Radio Transceiver Input/Output}
+\index{Radio Transceiver Input/Output}
+		Both software components will have an interface to their respective XBee radio transceivers that will support data transfer between the rocket and the traditional computer. Any commands or data received from the various input sources will be placed onto this interface to be transmitted to the other radio transceiver. Data will be formatted with an English name representing what input it came from appended by the actual data separated by commas.
+
+\paragraph{\bf Sensor data Input}
+\index{Sensor Data Hardware Input}
+Sensor data input will be received from the various sensors on the system to be transmitted to the ground teams user interface. Accuracy of data depends on the accuracy of the sensors and the ability of the radio transceivers to communicate entire data package. When sensor data is inputted it is packaged and transmitted to the radio transceiver. Data format will be time, pressure, temperature, altitude, accel\_x, accel\_y, accel\_z, GPS\_long, GPS\_lat.
+
+\subsubsection{Software Interfaces}
+\index{Software Interfaces}
+\subsubsection{Communication Interfaces}
+\index{Communication Interfaces}
+\index{Serial Communcation Interface}
+\paragraph {\bf Serial Communication Interface}All communication except for to the electronic launch components will be done via serial ports. Input and Output to these ports will be done through an API provided by the XBee's manufactures.
+
+\subsection{Functions}
+{\bf Layne Nolli}
+\\ 
+\index{Functions}
+\subsubsection{Command Input}
+\index{Command Input}
+	\paragraph{ Requirement 1}Fill command input must delivered accurately to the onboard components. \par
+
+\subsubsection{Sensor Output}
+\index{Sensor Output}
+	\paragraph{ Requirement 1}Sensor output will be displayed on the user interface in graphical format.\par
+	\paragraph{ Requirement 2}Sensor data will arrive in time and in order. This requirement will allow the data to be displayed in a time oriented graph.\par
+	\paragraph{ Requirement 3}Sensor data will be converted to its output format depending on the type of data supplied by the sensor. \par
+
+\subsection{ Performance Requirements}
+\index{Performance Requirements}
+There will be only one user interface open at any given time. Supporting the interaction of only one user at a time. The system will need to be able to handle data in the amount of about 100 megabytes a minute. This measurement is from last year's data and may change. 95 percent of received data packets need to be processed in under 1 second. 100 percent of command data packets need to be processed in under 1 second.
+
+\subsection{Logical database requirements}
+\index{Logical database requirements}
+We will not be interacting with a logical database in this project.
+
+\subsection{Design constraints}
+\index{Design Constraints}
+We have to be able to operate in harsh conditions with only battery power.
+
+\subsection{Design Metrics}
+Our project inherently has metrics involving correct data acquisition, the validity of data, the speed of transferring data, the accuracy of data being displayed on the screen, and the correctness of saving the data. Each of these we can place a unit of measure on. \par
+\begin{itemize}
+\item{\bf Correct Data Acquisition - } If the data the sensors or actually producing matches the data that our program gathers to process we can call our data acquisition a success. To measure this we will have to take measurements with analog, or other known accurate digital devices of the same thing our sensors our. If we control the environment on the data matches up we know this part of our program is accurate. 
+\item{\bf Speed of Transferring Data -} The data must be collected and transfered within a reasonable amount of time. From rocket to ground unit data should be delivered within one second.
+\item{\bf Validity of the Data - } There is the possibility that the ECE subsystem sensors could produce incorrect readings. This would cause or data visualization routines and logging routine to produces inaccurate results. The only way to test this is to provide secondary measuring equipment on site.
+\item{\bf Accuracy of the Data On Screen - } After data has been transferred and processed we need to accurately represent it on the screen. Each data element will be measured in its own units i.e pounds per square inch. These units need to be accurately represented on the screen to scale. When data arrives and is draw on the screen it needs to be within 1 percent of the actual values. To test this we will compare our on screen values to values processed by another program. Similar to above we need to verify we give the same answer as everybody else.
+\item{\bf Correctness of Saved Data - } The logged data needs to match the screen data that was displayed.
+\end{itemize}
+
+\subsection{Standards compliance}
+\index{Standards compliance}
+There are no explicit standards imposed on our project. The rocket as a whole needs to follow all FCC, ESRA, and possibly FAA regulations. We are launching a rocket up to 10,000 feet and need to obey all rules associated with performing that action.
+
+\subsection{Software System Attributes}
+\index{Software System Attributes}
+\index{Reliability}
+\subsubsection{Reliability} Reliability will be measured with time constraints, correct data transfer, correct data visualization, and correct communication to launch the rocket. Timing is critical to many components and data needs to be communicated in less than 1 second for most components in order for the system to perform correctly. Data needs to be accurate or commands and visualization will not return expected results.
+
+\index{Availability}
+\subsubsection{Availability}
+Our HyRo VS system must maintain communication with the onboard ECE subsystem in order to maintain availability of the user interface. If data communication is broken the interface will not be able to allow humans to issue commands or see visualized data. If communication is broken the program will attempt to reestablish connection until it either establishes communication or the user exits the interface.
+
+\index{Security}
+\subsubsection{Security}
+We have no security constraints imposed on our project.
+\subsubsection{Maintainability} The software should be well documented and modularized so next year's rocket team can build off of it with ease. Classes and inheritance will be used to support object oriented approaches.
+\index{Maintainability}
+\index{Portability}
+\subsubsection{Portability} The HyRo VS is to be written in Python which is portable to many OS's including Windows, Linux and mac OS if time allows for creating system independent code. The first OS we will support is Windows.
+
+\section{Index}
+\printindex
+
+\newpage
+
+\textbf{Students:}
+
+\vspace{5mm}
+ 
+
+\noindent \namesigdate{Jason Klindtworth} \hfill \namesigdate[6cm]{Josh Asher}
+\vspace{5mm}
+
+\noindent \namesigdate{Layne Nolli}
+ \vspace{5mm}
+
+\textbf{Client:}
+
+\vspace{5mm}
+ 
+
+\noindent \namesigdate{Nancy Squires}
+
+
+\end{document}
