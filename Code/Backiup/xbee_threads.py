@@ -5,8 +5,13 @@ from xbee import XBee
 import serial
 import serial.tools.list_ports
 
+exitFalg = 0
+
+def sendData(data):
+    pass
+
+
 class xb_rcv_thread(threading.Thread):
-    #Initializes all self variables, including the queues this thread needs to access
     def __init__(self, threadID, name, counter, timeStamp, chamberTemp, chamberPres, altitude, accelX, accelY, accelZ, GPSLon, GPSLat, port, sQue):
         threading.Thread.__init__(self)
         self.threadID = threadID
@@ -14,7 +19,7 @@ class xb_rcv_thread(threading.Thread):
         self.counter = counter
         self.port = port
         self.serial = self.init()
-        self.xbee = XBee(self.serial, callback=self.processMessage) #sets serial port and call back functino for recieved messages
+        self.xbee = XBee(self.serial, callback=self.processMessage)
         self.chamberTemp = chamberTemp
         self.chamberPres = chamberPres
         self.timeStamp = timeStamp
@@ -26,34 +31,32 @@ class xb_rcv_thread(threading.Thread):
         self.GPSLat = GPSLat
         self.sendQue = sQue
         self.exit = 0
-    
-    #The main thread of execution for this thread, calls listen 
+
     def run(self):
         print("Starting " + self.name)
         #self.xbee.tx(dest_addr=b'\x00\x01', data=b'Hello World')
         self.listen()
         print("Exiting " + self.name)
 
-    #initialization function for thread, opens up serial port for communication to the XBee
     def init(self):
         try:
             # Open serial port
             print("opening comm")
+            #ser = serial.Serial('COM4', 9600)
             return serial.Serial(self.port, 9600)
+
+            # Send the string 'Hello World' to the module with MY set to 1
+            #xbee.tx(dest_addr=b'\x00\x01', data=b'Hello World')
        
         except KeyboardInterrupt:
             pass
-    
-    #Called when thread is closed, stops the xbee, cloes the serial port and sets the exit flag.
+
     def end(self):
         self.xbee.halt()
         self.serial.close()
         #set exit flag
         self.exit = 1
 
-    #Our imposed main thread process, checks if exit is set and then returns to exit thread if it is set. 
-    #Also calls send() to send any commands in the send queue then sleeps briefly and repeats
-    #This while loop keeps the thread alive
     def listen(self):
         while 1:
             #exit thread if flag is set
@@ -62,14 +65,11 @@ class xb_rcv_thread(threading.Thread):
             self.send()
             time.sleep(0.001)
 
-    #This is the call back function for the XBee API. When a messesage is revieced on the XBee this message 
-    #parses the data and puts it into the respected shared queues
     def processMessage(self, data):
         print("San Check")
-        print(data)
         dataStr = data["rf_data"].decode("utf-8").split(';')
-        
-        #After expo we are going to add a recieve block for the parachute deployment, this was just requested 
+
+        #what if we dont get values? Need to test and adjust for that
         self.timeStamp.put(dataStr[0], block=False)
         self.chamberTemp.put(dataStr[1], block=False)
         self.chamberPres.put(dataStr[2], block=False)
@@ -80,7 +80,6 @@ class xb_rcv_thread(threading.Thread):
         self.GPSLon.put(dataStr[7], block=False)
         self.GPSLat.put(dataStr[8], block=False)
 
-    #Checks the message que for the fill command. If detected sends fill to the other radio transciever.
     def send(self):
         #self.xbee.tx(dest_addr=b'\x00\x01', data=message)
         if(self.sendQue.empty()):
@@ -88,7 +87,8 @@ class xb_rcv_thread(threading.Thread):
         else:
             self.sendQue.get(False)
      
+            #log COMMAND with time
             self.sendQue.task_done()
             print("Send Fill Message")
-            self.xbee.tx(dest_addr=b'\x00\x01', data=b'FILL') #Send message to the other Xbee
+            self.xbee.tx(dest_addr=b'\x00\x01', data=b'FILL')
 
