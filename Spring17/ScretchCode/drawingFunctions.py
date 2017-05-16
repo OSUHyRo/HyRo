@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import Tk
 import matplotlib
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib import image
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
@@ -11,10 +12,14 @@ from matplotlib.figure import Figure
 from scipy import integrate
 from math import *
 import time
+from scipy.interpolate import spline
 
 hyroGUI = Tk() # Setupd the main window object
 coneSep = False
 secDeployed = False
+
+matplotlib.rcParams.update({'font.size': 10})
+#np.seterr(divide='ignore', invalid='ignore')
 
 #a Generic class to template a drawing function
 class drawCanvas:
@@ -71,8 +76,12 @@ class AdrawPlot:
             #plot that array of data values on the acceleration graph
             self.f = Figure(figsize=(self.width,self.height), dpi=100)
             self.accel = self.f.add_subplot(111)
+            self.accel.set_ylabel('Gs')
+            
+            self.accel.yaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter('%.2f'))
             self.accel.plot(j,k)
             #a.plot([1,2,3,4],[1,7,8,9])
+            self.f.tight_layout()
 
             #Draw the new plot on the GUI
             self.canvas = FigureCanvasTkAgg(self.f, master=mainwindow)
@@ -89,7 +98,7 @@ class AdrawPlot:
            
 
             if(len(sepFile) <= 1):
-                pass
+                return
 
             else:
                 for plotPair in sepFile:
@@ -101,9 +110,19 @@ class AdrawPlot:
 
 
             self.accel.clear()
-            #self.f = Figure(figsize=(self.width,self.height), dpi=100)
-            #self.accel = self.f.add_subplot(111)
-            self.accel.plot(j,k)
+            self.f = Figure(figsize=(self.width,self.height), dpi=100)
+            self.accel = self.f.add_subplot(111)
+            #newj = np.array(j)
+            #newk = np.array(k)
+
+            #x_smooth = np.linspace(newj.min(), newj.max(), 300)
+            #y_smooth = spline(newj, newk, x_smooth)
+
+            self.accel.plot(j ,k)
+            self.accel.set_ylabel('Gs')
+            self.accel.yaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter('%.2f'))
+            self.f.tight_layout()
+
             #self.canvas = FigureCanvasTkAgg(self.f, self.window)
             self.canvas.show()
             self.canvas.get_tk_widget().place(x = self.x, y = self.y)
@@ -146,7 +165,9 @@ class VdrawPlot:
             self.f = Figure(figsize=(self.width,self.height), dpi=100)
             self.velo = self.f.add_subplot(111)
             self.velo.plot(j,k)
-
+            self.velo.set_ylabel('Gs')
+            self.velo.yaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter('%.2f'))
+            self.f.tight_layout()
             #Construct inital canvas
             self.canvas = FigureCanvasTkAgg(self.f, master=mainwindow)
             self.canvas.show()
@@ -177,6 +198,9 @@ class VdrawPlot:
             #self.f = Figure(figsize=(self.width,self.height), dpi=100)
             #self.accel = self.f.add_subplot(111)
             self.velo.plot(j,k)
+            self.velo.set_ylabel('Gs')
+            self.velo.yaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter('%.2f'))
+            self.f.tight_layout()
             #self.canvas = FigureCanvasTkAgg(self.f, self.window)
             self.canvas.show()
             self.canvas.get_tk_widget().place(x = self.x, y = self.y)
@@ -219,7 +243,10 @@ class CPdrawPlot:
             self.f = Figure(figsize=(self.width,self.height), dpi=100)
             self.accel = self.f.add_subplot(111)
             self.accel.plot(j,k)
-
+            self.accel.set_ylabel('Pa')
+            #self.accel.yaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter(useMathText=True, useOffset=False))
+            #self.accel.yaxis.get_major_formatter().set_powerlimits((0,1))
+            self.f.tight_layout()
             self.canvas = FigureCanvasTkAgg(self.f, master=mainwindow)
             self.canvas.show()
 
@@ -248,6 +275,10 @@ class CPdrawPlot:
             #self.f = Figure(figsize=(self.width,self.height), dpi=100)
             #self.accel = self.f.add_subplot(111)
             self.accel.plot(j,k)
+            self.accel.set_ylabel('Pa')
+            #self.accel.yaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter(useMathText=True, useOffset=False))
+            #self.accel.yaxis.get_major_formatter().set_powerlimits((0,1))
+            self.f.tight_layout()
             #self.canvas = FigureCanvasTkAgg(self.f, self.window)
             self.canvas.show()
             self.canvas.get_tk_widget().place(x = self.x, y = self.y)
@@ -291,7 +322,8 @@ class CTdrawPlot:
             self.f = Figure(figsize=(self.width,self.height), dpi=100)
             self.accel = self.f.add_subplot(111)
             self.accel.plot(j,k)
-
+            self.accel.set_ylabel('C')
+            self.f.tight_layout()
             self.canvas = FigureCanvasTkAgg(self.f, master=mainwindow)
             self.canvas.show()
 
@@ -321,6 +353,8 @@ class CTdrawPlot:
             #self.f = Figure(figsize=(self.width,self.height), dpi=100)
             #self.accel = self.f.add_subplot(111)
             self.accel.plot(j,k)
+            self.accel.set_ylabel('C')
+            self.f.tight_layout()
             #self.canvas = FigureCanvasTkAgg(self.f, self.window)
             self.canvas.show()
             self.canvas.get_tk_widget().place(x = self.x, y = self.y)
@@ -365,7 +399,9 @@ class AltdrawPlot:
             self.f = Figure(figsize=(self.width,self.height), dpi=100)
             self.accel = self.f.add_subplot(111)
             self.accel.plot(j,k)
-
+            self.accel.set_ylabel('M')
+            self.accel.yaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter('%4d'))
+            self.f.tight_layout()
             self.canvas = FigureCanvasTkAgg(self.f, master=mainwindow)
             self.canvas.show()
 
@@ -394,6 +430,9 @@ class AltdrawPlot:
             #self.f = Figure(figsize=(self.width,self.height), dpi=100)
             #self.accel = self.f.add_subplot(111)
             self.accel.plot(j,k)
+            self.accel.set_ylabel('M')
+            self.accel.yaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter('%4d'))
+            self.f.tight_layout()
             #self.canvas = FigureCanvasTkAgg(self.f, self.window)
             self.canvas.show()
             self.canvas.get_tk_widget().place(x = self.x, y = self.y)
@@ -437,7 +476,13 @@ class drawGuage(drawCanvas):
                 #draw thicker tic marks every other tic mark
                 self.canvas.create_line(75*cos(r) + self.width / 2, 75*sin(r) + self.height, xpos, ypos, width = 4)
                 if not (count == 0 or count == 20):
-                    self.canvas.create_text(xpos, ypos - 10, text=count) # draw tic mark number
+                    if(self.max == 5000):
+                        t = int(count * 5 / 2)
+                        self.canvas.create_text(xpos, ypos - 10, text=t) # draw tic mark number
+
+                    else:
+                        t = int((count / 2) * 10)
+                        self.canvas.create_text(xpos, ypos - 10, text=t) # draw tic mark number
             else:
                 #draw thinner line on every other tic mark
                 self.canvas.create_line(75*cos(r) + self.width / 2, 75*sin(r) + self.height, xpos, ypos, width = 1)
@@ -465,11 +510,28 @@ def convVel(value, directory):
             if(plotPair == ""):
                 continue
             aAndB = plotPair.split(',')
-            j.append(float(aAndB[0]))
-            k.append(float(aAndB[1]))
-        #Uses simpsion functino to numerically integrate the acceration data
-        data = integrate.simps(k, x=j)
+            #print(aAndB)
 
+            if(int(aAndB[0]) == "0"):
+                #j.append(float(aAndB[0]))
+                j.append(time.clock())
+            else:
+                #j.append(float(aAndB[0]))
+                j.append(time.clock())
+            #print(aAndB[0])
+            if(aAndB[1] == "0.0"):
+                k.append(float(aAndB[1]))
+                #k.append(time.clock())
+            else:
+                k.append(float(aAndB[1]))
+                #k.append(time.clock())
+
+            #print(aAndB[1])
+        #Uses simpsion functino to numerically integrate the acceration data
+        for i in k:
+            print(i)
+        data = integrate.simps(k, x=j) * 1000
+        
         t = round(time.clock()) #get clock time for value
         #open and write velocity data to VSample.txt for use by the velocity redrawing function
         file = open(directory+"VSample.txt", "a")

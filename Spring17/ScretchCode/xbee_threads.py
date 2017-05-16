@@ -71,11 +71,11 @@ class xb_rcv_thread(threading.Thread):
         global secDeployed
         global coneSep
         print("New Message")
-        # print(data)
+        print(data)
        
         dataStr = data["rf_data"].decode("utf-8").split(';')
         #print(dataStr)
-        if(len(dataStr) == 9):
+        if(len(dataStr) == 9 or len(dataStr) == 10):
             #After expo we are going to add a recieve block for the parachute deployment, this was just requested 
             self.timeStamp.put(dataStr[0], block=False)
             self.chamberTemp.put(dataStr[1], block=False)
@@ -97,6 +97,8 @@ class xb_rcv_thread(threading.Thread):
         elif(dataStr[2] == "CONFIRMATION"):
             print("got confirmation")
             #do stuff
+        else:
+            print(dataStr)
 
 
     #Checks the message que for the fill command. If detected sends fill to the other radio transciever.
@@ -110,5 +112,6 @@ class xb_rcv_thread(threading.Thread):
             self.sendQue.task_done()
             print("Send Fill Message")
             #self.xbee.tx(dest_addr=b'\x00\x01', data=b'FILL') #Send message to the other Xbee
-            self.xbee.tx_long_addr(dest_addr='\x00\x13\xA2\x00\x41\x5E\x0E\x52', data=b'$COMMAND13')
+            #self.xbee.tx_long_addr(dest_addr='\x00\x13\xA2\x00\x41\x5E\x0E\x52', data=b'$COMMAND13')
+            self.xbee.tx_long_addr(dest_addr='\x00\x13\xA2\x00\x41\x02\x0D\xE3', data=b'$COMMAND13')
 

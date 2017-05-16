@@ -48,10 +48,10 @@ def start():
     global stopflag
     #Only create thread when its variable is set to none or the thread is not alive
     if(xbee_thread == None):
-        xbee_thread = xb_rcv_thread(1, "Xbee-Thread", 1,  timeStamp=qTimeStamp, chamberTemp=qChamberTemp, chamberPres=qChamberPressure, altitude=qAltitude, accelX=qAccelX, accelY=qAccelY, accelZ=qAccelZ, GPSLon=qGPSLong, GPSLat=qGPSLat, port="COM3",sQue=sQue) 
+        xbee_thread = xb_rcv_thread(1, "Xbee-Thread", 1,  timeStamp=qTimeStamp, chamberTemp=qChamberTemp, chamberPres=qChamberPressure, altitude=qAltitude, accelX=qAccelX, accelY=qAccelY, accelZ=qAccelZ, GPSLon=qGPSLong, GPSLat=qGPSLat, port="COM6",sQue=sQue) 
         xbee_thread.start()   
     if not(xbee_thread.is_alive()):
-       xbee_thread = xb_rcv_thread(1, "Xbee-Thread", 1,  timeStamp=qTimeStamp, chamberTemp=qChamberTemp, chamberPres=qChamberPressure, altitude=qAltitude, accelX=qAccelX, accelY=qAccelY, accelZ=qAccelZ, GPSLon=qGPSLong, GPSLat=qGPSLat, port="COM3",sQue=sQue) 
+       xbee_thread = xb_rcv_thread(1, "Xbee-Thread", 1,  timeStamp=qTimeStamp, chamberTemp=qChamberTemp, chamberPres=qChamberPressure, altitude=qAltitude, accelX=qAccelX, accelY=qAccelY, accelZ=qAccelZ, GPSLon=qGPSLong, GPSLat=qGPSLat, port="COM6",sQue=sQue) 
        xbee_thread.start()
     stopflag = 0
     print("Started!")
@@ -92,9 +92,9 @@ def load():
     print("Loading" + directory)
 
     #redraw gauges at 0 for this
-    chamberPressure.reDraw(value=0, unit="Pa x 50,000")
-    chamberTemp.reDraw(value=0, unit="C x 10")
-    altitude.reDraw(value=0, unit="M x 200")
+    chamberPressure.reDraw(value=0, unit="Pa x 10,000")
+    chamberTemp.reDraw(value=0, unit="C")
+    altitude.reDraw(value=0, unit="M x 100")
 
     #redraw the graphs with the selected files
     chamberPressureGraph.reDraw(directory=directory)
@@ -146,9 +146,9 @@ fillButton.config(image=fillButtonImage, width="125", height="50", bg="#666666",
 #launchButton.config(image=launchButtonImage, width="150", height="60", bg="#666666", bd=0, relief=SUNKEN, overrelief=RAISED)
 
 #Initialize gauge classes with initial parameters
-chamberPressure = drawGuage(mainwindow=hyroGUI, x=300, y=50, h=150, w=200, min=10 , max=100000)
-chamberTemp = drawGuage(mainwindow=hyroGUI, x=600, y=50, h=150, w=200, min=10, max=100)
-altitude = drawGuage(mainwindow=hyroGUI, x=900, y=50, h=150, w=200, min=10 , max=4000)
+chamberPressure = drawGuage(mainwindow=hyroGUI, x=300, y=50, h=150, w=200, min=0 , max=100000)
+chamberTemp = drawGuage(mainwindow=hyroGUI, x=600, y=50, h=150, w=200, min=0, max=100)
+altitude = drawGuage(mainwindow=hyroGUI, x=900, y=50, h=150, w=200, min=0 , max=5000)
 
 #Initialize graph classes with initial parameters
 acceleration = AdrawPlot(mainwindow=hyroGUI, x=440, y=290, h=2, w=3.5)
@@ -227,10 +227,12 @@ def collectData():
     file.truncate()
     file.close()
 
+    start = time.clock()
+
     #This loop checks all the queues it shares with the XBee thread. If something is found in that queue the data is processed.
     while True:
         global coneSep
-        print(coneSep)
+        #print(coneSep)
         if(coneSep == 1):
             print("JLKSDFJDSK:LJ")
             w.place(x=10,y=400)
@@ -254,14 +256,14 @@ def collectData():
 
             #print("Chamber Pressure: " + data)
             #Get time and data value and store in sample file.
-            t = round(time.clock())
+            t = round(time.clock() - start)
             file = open(directory+"CPSample.txt", "a")
             file.write("\n")
             file.write(str(t)+","+str(data));
             file.close()
             #Call the redraw function
             chamberPressureGraph.reDraw(directory=directory)
-            chamberPressure.reDraw(value=data, unit="Pa x 50,000")
+            chamberPressure.reDraw(value=data, unit="Pa x 10,000")
             #Remove item from queue
             qChamberPressure.task_done()
         
@@ -270,14 +272,14 @@ def collectData():
         else:
             #same procedure as above
             data = qChamberTemp.get(False)
-            t = round(time.clock())
+            t = round(time.clock() - start)
             file = open(directory+"CTSample.txt", "a")
             file.write("\n")
             file.write(str(t)+","+str(data));
             file.close()
             #print("Chamber Temperature: " + data)
             chamberTempGraph.reDraw(directory=directory)
-            chamberTemp.reDraw(value=data, unit="C x 10")
+            chamberTemp.reDraw(value=data, unit="C")
             qChamberTemp.task_done()
 
         if(qAltitude.empty()):
@@ -287,13 +289,13 @@ def collectData():
             data = qAltitude.get(False)
             #print("Altitude: " + data)
 
-            t = round(time.clock())
+            t = round(time.clock() - start)
             file = open(directory+"AltSample.txt", "a")
             file.write("\n")
             file.write(str(t)+","+str(data));
             file.close()
             altitudeGraph.reDraw(directory=directory)
-            altitude.reDraw(value=data, unit="M x 200")
+            altitude.reDraw(value=data, unit="M x 100")
             qAltitude.task_done()
 
         if(qAccelX.empty() | qAccelY.empty() | qAccelZ.empty()):
@@ -306,7 +308,7 @@ def collectData():
             #take acceleration y data and store it in Asample with a timestamp
             data = qAccelY.get(False)
             #print("Velocity Y: " + data)
-            t = round(time.clock())
+            t = round(time.clock() - start)
             file = open(directory+"ASample.txt", "a")
             file.write("\n")
             file.write(str(t)+","+str(data));

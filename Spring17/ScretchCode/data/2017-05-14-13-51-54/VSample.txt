@@ -1,0 +1,10 @@
+
+1,0.0
+2,nan
+3,nan
+4,nan
+4,nan
+5,nan
+6,nan
+6,nan
+7,nan
